@@ -49,24 +49,22 @@ namespace Com.Docaret.UniverseBuilder
         #endregion
 
         #region Unity Methods
+        //Get Directory Path information & AddListeners to SlideButtonContainers
         private void Start()
         {
             universePath = DirectoryData.CurrentUniversePath;
             universeDirectory = DirectoryData.CurrentDirectory;
             compositeurFolderPath = DirectoryData.CompositeurFolderPath;
+
             CreateNewFolderButton();
 
-            leftButtonContainer.changeBackgroundButton.onClick.AddListener(Background_OnChangeBackground);
-            leftButtonContainer.changeUniverseNameButton.onClick.AddListener(CreateInputField);
-            leftButtonContainer.changeUniversePreviewButton.onClick.AddListener(delegate{OnChangeUniversePreview(leftButtonContainer.universePreview);});
-
-            rightButtonContainer.changeBackgroundButton.onClick.AddListener(Background_OnChangeBackground);
-            rightButtonContainer.changeUniverseNameButton.onClick.AddListener(CreateInputField);
-            rightButtonContainer.changeUniversePreviewButton.onClick.AddListener(delegate{OnChangeUniversePreview(rightButtonContainer.universePreview);});
+            SlideButtonContainerAddListeners(leftButtonContainer);
+            SlideButtonContainerAddListeners(rightButtonContainer);
         }
         #endregion
 
         #region UI Elements Creation Methods
+        //Create new folder & Event subscriptions
         private void OnCLick_CreateFolder()
         {
             FolderStruct folderStruct = new FolderStruct();
@@ -91,6 +89,7 @@ namespace Com.Docaret.UniverseBuilder
             CreateNewFolderButton();
         }
 
+        //Instanciate new Create Folder Button
         private void CreateNewFolderButton()
         {
             newFolderButton = Instantiate(newFolderButtonPrefab, bottomFolderContainer.transform).GetComponent<Button>();
@@ -99,7 +98,7 @@ namespace Com.Docaret.UniverseBuilder
         #endregion
 
         #region Delegate & Action Methods
-        private void Background_OnChangeBackground()
+        private void OnChangeBackground()
         {
             string[] path = StandaloneFileBrowser.OpenFilePanel("Select a Background", "", supportedImageExtantions, false);
 
@@ -210,6 +209,16 @@ namespace Com.Docaret.UniverseBuilder
         {
             nameInputField = Instantiate(inputFieldPrefab, uiContainer.transform);
             nameInputField.GetComponentInChildren<TMP_InputField>().onEndEdit.AddListener(OnChangeUniverseName);
+        }
+
+        private void SlideButtonContainerAddListeners(SlidePanelButtonContainer buttonContainer)
+        {
+            buttonContainer.changeBackgroundButton.onClick.AddListener(OnChangeBackground);
+            buttonContainer.changeUniverseNameButton.onClick.AddListener(CreateInputField);
+            buttonContainer.changeUniversePreviewButton.onClick.AddListener(delegate 
+            {
+                OnChangeUniversePreview(buttonContainer.universePreview);
+            });
         }
         #endregion
     }

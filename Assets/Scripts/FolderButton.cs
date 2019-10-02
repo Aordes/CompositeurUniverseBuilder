@@ -15,7 +15,7 @@ using UnityEngine.UI;
 
 namespace Com.Docaret.UniverseBuilder
 {
-    public class FolderButton : MonoBehaviour, IPointerDownHandler, IPointerExitHandler
+    public class FolderButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         #region Fields
         [SerializeField] private InputField inputField;
@@ -34,6 +34,8 @@ namespace Com.Docaret.UniverseBuilder
         public OnClickDelegate onDeleteDirectory;
 
         private Button button;
+        private bool isControlPanelOpen;
+        private bool isMouseOverUi;
 
         private readonly int leftClick = 0;
         private readonly int rightClick = 1;
@@ -56,31 +58,47 @@ namespace Com.Docaret.UniverseBuilder
             });
         }
 
-        public void OnPointerDown(PointerEventData eventData)
+        public void OnPointerEnter(PointerEventData eventData)
         {
-            if (Input.GetMouseButtonDown(leftClick))
+            isMouseOverUi = true;
+            if (!isControlPanelOpen)
             {
-                controlPanel.SetActive(true);
+                StartCoroutine(MouseOver());
             }
         }
 
         public void OnPointerExit(PointerEventData eventData)
         {
-            PointerEventData pointerEventData = new PointerEventData(EventSystem.current);
-            pointerEventData.position = Input.mousePosition;
-
-            List<RaycastResult> raycastResultList = new List<RaycastResult>();
-            EventSystem.current.RaycastAll(pointerEventData, raycastResultList);
-            for (int i = 0; i < raycastResultList.Count; i++)
+            isMouseOverUi = false;
+            if (isControlPanelOpen)
             {
-                if (!raycastResultList[i].gameObject == controlPanel && Input.GetMouseButtonDown(leftClick))
-                {
-                    Debug.Log("Helllo");
-                    controlPanel.SetActive(false);
-                }
+                StartCoroutine(MouseExit());
             }
         }
         #endregion
+
+        private IEnumerator MouseOver()
+        {
+            //if (isMouseOverUi)
+            while (!Input.GetMouseButtonDown(leftClick) && isMouseOverUi)
+            {
+                yield return null;
+            }
+            controlPanel.SetActive(true);
+            isControlPanelOpen = true;
+            StopCoroutine(MouseOver());
+        }
+
+        private IEnumerator MouseExit()
+        {
+            while (!Input.GetMouseButtonDown(leftClick))
+            {
+                yield return null;
+            }
+            controlPanel.SetActive(false);
+            isControlPanelOpen = false;
+            StopCoroutine(MouseExit());
+        }
 
         #region CallBack Methods
         private void OnEnd_EditName(string name)
