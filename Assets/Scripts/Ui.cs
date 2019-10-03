@@ -52,9 +52,10 @@ namespace Com.Docaret.UniverseBuilder
         //Get Directory Path information & AddListeners to SlideButtonContainers
         private void Start()
         {
-            universePath = DirectoryData.CurrentUniversePath;
-            universeDirectory = DirectoryData.CurrentDirectory;
-            compositeurFolderPath = DirectoryData.CompositeurFolderPath;
+            UpdateDirectoryData();
+
+            leftButtonContainer.universeName.text = DirectoryData.CurrentUniverseName;
+            rightButtonContainer.universeName.text = DirectoryData.CurrentUniverseName;
 
             CreateNewFolderButton();
 
@@ -98,24 +99,6 @@ namespace Com.Docaret.UniverseBuilder
         #endregion
 
         #region Delegate & Action Methods
-        private void OnChangeBackground()
-        {
-            string[] path = StandaloneFileBrowser.OpenFilePanel("Select a Background", "", supportedImageExtantions, false);
-
-            if (path.Length == 0) return;
-
-            string newPath = universePath + "/_background.png";
-
-            if (File.Exists(newPath))
-            {
-                File.Delete(newPath);
-            }
-            File.Copy(path[0], newPath);
-
-            WWW www = new WWW(newPath);
-            backgroundImage.texture = www.texture;
-        }
-
         private void FolderButton_OnChangePreview(Button button)
         {
             string[] path = StandaloneFileBrowser.OpenFilePanel("Select a Preview", "", supportedImageExtantions, false);
@@ -162,7 +145,26 @@ namespace Com.Docaret.UniverseBuilder
         #endregion
 
         #region Callback Methods
-        private void OnChangeUniversePreview(RawImage preview)
+
+        private void OnChangeBackground()
+        {
+            string[] path = StandaloneFileBrowser.OpenFilePanel("Select a Background", "", supportedImageExtantions, false);
+
+            if (path.Length == 0) return;
+
+            string newPath = universePath + "/_background.png";
+
+            if (File.Exists(newPath))
+            {
+                File.Delete(newPath);
+            }
+            File.Copy(path[0], newPath);
+
+            WWW www = new WWW(newPath);
+            backgroundImage.texture = www.texture;
+        }
+
+        private void OnChangeUniversePreview()
         {
             string[] path = StandaloneFileBrowser.OpenFilePanel("Select a Preview", "", supportedImageExtantions, false);
 
@@ -177,7 +179,9 @@ namespace Com.Docaret.UniverseBuilder
             File.Copy(path[0], newPath);
 
             WWW www = new WWW(newPath);
-            preview.texture = www.texture;
+
+            leftButtonContainer.universePreview.texture = www.texture;
+            rightButtonContainer.universePreview.texture = www.texture;
         }
 
         private void OnChangeUniverseName(string newName)
@@ -185,10 +189,22 @@ namespace Com.Docaret.UniverseBuilder
             if (Directory.Exists(universePath + "/" + newName) || string.IsNullOrEmpty(newName)) return;
 
             universeDirectory.MoveTo(compositeurFolderPath + "/" + newName);
+
+            DirectoryData.CurrentUniverseName = newName;
+            DirectoryData.CurrentUniversePath = compositeurFolderPath + "/" + newName;
+
             leftButtonContainer.universeName.text = newName;
             rightButtonContainer.universeName.text = newName;
+            UpdateDirectoryData();
 
             Destroy(nameInputField);
+        }
+
+        private void UpdateDirectoryData()
+        {
+            universePath = DirectoryData.CurrentUniversePath;
+            universeDirectory = DirectoryData.CurrentDirectory;
+            compositeurFolderPath = DirectoryData.CompositeurFolderPath;
         }
         #endregion
 
@@ -215,10 +231,7 @@ namespace Com.Docaret.UniverseBuilder
         {
             buttonContainer.changeBackgroundButton.onClick.AddListener(OnChangeBackground);
             buttonContainer.changeUniverseNameButton.onClick.AddListener(CreateInputField);
-            buttonContainer.changeUniversePreviewButton.onClick.AddListener(delegate 
-            {
-                OnChangeUniversePreview(buttonContainer.universePreview);
-            });
+            buttonContainer.changeUniversePreviewButton.onClick.AddListener(OnChangeUniversePreview);
         }
         #endregion
     }
