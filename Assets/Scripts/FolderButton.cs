@@ -77,11 +77,12 @@ namespace Com.Docaret.UniverseBuilder
         }
         #endregion
 
+        
         private IEnumerator MouseOver()
         {
-            //if (isMouseOverUi)
-            while (!Input.GetMouseButtonDown(leftClick) && isMouseOverUi)
+            while (!Input.GetMouseButtonDown(leftClick) || !isMouseOverUi)
             {
+                Debug.Log(Input.GetMouseButtonDown(leftClick));
                 yield return null;
             }
             controlPanel.SetActive(true);
@@ -91,7 +92,7 @@ namespace Com.Docaret.UniverseBuilder
 
         private IEnumerator MouseExit()
         {
-            while (!Input.GetMouseButtonDown(leftClick))
+            while (!Input.GetMouseButtonDown(leftClick) || isMouseOverUi)
             {
                 yield return null;
             }
