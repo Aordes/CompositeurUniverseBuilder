@@ -7,7 +7,8 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Com.Docaret.CompositeurUniverseBuilder {
+namespace Com.Docaret.UniverseBuilder
+{
 
     public class ToolBar : MonoBehaviour {
 
@@ -27,13 +28,13 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
         [SerializeField] private Button btnDeleteMainfolder;
         [SerializeField] private Button btnDeleteSelection;
 
-        public event Action<string> OnAddMeta;
-        public event Action<string> OnRenameItem;
-        public event Action<string> OnAddPreview;
-        public event Action<string> OnDeleteItem;
+        //public event Action<string> OnAddMeta;
+        //public event Action<string> OnRenameItem;
+        //public event Action<string> OnAddPreview;
+        //public event Action<string> OnDeleteItem;
 
-        private string _currentFolder;
-        public string CurrentFolder
+        private Button _currentFolder;
+        public Button CurrentFolder
         {
             set {
                 _currentFolder = value;
@@ -41,8 +42,8 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
             }
         }
 
-        private string _currentSelection;
-        public string CurrentSelection
+        private Button _currentSelection;
+        public Button CurrentSelection
         {
             set
             {
@@ -76,42 +77,43 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
 
         private void AddMetaToMainFolder_OnClick()
         {
-            OnAddMeta?.Invoke(_currentFolder);
+            //OnAddMeta?.Invoke(_currentFolder);
         }
 
         private void AddMetaToSelection_OnClick()
         {
-            OnAddMeta?.Invoke(_currentSelection);
+            //OnAddMeta?.Invoke(_currentSelection);
         }
 
         private void RenameMainFolder_OnClick()
         {
-            OnRenameItem?.Invoke(_currentFolder);
+            //OnRenameItem?.Invoke(_currentFolder);
         }
 
         private void RenameSelection_OnClick()
         {
-            OnRenameItem?.Invoke(_currentSelection);
+            //OnRenameItem?.Invoke(_currentSelection);
         }
 
         private void PreviewToMainFolder_OnClick()
         {
-            OnAddPreview?.Invoke(_currentFolder);
+            //OnAddPreview?.Invoke(_currentFolder);
         }
 
         private void PreviewToSelection_OnClick()
         {
-            OnAddPreview?.Invoke(_currentSelection);
+            //OnAddPreview?.Invoke(_currentSelection);
         }
 
         private void DeleteMainFolder_OnClick()
         {
-            OnDeleteItem(_currentFolder);
+            //OnDeleteItem(_currentFolder);
         }
 
         private void DeleteSelection_OnClick()
         {
-            OnDeleteItem(_currentSelection);
+            //OnDeleteItem(_currentSelection);
+            FileManager.FolderButton_OnDeleteDirectory(_currentSelection);
         }
 
         public void OnSelectionChange(GameObject selection)
