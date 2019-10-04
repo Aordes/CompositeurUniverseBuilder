@@ -32,20 +32,8 @@ namespace Com.Docaret.UniverseBuilder
         private string universePath;
         private string compositeurFolderPath;
         private DirectoryInfo universeDirectory;
-        private List<FolderStruct> folderList = new List<FolderStruct>();
         private string path;
-        private ExtensionFilter[] supportedImageExtantions = new[] { new ExtensionFilter("Image Files", "png", "jpg", "jpeg") };
         private GameObject nameInputField;
-
-        private struct FolderStruct
-        {
-            public DirectoryInfo directory;
-            public Button button;
-            public FolderButton folderScript;
-            public string path;
-            public RawImage image;
-            public GameObject folderInstance;
-        }
         #endregion
 
         #region Unity Methods
@@ -69,7 +57,7 @@ namespace Com.Docaret.UniverseBuilder
         private void OnCLick_CreateFolder()
         {
             FolderStruct folderStruct = new FolderStruct();
-            folderStruct.path = universePath + "/" + "New Folder" + (folderList.Count + 1);
+            folderStruct.path = universePath + "/" + "New Folder" + (FileManager.folderList.Count + 1);
 
             DirectoryInfo folderDirectory = Directory.CreateDirectory(folderStruct.path);
             Destroy(newFolderButton.gameObject);
@@ -80,12 +68,12 @@ namespace Com.Docaret.UniverseBuilder
             folderStruct.folderScript = folderStruct.button.gameObject.GetComponent<FolderButton>();
             folderStruct.image = folderStruct.button.gameObject.GetComponent<RawImage>();
 
-            folderStruct.folderScript.onEndEditFolderName += FolderButton_RenameFolder;
-            folderStruct.folderScript.onChangePreview += FolderButton_OnChangePreview;
-            folderStruct.folderScript.onChangeDirectoryContent += FolderButton_OnChangeDirectoryContent;
-            folderStruct.folderScript.onDeleteDirectory += FolderButton_OnDeleteDirectory;
+            folderStruct.folderScript.onEndEditFolderName += FileManager.FolderButton_RenameFolder;
+            folderStruct.folderScript.onChangePreview += FileManager.FolderButton_OnChangePreview;
+            folderStruct.folderScript.onChangeDirectoryContent += FileManager.FolderButton_OnChangeDirectoryContent;
+            folderStruct.folderScript.onDeleteDirectory += FileManager.FolderButton_OnDeleteDirectory;
 
-            folderList.Add(folderStruct);
+            FileManager.folderList.Add(folderStruct);
 
             CreateNewFolderButton();
         }
@@ -98,57 +86,11 @@ namespace Com.Docaret.UniverseBuilder
         }
         #endregion
 
-        #region Delegate & Action Methods
-        private void FolderButton_OnChangePreview(Button button)
-        {
-            string[] path = StandaloneFileBrowser.OpenFilePanel("Select a Preview", "", supportedImageExtantions, false);
-
-            if (path.Length == 0) return;
-
-            FolderStruct folder = GetFolderStructFromFolderButton(button);
-            string newPath = folder.directory.FullName + "/_preview.png";
-
-            if (File.Exists(newPath))
-            {
-                File.Delete(newPath);
-            }
-            File.Copy(path[0], newPath);
-
-            WWW www = new WWW(newPath);
-            folder.image.texture = www.texture;
-        }
-
-        private void FolderButton_OnChangeDirectoryContent(Button button)
-        {
-            string[] path = StandaloneFileBrowser.OpenFilePanel("Select Documents", "", "", false);
-            if (path.Length == 0) return;
-
-            FolderStruct folder = GetFolderStructFromFolderButton(button);
-            File.Copy(path[0], folder.directory.FullName + "/" + Path.GetFileName(path[0]));
-        }
-
-        private void FolderButton_OnDeleteDirectory(Button button)
-        {
-            FolderStruct folder = GetFolderStructFromFolderButton(button);
-
-            folder.directory.Delete(true);
-            Destroy(folder.folderInstance);
-        }
-
-        private void FolderButton_RenameFolder(string newName, Button button)
-        {
-            if (Directory.Exists(universePath + "/" + newName) || string.IsNullOrEmpty(newName)) return;
-
-            FolderStruct folder = GetFolderStructFromFolderButton(button);
-            folder.directory.MoveTo(universePath + "/" + newName);
-        }
-        #endregion
-
         #region Callback Methods
 
         private void OnChangeBackground()
         {
-            string[] path = StandaloneFileBrowser.OpenFilePanel("Select a Background", "", supportedImageExtantions, false);
+            string[] path = StandaloneFileBrowser.OpenFilePanel("Select a Background", "", FileManager.supportedImageExtantions, false);
 
             if (path.Length == 0) return;
 
@@ -166,7 +108,7 @@ namespace Com.Docaret.UniverseBuilder
 
         private void OnChangeUniversePreview()
         {
-            string[] path = StandaloneFileBrowser.OpenFilePanel("Select a Preview", "", supportedImageExtantions, false);
+            string[] path = StandaloneFileBrowser.OpenFilePanel("Select a Preview", "", FileManager.supportedImageExtantions, false);
 
             if (path.Length == 0) return;
 
@@ -209,17 +151,6 @@ namespace Com.Docaret.UniverseBuilder
         #endregion
 
         #region Utils
-        private FolderStruct GetFolderStructFromFolderButton(Button button)
-        {
-            for (int i = 0; i < folderList.Count; i++)
-            {
-                if (folderList[i].button == button)
-                {
-                    return folderList[i];
-                }
-            }
-            return folderList[0];
-        }
 
         private void CreateInputField()
         {
