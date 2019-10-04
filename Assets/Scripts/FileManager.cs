@@ -15,6 +15,7 @@ namespace Com.Docaret.UniverseBuilder {
         #region Fields
         public static ExtensionFilter[] supportedImageExtantions = new[] { new ExtensionFilter("Image Files", "png", "jpg", "jpeg") };
         public static List<FolderStruct> folderList = new List<FolderStruct>();
+        public static DynamicGrid fileGrid;
         #endregion
 
         #region Action Methods
@@ -43,7 +44,16 @@ namespace Com.Docaret.UniverseBuilder {
             if (path.Length == 0) return;
 
             FolderStruct folder = GetFolderStructFromFolderButton(button);
-            File.Copy(path[0], folder.directory.FullName + "/" + Path.GetFileName(path[0]));
+            for (int i = 0; i < path.Length; i++)
+            {
+                File.Copy(path[i], folder.directory.FullName + "/" + Path.GetFileName(path[i]));
+                fileGrid.CreateFile();
+            }
+        }
+
+        public static void CreateFile()
+        {
+            fileGrid.CreateFile();
         }
 
         public static void FolderButton_OnDeleteDirectory(Button button)

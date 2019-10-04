@@ -23,7 +23,7 @@ namespace Com.Docaret.UniverseBuilder
         [SerializeField] private Button openButton;
         [SerializeField] private Button changePreviewButton;
         [SerializeField] private Button deleteButton;
-        [SerializeField] private GameObject controlPanel;
+        [SerializeField] private GameObject fileContainer;
 
         public delegate void OnEndEditFolderNameDelegate(string name, Button button);
         public OnEndEditFolderNameDelegate onEndEditFolderName;
@@ -44,18 +44,24 @@ namespace Com.Docaret.UniverseBuilder
         #region Unity Methods
         void Awake()
         {
-            controlPanel.SetActive(false);
+            fileContainer.SetActive(false);
 
             button = gameObject.GetComponent<Button>();
+            button.onClick.AddListener(AddFolder);
 
-            openButton.onClick.AddListener(OnClick_ChangeDirectoryContent);
-            changePreviewButton.onClick.AddListener(OnClick_ChangePreview);
-            deleteButton.onClick.AddListener(OnClick_DeleteButton);
+            //openButton.onClick.AddListener(OnClick_ChangeDirectoryContent);
+            //changePreviewButton.onClick.AddListener(OnClick_ChangePreview);
+            //deleteButton.onClick.AddListener(OnClick_DeleteButton);
 
-            inputField.onEndEdit.AddListener(delegate
-            {
-                OnEnd_EditName(inputField.text);
-            });
+            //inputField.onEndEdit.AddListener(delegate
+            //{
+            //    OnEnd_EditName(inputField.text);
+            //});
+        }
+
+        public void AddFolder()
+        {
+            FileManager.CreateFile();
         }
 
         public void OnPointerEnter(PointerEventData eventData)
@@ -85,8 +91,9 @@ namespace Com.Docaret.UniverseBuilder
                 Debug.Log(Input.GetMouseButtonDown(leftClick));
                 yield return null;
             }
-            controlPanel.SetActive(true);
+            fileContainer.SetActive(true);
             isControlPanelOpen = true;
+            FileManager.fileGrid = fileContainer.GetComponent<DynamicGrid>();
             StopCoroutine(MouseOver());
         }
 
@@ -96,7 +103,7 @@ namespace Com.Docaret.UniverseBuilder
             {
                 yield return null;
             }
-            controlPanel.SetActive(false);
+            fileContainer.SetActive(false);
             isControlPanelOpen = false;
             StopCoroutine(MouseExit());
         }

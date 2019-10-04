@@ -90,7 +90,7 @@ namespace Com.Docaret.UniverseBuilder
 
         private void OnChangeBackground()
         {
-            string[] path = StandaloneFileBrowser.OpenFilePanel("Select a Background", "", supportedImageExtantions, false);
+            string[] path = StandaloneFileBrowser.OpenFilePanel("Select a Background", "", FileManager.supportedImageExtantions, false);
 
             if (path.Length == 0) return;
 
@@ -108,7 +108,7 @@ namespace Com.Docaret.UniverseBuilder
 
         private void OnChangeUniversePreview()
         {
-            string[] path = StandaloneFileBrowser.OpenFilePanel("Select a Preview", "", supportedImageExtantions, false);
+            string[] path = StandaloneFileBrowser.OpenFilePanel("Select a Preview", "", FileManager.supportedImageExtantions, false);
 
             if (path.Length == 0) return;
 
