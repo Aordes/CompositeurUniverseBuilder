@@ -29,7 +29,6 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
             modalAlert.gameObject.SetActive(true);
             modalAlert.Init(Callback, title, message, ok, cancel);
 
-            modalAlert.btnCancel.enabled = !string.IsNullOrWhiteSpace(cancel);
             modalAlert.OnStatus += CloseScreen;
 
             animator.SetTrigger(initTrigger);
