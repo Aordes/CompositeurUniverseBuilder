@@ -9,23 +9,23 @@ using UnityEngine.UI;
 
 namespace Com.Docaret.CompositeurUniverseBuilder {
 
-    public class ModalAlert : MonoBehaviour {
+    public class ModalDialog : MonoBehaviour {
 
         [Header("Texts")]
         [SerializeField] protected Text txtAlert;
         [SerializeField] protected Text txtMessage;
 
-        [Header("Buttons")]
+        [Header("Confirm Button")]
         [SerializeField] protected Button btnConfirm;
-        [SerializeField] protected Button btnCancel;
-
-        [Header("Button Texts")]
         [SerializeField] protected Text txtConfirm;
+
+        [Header("Cancel Button")]
+        [SerializeField] protected Button btnCancel;
         [SerializeField] protected Text txtCancel;
 
         public Action<bool> OnStatus;
 
-        private void Start () {
+        protected virtual void Start () {
             if (btnConfirm)
                 btnConfirm.onClick.AddListener(ButtonConfirm_OnClick);
             if (btnCancel)
@@ -54,13 +54,13 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
             txtCancel.text = cancel;
         }
 
-        private void ButtonConfirm_OnClick()
+        protected virtual void ButtonConfirm_OnClick()
         {
             OnStatus?.Invoke(true);
             OnStatus = null;
         }
 
-        private void ButtonCancel_OnClick()
+        protected virtual void ButtonCancel_OnClick()
         {
             OnStatus?.Invoke(false);
             OnStatus = null;

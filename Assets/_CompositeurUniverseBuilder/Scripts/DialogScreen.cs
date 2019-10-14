@@ -13,7 +13,8 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
         [SerializeField] private Animator animator;
         [SerializeField] private string initTrigger = "Init";
         [SerializeField] private string removeTrigger = "Remove";
-        [SerializeField] private ModalAlert modalAlert;
+        [SerializeField] private ModalDialog modalDialog;
+        [SerializeField] private ModalDialogComplex modalDialogComplex;
 
         private void Start () {
             DisplayDialog(Test, "Test", "Confirm", "no", "Cancel");
@@ -26,15 +27,32 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
 
         public void DisplayDialog(Action<bool> Callback, string title, string ok, string message = "", string cancel = "")
         {
-            modalAlert.gameObject.SetActive(true);
-            modalAlert.Init(Callback, title, message, ok, cancel);
+            modalDialog.gameObject.SetActive(true);
+            modalDialogComplex.gameObject.SetActive(false);
 
-            modalAlert.OnStatus += CloseScreen;
+            modalDialog.Init(Callback, title, message, ok, cancel);
+            modalDialog.OnStatus += CloseScreen;
 
             animator.SetTrigger(initTrigger);
         }
 
-        private void CloseScreen(bool obj)
+        public void DisplayDialogComplex(Action<int> Callback, string title, string ok, string cancel, string alt, string message = "")
+        {
+            modalDialogComplex.gameObject.SetActive(true);
+            modalDialog.gameObject.SetActive(false);
+
+            modalDialogComplex.Init(Callback, title, message, ok, alt, cancel);
+            modalDialogComplex.OnStatus += CloseScreen;
+
+            animator.SetTrigger(initTrigger);
+        }
+
+        private void CloseScreen(bool isTrue)
+        {
+            animator.SetTrigger(removeTrigger);
+        }
+
+        private void CloseScreen(int id)
         {
             animator.SetTrigger(removeTrigger);
         }
