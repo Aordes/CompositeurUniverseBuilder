@@ -13,25 +13,50 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
         [SerializeField] private Animator animator;
         [SerializeField] private string initTrigger = "Init";
         [SerializeField] private string removeTrigger = "Remove";
+
+        [Header("Dialogs")]
         [SerializeField] private ModalDialog modalDialog;
         [SerializeField] private ModalDialogComplex modalDialogComplex;
+        [SerializeField] private InputDialog inputDialog;
 
-        private void Start () {
-            DisplayDialog(Test, "Test", "Confirm", "no", "Cancel");
-        }
-
-        public void Test(bool yes)
+        ///DEBUG ========================================================================
+        private void Start()
         {
-            Debug.Log("Result : " + yes);
+            //DisplayDialog(Test, "Test", "Confirm", "no", "Cancel");
+            inputDialog.gameObject.SetActive(false);
+            modalDialog.gameObject.SetActive(false);
+            modalDialogComplex.gameObject.SetActive(false);
         }
+
+        //public void Test(bool yes)
+        //{
+        //    Debug.Log("Result : " + yes);
+        //    DisplayDialogComplex(End, "Complex test", "OK", "Cancel", "No", "AAAAAAAA");
+        //}
+
+        //public void End(int state)
+        //{
+        //    Debug.Log("State : " + state);
+        //    DisplayInputDialog(TestInput, "Input", "ok", "cancel");
+        //}
+
+        //private void TestInput(bool result, string output)
+        //{
+        //    Debug.Log("result :" + result + " content :" + output);
+        //}
+        //END DEBUG ====================================================================
 
         public void DisplayDialog(Action<bool> Callback, string title, string ok, string message = "", string cancel = "")
         {
             modalDialog.gameObject.SetActive(true);
-            modalDialogComplex.gameObject.SetActive(false);
+
+            if (modalDialogComplex)
+                modalDialogComplex.gameObject.SetActive(false);
+            if (inputDialog)
+                inputDialog.gameObject.SetActive(false);
 
             modalDialog.Init(Callback, title, message, ok, cancel);
-            modalDialog.OnStatus += CloseScreen;
+            modalDialog.OnClose = CloseScreen;
 
             animator.SetTrigger(initTrigger);
         }
@@ -39,22 +64,42 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
         public void DisplayDialogComplex(Action<int> Callback, string title, string ok, string cancel, string alt, string message = "")
         {
             modalDialogComplex.gameObject.SetActive(true);
-            modalDialog.gameObject.SetActive(false);
+
+            if (modalDialog) 
+                modalDialog.gameObject.SetActive(false);
+            if (inputDialog)
+                inputDialog.gameObject.SetActive(false);
 
             modalDialogComplex.Init(Callback, title, message, ok, alt, cancel);
-            modalDialogComplex.OnStatus += CloseScreen;
+            modalDialogComplex.OnClose = CloseScreen;
 
             animator.SetTrigger(initTrigger);
         }
 
-        private void CloseScreen(bool isTrue)
+        public void DisplayInputDialog(Action<bool, string> Callback, string title, string ok, string cancel)
         {
-            animator.SetTrigger(removeTrigger);
+            modalDialogComplex.gameObject.SetActive(true);
+
+            inputDialog.gameObject.SetActive(true);
+           
+            if (modalDialog) 
+                modalDialog.gameObject.SetActive(false);
+            if (modalDialogComplex)
+                modalDialogComplex.gameObject.SetActive(false);
+
+            inputDialog.Init(Callback, title, ok, cancel);
+            inputDialog.OnClose = CloseScreen;
+
+            animator.SetTrigger(initTrigger);
         }
 
-        private void CloseScreen(int id)
+        private void CloseScreen()
         {
             animator.SetTrigger(removeTrigger);
+
+            inputDialog.OnClose = null;
+            modalDialog.OnClose = null;
+            modalDialogComplex.OnClose = null;
         }
     }
 }

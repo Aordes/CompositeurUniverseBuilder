@@ -9,43 +9,18 @@ using UnityEngine.UI;
 
 namespace Com.Docaret.CompositeurUniverseBuilder {
 
-    public class ModalDialog : MonoBehaviour {
+    public class ModalDialog : Dialog {
 
-        [Header("Texts")]
-        [SerializeField] protected Text txtAlert;
+        [Header("Message")]
         [SerializeField] protected Text txtMessage;
 
-        [Header("Confirm Button")]
-        [SerializeField] protected Button btnConfirm;
-        [SerializeField] protected Text txtConfirm;
-
-        [Header("Cancel Button")]
-        [SerializeField] protected Button btnCancel;
-        [SerializeField] protected Text txtCancel;
-
-        public Action<bool> OnStatus;
-
-        protected virtual void Start () {
-            if (btnConfirm)
-                btnConfirm.onClick.AddListener(ButtonConfirm_OnClick);
-            if (btnCancel)
-                btnCancel.onClick.AddListener(ButtonCancel_OnClick);
-        }
+        public new Action<bool> OnStatus;
 
         public void Init(Action<bool> Callback, string title, string message, string ok, string cancel)
         {
             OnStatus = Callback;
 
-            if (string.IsNullOrWhiteSpace(cancel))
-            {
-                btnCancel.interactable = false;
-                btnConfirm.transform.SetSiblingIndex(btnConfirm.transform.parent.childCount);
-            }
-            else 
-            {
-                btnCancel.interactable = true;
-                btnConfirm.transform.SetSiblingIndex(0);
-            }
+            SetButtonOrder(cancel);
 
             txtAlert.text = title;
             txtMessage.text = message;
@@ -54,16 +29,36 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
             txtCancel.text = cancel;
         }
 
-        protected virtual void ButtonConfirm_OnClick()
+        private void SetButtonOrder(string cancel)
         {
-            OnStatus?.Invoke(true);
-            OnStatus = null;
+            if (string.IsNullOrWhiteSpace(cancel))
+            {
+                btnCancel.interactable = false;
+                btnConfirm.transform.SetSiblingIndex(btnConfirm.transform.parent.childCount);
+            }
+            else
+            {
+                btnCancel.interactable = true;
+                btnConfirm.transform.SetSiblingIndex(0);
+            }
         }
 
-        protected virtual void ButtonCancel_OnClick()
+        protected override void ButtonConfirm_OnClick()
         {
+            base.ButtonConfirm_OnClick();
+
+            OnStatus?.Invoke(true);
+            OnStatus = null;
+
+        }
+
+        protected override void ButtonCancel_OnClick()
+        {
+            base.ButtonCancel_OnClick();
+
             OnStatus?.Invoke(false);
             OnStatus = null;
+
         }
     }
 }
