@@ -22,10 +22,10 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
         ///DEBUG ========================================================================
         private void Start()
         {
-            //DisplayDialog(Test, "Test", "Confirm", "no", "Cancel");
             inputDialog.gameObject.SetActive(false);
             modalDialog.gameObject.SetActive(false);
             modalDialogComplex.gameObject.SetActive(false);
+            //DisplayDialog(Test, "Test", "Confirm", "no", "Cancel");
         }
 
         //public void Test(bool yes)
