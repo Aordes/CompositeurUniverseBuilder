@@ -13,12 +13,14 @@ namespace Com.Docaret.UniverseBuilder
     {
         [SerializeField] private GameObject filePrefab;
 
+        public FolderStruct currentFolderStruct;
+        public List<FileStruct> fileList = new List<FileStruct>();
+
         private GridLayoutGroup gridLayout;
         private RectTransform rectTransform;
 
         private int minXCellSize = 80;
         private int minYCellSize = 20;
-        private List<FileStruct> fileList = new List<FileStruct>();
 
         private void Awake ()
         {
@@ -26,11 +28,17 @@ namespace Com.Docaret.UniverseBuilder
             rectTransform = gameObject.GetComponent<RectTransform>();
 		}
 
-        public void CreateFile()
+        public void CreateFile(string path)
         {
             GameObject instance = Instantiate(filePrefab, gameObject.transform);
             FileStruct fileStruct = new FileStruct();
+
             fileStruct.instance = instance;
+            fileStruct.folderstruct = currentFolderStruct;
+            fileStruct.textMesh = instance.GetComponent<TextMesh>();
+            fileStruct.button = instance.GetComponent<Button>();
+            fileStruct.path = path;
+
             fileList.Add(fileStruct);
             SetGridSize();
         }

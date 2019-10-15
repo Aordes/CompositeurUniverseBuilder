@@ -14,6 +14,8 @@ namespace Com.Docaret.UniverseBuilder
         public GameObject instance;
         public Button button;
         public Image image;
-        public string name;
+        public string path;
+        public TextMesh textMesh;
+        public FolderStruct folderstruct;
     }
 }

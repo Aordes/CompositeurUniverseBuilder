@@ -1,6 +1,6 @@
 ﻿///-----------------------------------------------------------------
 /// Author : #Adrien Bordes#
-/// Date : #DATE#
+/// Date : #01.09.2019#
 ///-----------------------------------------------------------------
 
 using SFB;
@@ -18,7 +18,7 @@ namespace Com.Docaret.UniverseBuilder {
         public static DynamicGrid fileGrid;
         #endregion
 
-        #region Action Methods
+        #region Folder Methods
         public static void FolderButton_OnChangePreview(Button button)
         {
             string[] path = StandaloneFileBrowser.OpenFilePanel("Select a Preview", "", supportedImageExtantions, false);
@@ -44,20 +44,17 @@ namespace Com.Docaret.UniverseBuilder {
             if (path.Length == 0) return;
 
             FolderStruct folder = GetFolderStructFromFolderButton(button);
+
             for (int i = 0; i < path.Length; i++)
             {
                 File.Copy(path[i], folder.directory.FullName + "/" + Path.GetFileName(path[i]));
-                fileGrid.CreateFile();
+                CreateFile(folder.directory.FullName + "/" + Path.GetFileName(path[i]));
             }
-        }
-
-        public static void CreateFile()
-        {
-            fileGrid.CreateFile();
         }
 
         public static void FolderButton_OnDeleteDirectory(Button button)
         {
+            Debug.Log("Delete Directory");
             FolderStruct folder = GetFolderStructFromFolderButton(button);
 
             folder.directory.Delete(true);
@@ -74,6 +71,32 @@ namespace Com.Docaret.UniverseBuilder {
         }
         #endregion
 
+        #region File Methods
+        public static void CreateFile(string path)
+        {
+            fileGrid.CreateFile(path);
+        }
+
+        public static void DeleteFileDirectory(Button button)
+        {
+            Debug.Log("Delete File");
+            FileStruct file = GetFileStructFromFileButton(fileGrid.fileList, button);
+
+            Directory.Delete(file.path);
+            file.folderstruct.fileList.RemoveAt(file.folderstruct.fileList.IndexOf(file));
+            Object.Destroy(file.instance);
+        }
+
+        public static void FileButton_RenameFile(string newName, Button button)
+        {
+            if (Directory.Exists(fileGrid.currentFolderStruct.directory.FullName + "/" + newName) || string.IsNullOrEmpty(newName)) return;
+
+            FileStruct file = GetFileStructFromFileButton(fileGrid.fileList, button);
+            Debug.Log(file.folderstruct.directory.FullName);
+            file.folderstruct.directory.MoveTo(fileGrid.currentFolderStruct.directory.FullName + "/" + newName);
+        }
+        #endregion
+
         #region Utils
         private static FolderStruct GetFolderStructFromFolderButton(Button button)
         {
@@ -85,6 +108,18 @@ namespace Com.Docaret.UniverseBuilder {
                 }
             }
             return folderList[0];
+        }
+
+        private static FileStruct GetFileStructFromFileButton(List<FileStruct> fileList, Button button)
+        {
+            for (int i = 0; i < fileList.Count; i++)
+            {
+                if (fileList[i].button == button)
+                {
+                    return fileList[i];
+                }
+            }
+            return fileList[0];
         }
         #endregion
     }

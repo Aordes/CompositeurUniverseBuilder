@@ -1,8 +1,9 @@
 ﻿///-----------------------------------------------------------------
 /// Author : #Adrien Bordes#
-/// Date : #DATE#
+/// Date : #01.09.2019#
 ///-----------------------------------------------------------------
 
+using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,5 +18,6 @@ namespace Com.Docaret.UniverseBuilder
         public string path;
         public RawImage image;
         public GameObject folderInstance;
+        public List<FileStruct> fileList;
     }
 }

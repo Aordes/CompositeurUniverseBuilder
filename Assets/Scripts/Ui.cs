@@ -28,6 +28,7 @@ namespace Com.Docaret.UniverseBuilder
         [SerializeField] SlidePanelButtonContainer rightButtonContainer;
         [SerializeField] GameObject inputFieldPrefab;
         [SerializeField] GameObject uiContainer;
+        [SerializeField] ToolBar toolBar;
 
         private string universePath;
         private string compositeurFolderPath;
@@ -56,6 +57,7 @@ namespace Com.Docaret.UniverseBuilder
         //Create new folder & Event subscriptions
         private void OnCLick_CreateFolder()
         {
+            DynamicGrid dynamicGrid;
             FolderStruct folderStruct = new FolderStruct();
             folderStruct.path = universePath + "/" + "New Folder" + (FileManager.folderList.Count + 1);
 
@@ -66,7 +68,11 @@ namespace Com.Docaret.UniverseBuilder
             folderStruct.folderInstance = Instantiate(folderPrefab, bottomFolderContainer.transform);
             folderStruct.button = folderStruct.folderInstance.GetComponent<Button>();
             folderStruct.folderScript = folderStruct.button.gameObject.GetComponent<FolderButton>();
+            folderStruct.folderScript.toolbar = toolBar;
             folderStruct.image = folderStruct.button.gameObject.GetComponent<RawImage>();
+
+            dynamicGrid = folderStruct.folderScript.fileContainer.GetComponent<DynamicGrid>();
+            folderStruct.fileList = dynamicGrid.fileList;
 
             folderStruct.folderScript.onEndEditFolderName += FileManager.FolderButton_RenameFolder;
             folderStruct.folderScript.onChangePreview += FileManager.FolderButton_OnChangePreview;
@@ -74,6 +80,7 @@ namespace Com.Docaret.UniverseBuilder
             folderStruct.folderScript.onDeleteDirectory += FileManager.FolderButton_OnDeleteDirectory;
 
             FileManager.folderList.Add(folderStruct);
+            dynamicGrid.currentFolderStruct = folderStruct;
 
             CreateNewFolderButton();
         }
