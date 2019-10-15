@@ -4,6 +4,7 @@
 ///-----------------------------------------------------------------
 
 using SFB;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
@@ -59,7 +60,7 @@ namespace Com.Docaret.UniverseBuilder {
 
             folder.directory.Delete(true);
             folderList.RemoveAt(folderList.IndexOf(folder));
-            Object.Destroy(folder.folderInstance);
+            UnityEngine.Object.Destroy(folder.folderInstance);
         }
 
         public static void FolderButton_RenameFolder(string newName, Button button)
@@ -84,7 +85,7 @@ namespace Com.Docaret.UniverseBuilder {
 
             Directory.Delete(file.path);
             file.folderstruct.fileList.RemoveAt(file.folderstruct.fileList.IndexOf(file));
-            Object.Destroy(file.instance);
+            UnityEngine.Object.Destroy(file.instance);
         }
 
         public static void FileButton_RenameFile(string newName, Button button)
@@ -95,6 +96,40 @@ namespace Com.Docaret.UniverseBuilder {
             Debug.Log(file.folderstruct.directory.FullName);
             file.folderstruct.directory.MoveTo(fileGrid.currentFolderStruct.directory.FullName + "/" + newName);
         }
+        #endregion
+
+        #region Meta
+        public static void AddMetaToFile(string meta, Button button)
+        {
+            FileStruct file = GetFileStructFromFileButton(fileGrid.fileList, button);
+            string metaPath = Path.Combine(file.path + "_meta");
+
+            if (!File.Exists(metaPath))
+            {
+                CreateMetaFile(meta, metaPath);
+            }
+            else
+            {
+                AddToExistingMetaFile(meta, metaPath);
+            }
+
+        }
+
+        public static void AddMetaToFolder(string meta, Button button)
+        {
+            FolderStruct folder = GetFolderStructFromFolderButton(button);
+            string metaPath = Path.Combine(folder.directory.FullName + "_meta");
+
+            if (!File.Exists(metaPath))
+            {
+                CreateMetaFile(meta, metaPath);
+            }
+            else
+            {
+                AddToExistingMetaFile(meta, metaPath);
+            }
+        }
+     
         #endregion
 
         #region Utils
@@ -120,6 +155,33 @@ namespace Com.Docaret.UniverseBuilder {
                 }
             }
             return fileList[0];
+        }
+
+        private static void CreateMetaFile(string meta, string metaPath)
+        {
+            // Create a file to write to.
+            using (StreamWriter sw = File.CreateText(metaPath))
+            {
+                sw.WriteLine(meta);
+            }
+        }
+
+        private static void AddToExistingMetaFile(string meta, string metaPath)
+        {
+            // Open the file to read from.
+            using (StreamReader sr = File.OpenText(metaPath))
+            {
+                string s;
+                while ((s = sr.ReadLine()) != null)
+                {
+                    if (s == meta) return;
+                }
+
+                using (StreamWriter sw = new StreamWriter(metaPath))
+                {
+                    sw.WriteLine(meta);
+                }
+            }
         }
         #endregion
     }

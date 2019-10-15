@@ -15,6 +15,15 @@ namespace Com.Docaret.UniverseBuilder
         [Header("Meta")]
         [SerializeField] private Button btnAddMetaToMainFolder;
         [SerializeField] private Button btnAddMetaToSelection;
+        [SerializeField] private GameObject metaMenu;
+
+        [Header("MetaData")]
+        [SerializeField] private Toggle desiredWidth;
+        [SerializeField] private Slider desiredWidthSlider;
+        [SerializeField] private Toggle showOnStart;
+        [SerializeField] private Toggle videoLoop;
+        [SerializeField] private Toggle videoAutoPlay;
+        [SerializeField] private Toggle videoMute;
 
         [Header("Rename")]
         [SerializeField] private Button btnRenameMainFolder;
@@ -30,12 +39,6 @@ namespace Com.Docaret.UniverseBuilder
 
         [Header("Content")]
         [SerializeField] private Button btnAddContent;
-
-
-        //public event Action<string> OnAddMeta;
-        //public event Action<string> OnRenameItem;
-        //public event Action<string> OnAddPreview;
-        //public event Action<string> OnDeleteItem;
 
         public event Action<GameObject> OnSelectionChangeEvent;
 
@@ -73,23 +76,15 @@ namespace Com.Docaret.UniverseBuilder
 
             if (btnAddMetaToMainFolder)
                 btnAddMetaToMainFolder.onClick.AddListener(AddMetaToSelection_OnClick);
-            if (btnAddMetaToSelection)
-                btnAddMetaToSelection.onClick.AddListener(AddMetaToSelection_OnClick);
 
             if (btnRenameMainFolder)
                 btnRenameMainFolder.onClick.AddListener(RenameSelection_OnClick);
-            if (btnRenameSelection)
-                btnRenameSelection.onClick.AddListener(RenameSelection_OnClick);
 
             if (btnPreviewToMainfolder)
                 btnPreviewToMainfolder.onClick.AddListener(PreviewToSelection_OnClick);
-            if (btnPreviewToSelection)
-                btnPreviewToSelection.onClick.AddListener(PreviewToSelection_OnClick);
 
             if (btnDeleteMainfolder)
                 btnDeleteMainfolder.onClick.AddListener(DeleteSelection_OnClick);
-            if (btnDeleteSelection)
-                btnDeleteSelection.onClick.AddListener(DeleteSelection_OnClick);
 
             if (btnAddContent)
                 btnAddContent.onClick.AddListener(AddContent_OnClick);
@@ -97,7 +92,8 @@ namespace Com.Docaret.UniverseBuilder
 
         private void AddMetaToSelection_OnClick()
         {
-            //OnAddMeta?.Invoke(_currentSelection);
+            metaMenu.SetActive(true);
+            FileManager.AddMetaToFile("Hhh", _currentSelection);
         }
 
         private void RenameSelection_OnClick()
