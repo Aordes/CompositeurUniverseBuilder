@@ -48,7 +48,7 @@ namespace Com.Docaret.UniverseBuilder
         public Button CurrentFolder
         {
             set {
-                _currentFolder = value;               
+                _currentFolder = value;
                 //init buttons
             }
         }
@@ -56,14 +56,14 @@ namespace Com.Docaret.UniverseBuilder
         private Button _currentSelection;
         public Button CurrentSelection
         {
-                //OnSelectionChange();
+            //OnSelectionChange();
             set
             {
                 _currentSelection = value;
-                if (_currentFolder == value) return;
+                if (_currentSelection == value) return;
                 else
                 {
-                    _currentFolder = value;
+                    _currentSelection = value;
                     OnSelectionChangeEvent?.Invoke(value.gameObject);
                 }
 
@@ -71,11 +71,12 @@ namespace Com.Docaret.UniverseBuilder
             }
         }
 
-        private void Start () {
+        private void Start() {
             OnSelectionChangeEvent += OnSelectionChange;
 
+            #region Buttons AddListeners
             if (btnAddMetaToMainFolder)
-                btnAddMetaToMainFolder.onClick.AddListener(AddMetaToSelection_OnClick);
+                btnAddMetaToMainFolder.onClick.AddListener(OpenMetaToMenu_OnClick);
 
             if (btnRenameMainFolder)
                 btnRenameMainFolder.onClick.AddListener(RenameSelection_OnClick);
@@ -88,12 +89,109 @@ namespace Com.Docaret.UniverseBuilder
 
             if (btnAddContent)
                 btnAddContent.onClick.AddListener(AddContent_OnClick);
+            #endregion
+
+            #region Toggles & Sliders AddListeners
+            //MetaData Toggles & Sliders
+            if (desiredWidth) desiredWidth.onValueChanged.AddListener((value) => {
+                DesiredWidth_OnValueChanged(value);
+            });
+
+            if (desiredWidth) desiredWidthSlider.onValueChanged.AddListener((value) => {
+                DesiredWidthSlider_OnValueChanged(value);
+            });
+
+            if (showOnStart) desiredWidth.onValueChanged.AddListener((value) => {
+                ShowOnStart_OnValueChanged(value);
+            });
+
+            if (videoLoop) desiredWidth.onValueChanged.AddListener((value) => {
+                VideoLoop_OnValueChanged(value);
+            });
+
+            if (videoAutoPlay) desiredWidth.onValueChanged.AddListener((value) => {
+                VideoAutoPlay_OnValueChanged(value);
+            });
+
+            if (videoMute) desiredWidth.onValueChanged.AddListener((value) => {
+                VideoMute_OnValueChanged(value);
+            });
+            #endregion
         }
 
-        private void AddMetaToSelection_OnClick()
+        private void Update()
+        {
+            Debug.Log(_currentSelection.gameObject.name);
+        }
+
+        private void CloseMetaToMenu()
+        {
+            metaMenu.SetActive(false);
+        }
+
+        private void UpdateMetaMenuToCurrentSelection()
+        {
+            MetaData md;
+
+            if (isFile)
+            {
+               FileStruct fileStruct = FileManager.GetFileStructFromFileButton(_currentSelection);
+               md = fileStruct.metaData;
+            }
+            else
+            {
+                FolderStruct folderStruct = FileManager.GetFolderStructFromFolderButton(_currentSelection);
+                md = folderStruct.metaData;
+            }
+
+            desiredWidth.isOn = md.desiredWidth;
+            desiredWidthSlider.value = md.desiredWidthValue;
+
+            showOnStart.isOn = md.showOnStart;
+
+            videoLoop.isOn = md.videoLoop;
+
+            videoAutoPlay.isOn = md.videoAutoplay;
+
+            videoMute.isOn = md.videoMute;
+        }
+
+        #region Meta OnValueChanged
+        private void DesiredWidth_OnValueChanged(bool value)
+        {
+            FileManager.ChangeMetaData(isFile, _currentSelection, MetaData.DESIRED_WIDTH, value, Mathf.RoundToInt(desiredWidthSlider.value));
+        }
+
+        private void DesiredWidthSlider_OnValueChanged(float value)
+        {
+            FileManager.ChangeMetaData(isFile, _currentSelection, MetaData.DESIRED_WIDTH, desiredWidth.isOn, Mathf.RoundToInt(value));
+        }
+
+        private void ShowOnStart_OnValueChanged(bool value)
+        {
+            FileManager.ChangeMetaData(isFile, _currentSelection, MetaData.SHOW_ON_START, value);
+        }
+
+        private void VideoLoop_OnValueChanged(bool value)
+        {
+            FileManager.ChangeMetaData(isFile, _currentSelection, MetaData.VDEO_LOOP, value);
+        }
+
+        private void VideoAutoPlay_OnValueChanged(bool value)
+        {
+            FileManager.ChangeMetaData(isFile, _currentSelection, MetaData.VDEO_AUTOPLAY, value);
+        }
+
+        private void VideoMute_OnValueChanged(bool value)
+        {
+            FileManager.ChangeMetaData(isFile, _currentSelection, MetaData.VDEO_MUTE, value);
+        }
+        #endregion
+
+        #region ToolBar Buttons On_Click
+        private void OpenMetaToMenu_OnClick()
         {
             metaMenu.SetActive(true);
-            FileManager.AddMetaToFile("Hhh", _currentSelection);
         }
 
         private void RenameSelection_OnClick()
@@ -132,11 +230,13 @@ namespace Com.Docaret.UniverseBuilder
         {
             FileManager.FolderButton_OnChangeDirectoryContent(_currentSelection);
         }
+        #endregion
 
         public void OnSelectionChange(GameObject selection)
         {
             Debug.Log("Change");
             isFile = _currentSelection.gameObject.CompareTag("File");
+            CloseMetaToMenu();
         }
     }
 }

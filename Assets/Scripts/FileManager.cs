@@ -17,6 +17,9 @@ namespace Com.Docaret.UniverseBuilder {
         public static ExtensionFilter[] supportedImageExtantions = new[] { new ExtensionFilter("Image Files", "png", "jpg", "jpeg") };
         public static List<FolderStruct> folderList = new List<FolderStruct>();
         public static DynamicGrid fileGrid;
+
+        private static string currentMetaProperty;
+        
         #endregion
 
         #region Folder Methods
@@ -81,7 +84,7 @@ namespace Com.Docaret.UniverseBuilder {
         public static void DeleteFileDirectory(Button button)
         {
             Debug.Log("Delete File");
-            FileStruct file = GetFileStructFromFileButton(fileGrid.fileList, button);
+            FileStruct file = GetFileStructFromFileButton(button);
 
             Directory.Delete(file.path);
             file.folderstruct.fileList.RemoveAt(file.folderstruct.fileList.IndexOf(file));
@@ -92,48 +95,80 @@ namespace Com.Docaret.UniverseBuilder {
         {
             if (Directory.Exists(fileGrid.currentFolderStruct.directory.FullName + "/" + newName) || string.IsNullOrEmpty(newName)) return;
 
-            FileStruct file = GetFileStructFromFileButton(fileGrid.fileList, button);
+            FileStruct file = GetFileStructFromFileButton(button);
             Debug.Log(file.folderstruct.directory.FullName);
             file.folderstruct.directory.MoveTo(fileGrid.currentFolderStruct.directory.FullName + "/" + newName);
         }
         #endregion
 
         #region Meta
-        public static void AddMetaToFile(string meta, Button button)
+        public static void ChangeMetaData(bool isFile, Button button, string metaProperty, bool value, int intValue = 0)
         {
-            FileStruct file = GetFileStructFromFileButton(fileGrid.fileList, button);
-            string metaPath = Path.Combine(file.path + "_meta");
-
-            if (!File.Exists(metaPath))
+            if (isFile)
             {
-                CreateMetaFile(meta, metaPath);
+                AddMetaToFile(button, metaProperty, value, intValue);
             }
             else
             {
-                AddToExistingMetaFile(meta, metaPath);
+                AddMetaToFolder(button, metaProperty, value, intValue);
             }
+        }
+
+        public static void AddMetaToFile(Button button, string metaProperty, bool value, int intValue)
+        {
+            FileStruct file = GetFileStructFromFileButton(button);
+            string metaPath = Path.Combine(file.path + "_meta.txt");
+
+            currentMetaProperty = metaProperty;
+
+            if (intValue == 0) metaProperty += " " + value;
+            else metaProperty += " " + intValue + "%";
+
+            UpdateFileOrFolderMetaData(file.metaData, metaProperty, value, intValue);
+            AddOrCreateMeta(metaProperty, metaPath);
 
         }
 
-        public static void AddMetaToFolder(string meta, Button button)
+        public static void AddMetaToFolder(Button button, string metaProperty, bool value, int intValue)
         {
             FolderStruct folder = GetFolderStructFromFolderButton(button);
-            string metaPath = Path.Combine(folder.directory.FullName + "_meta");
+            string metaPath = Path.Combine(folder.directory.FullName + "_meta.txt");
 
-            if (!File.Exists(metaPath))
+            currentMetaProperty = metaProperty;
+
+            if (intValue == 0) metaProperty += " " + value;
+            else metaProperty += " " + intValue + "%";
+
+            UpdateFileOrFolderMetaData(folder.metaData, metaProperty, value, intValue);
+            AddOrCreateMeta(metaProperty, metaPath);
+        }
+
+        private static void UpdateFileOrFolderMetaData(MetaData metaData, string metaProperty, bool value, int intValue = 0)
+        {
+            switch (metaProperty)
             {
-                CreateMetaFile(meta, metaPath);
-            }
-            else
-            {
-                AddToExistingMetaFile(meta, metaPath);
+                case MetaData.DESIRED_WIDTH:
+                    metaData.desiredWidth = value;
+                    metaData.desiredWidthValue = intValue;
+                    break;
+                case MetaData.SHOW_ON_START:
+                    metaData.showOnStart = value;
+                    break;
+                case MetaData.VDEO_LOOP:
+                    metaData.videoLoop = value;
+                    break;
+                case MetaData.VDEO_AUTOPLAY:
+                    metaData.videoAutoplay = value;
+                    break;
+                case MetaData.VDEO_MUTE:
+                    metaData.videoAutoplay = value;
+                    break;
             }
         }
-     
         #endregion
 
         #region Utils
-        private static FolderStruct GetFolderStructFromFolderButton(Button button)
+        public static FolderStruct GetFolderStructFromFolderButton(Button button)
         {
             for (int i = 0; i < folderList.Count; i++)
             {
@@ -145,16 +180,28 @@ namespace Com.Docaret.UniverseBuilder {
             return folderList[0];
         }
 
-        private static FileStruct GetFileStructFromFileButton(List<FileStruct> fileList, Button button)
+        public static FileStruct GetFileStructFromFileButton(Button button)
         {
-            for (int i = 0; i < fileList.Count; i++)
+            for (int i = 0; i < fileGrid.fileList.Count; i++)
             {
-                if (fileList[i].button == button)
+                if (fileGrid.fileList[i].button == button)
                 {
-                    return fileList[i];
+                    return fileGrid.fileList[i];
                 }
             }
-            return fileList[0];
+            return fileGrid.fileList[0];
+        }
+
+        private static void AddOrCreateMeta(string meta, string metaPath)
+        {
+            if (!File.Exists(metaPath))
+            {
+                CreateMetaFile(meta, metaPath);
+            }
+            else
+            {
+                AddToExistingMetaFile(meta, metaPath);
+            }
         }
 
         private static void CreateMetaFile(string meta, string metaPath)

@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 303814469751438106}
   - component: {fileID: 303814469751438101}
   - component: {fileID: 303814469751438100}
+  - component: {fileID: 8699026659235058653}
   m_Layer: 5
   m_Name: FolderItem
   m_TagString: File
@@ -165,6 +166,20 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &8699026659235058653
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 303814469751438102}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b742e0668e45b464da89cb29cafa2da7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  button: {fileID: 303814469751438101}
+  toolBar: {fileID: 0}
 --- !u!1 &303814470887216505
 GameObject:
   m_ObjectHideFlags: 0

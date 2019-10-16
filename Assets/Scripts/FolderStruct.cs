@@ -19,5 +19,6 @@ namespace Com.Docaret.UniverseBuilder
         public RawImage image;
         public GameObject folderInstance;
         public List<FileStruct> fileList;
+        public MetaData metaData;
     }
 }

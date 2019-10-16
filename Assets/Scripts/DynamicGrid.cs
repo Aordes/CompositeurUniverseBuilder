@@ -13,6 +13,7 @@ namespace Com.Docaret.UniverseBuilder
     {
         [SerializeField] private GameObject filePrefab;
 
+        public ToolBar toolBar;
         public FolderStruct currentFolderStruct;
         public List<FileStruct> fileList = new List<FileStruct>();
 
@@ -37,7 +38,9 @@ namespace Com.Docaret.UniverseBuilder
             fileStruct.folderstruct = currentFolderStruct;
             fileStruct.textMesh = instance.GetComponent<TextMesh>();
             fileStruct.button = instance.GetComponent<Button>();
+            fileStruct.button.GetComponent<FileSelection>().toolBar = toolBar;
             fileStruct.path = path;
+            fileStruct.metaData = new MetaData();
 
             fileList.Add(fileStruct);
             SetGridSize();

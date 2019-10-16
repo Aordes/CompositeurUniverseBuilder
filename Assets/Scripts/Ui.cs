@@ -70,6 +70,7 @@ namespace Com.Docaret.UniverseBuilder
             folderStruct.folderScript = folderStruct.button.gameObject.GetComponent<FolderButton>();
             folderStruct.folderScript.toolbar = toolBar;
             folderStruct.image = folderStruct.button.gameObject.GetComponent<RawImage>();
+            folderStruct.metaData = new MetaData();
 
             dynamicGrid = folderStruct.folderScript.fileContainer.GetComponent<DynamicGrid>();
             folderStruct.fileList = dynamicGrid.fileList;

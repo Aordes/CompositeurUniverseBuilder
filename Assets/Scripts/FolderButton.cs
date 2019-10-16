@@ -45,6 +45,7 @@ namespace Com.Docaret.UniverseBuilder
         #region Unity Methods
         void Awake()
         {
+            fileContainer.GetComponent<DynamicGrid>().toolBar = toolbar;
             fileContainer.SetActive(false);
 
 
@@ -77,6 +78,7 @@ namespace Com.Docaret.UniverseBuilder
         private void OnSelected()
         {
             toolbar.CurrentSelection = button;
+            toolbar.CurrentFolder = button;
         }
 
         public void OnPointerExit(PointerEventData eventData)

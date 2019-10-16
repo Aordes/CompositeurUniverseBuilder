@@ -17,5 +17,6 @@ namespace Com.Docaret.UniverseBuilder
         public string path;
         public TextMesh textMesh;
         public FolderStruct folderstruct;
+        public MetaData metaData;
     }
 }
