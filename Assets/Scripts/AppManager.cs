@@ -74,7 +74,7 @@ namespace Com.Docaret.UniverseBuilder
 
             if (files.Length != 0)
             {
-                Debug.Log(files[0].FullName);
+                //Debug.Log(files[0].FullName);
                 byte[] data = File.ReadAllBytes(files[0].FullName);
 
                 Texture2D texture2D = new Texture2D(2, 2);
