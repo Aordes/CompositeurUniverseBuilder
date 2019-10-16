@@ -42,6 +42,16 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
             videoPlayer.Play();
         }
 
+        public void BeginPreview()
+        {
+            //videoPlayer.Play();
+        }
+
+        public void StopPreview()
+        {
+            //videoPlayer.Stop();
+        }
+
         private void ButtonPlay_OnClick()
         {
             OnPlay?.Invoke();
