@@ -45,8 +45,8 @@ namespace Com.Docaret.UniverseBuilder
 
             if (btnCreateUniverse)
                 btnCreateUniverse.onClick.AddListener(OnClick_CreateUniverse);
-            if (btnOpenUniverse)
-            btnOpenUniverse.onClick.AddListener(OnClick_OpenUniverse);
+            //if (btnOpenUniverse)
+            //btnOpenUniverse.onClick.AddListener(OnClick_OpenUniverse);
 
             GetProjects();
         }
@@ -95,13 +95,21 @@ namespace Com.Docaret.UniverseBuilder
             //    preview = Sprite.Create(texture2D, new Rect((texture2D.width - minSize) / 2, (texture2D.height - minSize) / 2, minSize, minSize), Vector2.zero);
             //}
 
-            instance.Init(directoryInfo.FullName, directoryInfo.Name, preview);
+            instance.Init(directoryInfo, preview);
             instance.OnClick += ProjectItem_OnClick;
         }
 
-        private void ProjectItem_OnClick(string obj)
+        private void ProjectItem_OnClick(DirectoryInfo source)
         {
-            Debug.Log("Loading " + obj);
+            Debug.Log("Loading " + source.FullName);
+            universeDirectory = source;
+
+            DirectoryData.CurrentUniverseName = source.Name;
+            DirectoryData.CurrentDirectory = source;
+            DirectoryData.CurrentUniversePath = source.FullName;
+            DirectoryData.CompositeurFolderPath = compositeurFolderPath;
+
+            StartCoroutine(AsyncLoadEditor());
         }
 
 
@@ -109,11 +117,6 @@ namespace Com.Docaret.UniverseBuilder
         private void OnClick_CreateUniverse()
         {
             //universeNameInputField.gameObject.SetActive(true);
-        }
-
-        private void OnClick_OpenUniverse()
-        {
-        
         }
 
         private void OnEndEdit_LoadScene(string name)
@@ -125,12 +128,12 @@ namespace Com.Docaret.UniverseBuilder
             DirectoryData.CurrentUniversePath = universeDirectory.FullName;
             DirectoryData.CompositeurFolderPath = compositeurFolderPath;
 
-            StartCoroutine(LoadYourAsyncScene());
+            StartCoroutine(AsyncLoadEditor());
         }
         #endregion
 
         #region Coroutine
-        private IEnumerator LoadYourAsyncScene()
+        private IEnumerator AsyncLoadEditor()
         {
             AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("Universe Builder");
 
@@ -139,7 +142,7 @@ namespace Com.Docaret.UniverseBuilder
             {
                 yield return null;
             }
-            StopCoroutine(LoadYourAsyncScene());
+            StopCoroutine(AsyncLoadEditor());
         }
         #endregion
     }
