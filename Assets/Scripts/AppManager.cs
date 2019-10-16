@@ -25,8 +25,7 @@ namespace Com.Docaret.UniverseBuilder
         [SerializeField] private Transform projectGrid;
         [SerializeField] private ProjectItem prefabProjectItem;
 
-        private static string PREVIEW_FILE_NAME = "_preview.png";
-        private static Rect IMAGE_RECT = new Rect(0, 0, 256, 256);
+        private static string PREVIEW_FILE_NAME = "_preview.*";
 
         private string compositeurFolderPath;
         private DirectoryInfo compositeurDirectory;
@@ -56,12 +55,12 @@ namespace Com.Docaret.UniverseBuilder
         private void GetProjects()
         {
             DirectoryInfo info = new DirectoryInfo(compositeurFolderPath);
-            DirectoryInfo[] files = info.GetDirectories();
+            DirectoryInfo[] directories = info.GetDirectories();
 
-            for (int i = 0; i < files.Length; i++)
+            for (int i = 0; i < directories.Length; i++)
             {
-                AddProject(files[i]);
-                Debug.Log(files[i]);
+                AddProject(directories[i]);
+                //Debug.Log(directories[i]);
             }
         }
 
@@ -71,16 +70,30 @@ namespace Com.Docaret.UniverseBuilder
             Sprite preview = null;
 
             string previewPath = Path.Combine(directoryInfo.FullName, PREVIEW_FILE_NAME);
+            FileInfo[] files = directoryInfo.GetFiles(PREVIEW_FILE_NAME);
 
-            if (File.Exists(previewPath))
+            if (files.Length != 0)
             {
-                byte[] data = File.ReadAllBytes(previewPath);
+                Debug.Log(files[0].FullName);
+                byte[] data = File.ReadAllBytes(files[0].FullName);
 
                 Texture2D texture2D = new Texture2D(2, 2);
                 texture2D.LoadImage(data);
 
-                preview = Sprite.Create(texture2D, IMAGE_RECT, Vector2.one * 0.5f);
+                float minSize = Mathf.Min(texture2D.width, texture2D.height);
+                preview = Sprite.Create(texture2D, new Rect((texture2D.width - minSize) / 2, (texture2D.height - minSize) / 2, minSize, minSize), Vector2.zero);
             }
+
+            //if (File.Exists(previewPath))
+            //{
+            //    byte[] data = File.ReadAllBytes(previewPath);
+
+            //    Texture2D texture2D = new Texture2D(2, 2);
+            //    texture2D.LoadImage(data);
+
+            //    float minSize = Mathf.Min(texture2D.width, texture2D.height);
+            //    preview = Sprite.Create(texture2D, new Rect((texture2D.width - minSize) / 2, (texture2D.height - minSize) / 2, minSize, minSize), Vector2.zero);
+            //}
 
             instance.Init(directoryInfo.FullName, directoryInfo.Name, preview);
             instance.OnClick += ProjectItem_OnClick;
