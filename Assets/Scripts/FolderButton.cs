@@ -45,22 +45,15 @@ namespace Com.Docaret.UniverseBuilder
         #region Unity Methods
         void Awake()
         {
-            fileContainer.GetComponent<DynamicGrid>().toolBar = toolbar;
             fileContainer.SetActive(false);
 
-
             button = gameObject.GetComponent<Button>();
-            button.onClick.AddListener(AddFolder);
             button.onClick.AddListener(OnSelected);
+        }
 
-            //openButton.onClick.AddListener(OnClick_ChangeDirectoryContent);
-            //changePreviewButton.onClick.AddListener(OnClick_ChangePreview);
-            //deleteButton.onClick.AddListener(OnClick_DeleteButton);
-
-            //inputField.onEndEdit.AddListener(delegate
-            //{
-            //    OnEnd_EditName(inputField.text);
-            //});
+        private void Start()
+        {
+            fileContainer.GetComponent<DynamicGrid>().toolBar = toolbar;
         }
         #endregion
 
@@ -112,11 +105,6 @@ namespace Com.Docaret.UniverseBuilder
         #endregion
 
         #region CallBack Methods
-        public void AddFolder()
-        {           
-            //FileManager.CreateFile();
-        }
-
         private void OnEnd_EditName(string name)
         {
             onEndEditFolderName?.Invoke(name, button);          

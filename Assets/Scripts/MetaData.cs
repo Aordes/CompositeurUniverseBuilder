@@ -3,13 +3,14 @@
 /// Date : 15/10/2019 18:09
 ///-----------------------------------------------------------------
 
+using System;
 using UnityEngine;
 
 namespace Com.Docaret.UniverseBuilder
 {
-	public class MetaData {
+	public class MetaData : MonoBehaviour {
 
-        public int desiredWidthValue;
+        public int desiredWidthValue = 75;
         public bool desiredWidth;
 
         public bool showOnStart;
@@ -17,10 +18,17 @@ namespace Com.Docaret.UniverseBuilder
         public bool videoAutoplay = true;
         public bool videoMute;
 
+        public bool[] metaList;
+
         public const string DESIRED_WIDTH = "desiredWidth =";
-        public const string SHOW_ON_START = "showOnStart =";
-        public const string VDEO_LOOP = "videoLoop =";
-        public const string VDEO_AUTOPLAY = "videoAutoplay =";
-        public const string VDEO_MUTE = "videoMute =";
-	}
+        public const string SHOW_ON_START = "table.showOnStart =";
+        public const string VDEO_LOOP = "video.loop =";
+        public const string VDEO_AUTOPLAY = "video.autoplay =";
+        public const string VDEO_MUTE = "video.mute =";
+
+        private void Awake()
+        {
+            metaList = new bool[] { desiredWidth, showOnStart, videoLoop, videoAutoplay, videoMute };
+        }
+    }
 }

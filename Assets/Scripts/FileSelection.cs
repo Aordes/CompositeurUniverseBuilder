@@ -12,7 +12,6 @@ namespace Com.Docaret.UniverseBuilder
 
         [SerializeField] private Button button;
 
-
         public ToolBar toolBar;
 
         private void Start()

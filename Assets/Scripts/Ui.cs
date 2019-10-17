@@ -69,16 +69,17 @@ namespace Com.Docaret.UniverseBuilder
             folderStruct.button = folderStruct.folderInstance.GetComponent<Button>();
             folderStruct.folderScript = folderStruct.button.gameObject.GetComponent<FolderButton>();
             folderStruct.folderScript.toolbar = toolBar;
+            Debug.Log(folderStruct.folderScript.toolbar);
             folderStruct.image = folderStruct.button.gameObject.GetComponent<RawImage>();
             folderStruct.metaData = new MetaData();
 
             dynamicGrid = folderStruct.folderScript.fileContainer.GetComponent<DynamicGrid>();
             folderStruct.fileList = dynamicGrid.fileList;
 
-            folderStruct.folderScript.onEndEditFolderName += FileManager.FolderButton_RenameFolder;
-            folderStruct.folderScript.onChangePreview += FileManager.FolderButton_OnChangePreview;
-            folderStruct.folderScript.onChangeDirectoryContent += FileManager.FolderButton_OnChangeDirectoryContent;
-            folderStruct.folderScript.onDeleteDirectory += FileManager.FolderButton_OnDeleteDirectory;
+            //folderStruct.folderScript.onEndEditFolderName += FileManager.FolderButton_RenameFolder;
+            //folderStruct.folderScript.onChangePreview += FileManager.FolderButton_OnChangePreview;
+            //folderStruct.folderScript.onChangeDirectoryContent += FileManager.FolderButton_OnChangeDirectoryContent;
+            //folderStruct.folderScript.onDeleteDirectory += FileManager.FolderButton_OnDeleteDirectory;
 
             FileManager.folderList.Add(folderStruct);
             dynamicGrid.currentFolderStruct = folderStruct;

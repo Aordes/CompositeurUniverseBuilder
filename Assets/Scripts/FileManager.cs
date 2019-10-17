@@ -86,7 +86,8 @@ namespace Com.Docaret.UniverseBuilder {
             Debug.Log("Delete File");
             FileStruct file = GetFileStructFromFileButton(button);
 
-            Directory.Delete(file.path);
+            Debug.Log(file.path);
+            File.Delete(file.path);
             file.folderstruct.fileList.RemoveAt(file.folderstruct.fileList.IndexOf(file));
             UnityEngine.Object.Destroy(file.instance);
         }
@@ -117,15 +118,15 @@ namespace Com.Docaret.UniverseBuilder {
         public static void AddMetaToFile(Button button, string metaProperty, bool value, int intValue)
         {
             FileStruct file = GetFileStructFromFileButton(button);
-            string metaPath = Path.Combine(file.path + "_meta.txt");
+            string metaPath = Path.Combine(Path.GetDirectoryName(file.path) + "/" + Path.GetFileNameWithoutExtension(file.path) + "_meta.txt");
 
             currentMetaProperty = metaProperty;
 
-            if (intValue == 0) metaProperty += " " + value;
-            else metaProperty += " " + intValue + "%";
+            //if (intValue == 0) metaProperty += " " + value;
+            //else metaProperty += " " + intValue + "%";
 
             UpdateFileOrFolderMetaData(file.metaData, metaProperty, value, intValue);
-            AddOrCreateMeta(metaProperty, metaPath);
+            AddOrCreateMeta(metaPath, file.metaData);
 
         }
 
@@ -136,11 +137,11 @@ namespace Com.Docaret.UniverseBuilder {
 
             currentMetaProperty = metaProperty;
 
-            if (intValue == 0) metaProperty += " " + value;
-            else metaProperty += " " + intValue + "%";
+            //if (intValue == 0) metaProperty += " " + value;
+            //else metaProperty += " " + intValue + "%";
 
             UpdateFileOrFolderMetaData(folder.metaData, metaProperty, value, intValue);
-            AddOrCreateMeta(metaProperty, metaPath);
+            AddOrCreateMeta(metaPath, folder.metaData);
         }
 
         private static void UpdateFileOrFolderMetaData(MetaData metaData, string metaProperty, bool value, int intValue = 0)
@@ -161,7 +162,7 @@ namespace Com.Docaret.UniverseBuilder {
                     metaData.videoAutoplay = value;
                     break;
                 case MetaData.VDEO_MUTE:
-                    metaData.videoAutoplay = value;
+                    metaData.videoMute = value;
                     break;
             }
         }
@@ -192,41 +193,85 @@ namespace Com.Docaret.UniverseBuilder {
             return fileGrid.fileList[0];
         }
 
-        private static void AddOrCreateMeta(string meta, string metaPath)
+        private static void AddOrCreateMeta(string metaPath, MetaData metaData)
         {
             if (!File.Exists(metaPath))
             {
-                CreateMetaFile(meta, metaPath);
+                CreateMetaFile(metaPath, metaData);
             }
             else
             {
-                AddToExistingMetaFile(meta, metaPath);
+                AddToExistingMetaFile(metaPath, metaData);
             }
         }
 
-        private static void CreateMetaFile(string meta, string metaPath)
+        private static void CreateMetaFile(string metaPath, MetaData metaData)
         {
+            Debug.Log(metaData.videoMute);
+            string metaLine = "";
             // Create a file to write to.
             using (StreamWriter sw = File.CreateText(metaPath))
             {
-                sw.WriteLine(meta);
+                if (metaData.desiredWidth)
+                {
+                    metaLine = MetaData.DESIRED_WIDTH + " " + metaData.desiredWidthValue + "%";
+                    sw.WriteLine(metaLine);
+                }
+                if (metaData.showOnStart)
+                {
+                    metaLine = MetaData.SHOW_ON_START + " " + metaData.showOnStart;
+                    sw.WriteLine(metaLine);
+                }
+                if (metaData.videoLoop)
+                {
+                    metaLine = MetaData.VDEO_LOOP + " " + metaData.videoLoop;
+                    sw.WriteLine(metaLine);
+                }
+                if (!metaData.videoAutoplay)
+                {
+                    metaLine = MetaData.VDEO_AUTOPLAY + " " + metaData.videoAutoplay;
+                    sw.WriteLine(metaLine);
+                }
+                if (metaData.videoMute)
+                {
+                    metaLine = MetaData.VDEO_MUTE + " " + metaData.videoMute;
+                    sw.WriteLine(metaLine);
+                }
             }
+            if (metaLine == "") File.Delete(metaPath);
         }
 
-        private static void AddToExistingMetaFile(string meta, string metaPath)
+        private static void AddToExistingMetaFile(string metaPath, MetaData metaData)
         {
-            // Open the file to read from.
-            using (StreamReader sr = File.OpenText(metaPath))
-            {
-                string s;
-                while ((s = sr.ReadLine()) != null)
-                {
-                    if (s == meta) return;
-                }
+            Debug.Log(metaData.videoMute);
+            string metaLine = "";
 
-                using (StreamWriter sw = new StreamWriter(metaPath))
+            using (StreamWriter sw = new StreamWriter(metaPath, false))
+            {
+                if (metaData.desiredWidth)
                 {
-                    sw.WriteLine(meta);
+                    metaLine = MetaData.DESIRED_WIDTH + " " + metaData.desiredWidthValue + "%";
+                    sw.WriteLine(metaLine);
+                }
+                if (metaData.showOnStart)
+                {
+                    metaLine = MetaData.SHOW_ON_START + " " + metaData.showOnStart;
+                    sw.WriteLine(metaLine);
+                }
+                if (metaData.videoLoop)
+                {
+                    metaLine = MetaData.VDEO_LOOP + " " + metaData.videoLoop;
+                    sw.WriteLine(metaLine);
+                }
+                if (!metaData.videoAutoplay)
+                {
+                    metaLine = MetaData.VDEO_AUTOPLAY + " " + metaData.videoAutoplay;
+                    sw.WriteLine(metaLine);
+                }
+                if (metaData.videoMute)
+                {
+                    metaLine = MetaData.VDEO_MUTE + " " + metaData.videoMute;
+                    sw.WriteLine(metaLine);
                 }
             }
         }

@@ -59,7 +59,6 @@ namespace Com.Docaret.UniverseBuilder
             //OnSelectionChange();
             set
             {
-                _currentSelection = value;
                 if (_currentSelection == value) return;
                 else
                 {
@@ -101,19 +100,19 @@ namespace Com.Docaret.UniverseBuilder
                 DesiredWidthSlider_OnValueChanged(value);
             });
 
-            if (showOnStart) desiredWidth.onValueChanged.AddListener((value) => {
+            if (showOnStart) showOnStart.onValueChanged.AddListener((value) => {
                 ShowOnStart_OnValueChanged(value);
             });
 
-            if (videoLoop) desiredWidth.onValueChanged.AddListener((value) => {
+            if (videoLoop) videoLoop.onValueChanged.AddListener((value) => {
                 VideoLoop_OnValueChanged(value);
             });
 
-            if (videoAutoPlay) desiredWidth.onValueChanged.AddListener((value) => {
+            if (videoAutoPlay) videoAutoPlay.onValueChanged.AddListener((value) => {
                 VideoAutoPlay_OnValueChanged(value);
             });
 
-            if (videoMute) desiredWidth.onValueChanged.AddListener((value) => {
+            if (videoMute) videoMute.onValueChanged.AddListener((value) => {
                 VideoMute_OnValueChanged(value);
             });
             #endregion
@@ -121,7 +120,7 @@ namespace Com.Docaret.UniverseBuilder
 
         private void Update()
         {
-            Debug.Log(_currentSelection.gameObject.name);
+            //Debug.Log(_currentSelection.gameObject.name);
         }
 
         private void CloseMetaToMenu()
@@ -184,6 +183,7 @@ namespace Com.Docaret.UniverseBuilder
 
         private void VideoMute_OnValueChanged(bool value)
         {
+            Debug.Log(value);
             FileManager.ChangeMetaData(isFile, _currentSelection, MetaData.VDEO_MUTE, value);
         }
         #endregion
@@ -235,8 +235,9 @@ namespace Com.Docaret.UniverseBuilder
         public void OnSelectionChange(GameObject selection)
         {
             Debug.Log("Change");
-            isFile = _currentSelection.gameObject.CompareTag("File");
+            isFile = selection.CompareTag("File");
             CloseMetaToMenu();
+            UpdateMetaMenuToCurrentSelection();
         }
     }
 }

@@ -419,6 +419,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   filePrefab: {fileID: 303814469751438102, guid: 30a8e2d1248eaa9498611474eed72f7a,
     type: 3}
+  toolBar: {fileID: 0}
 --- !u!1 &8597980953729236769
 GameObject:
   m_ObjectHideFlags: 0
@@ -436,7 +437,7 @@ GameObject:
   - component: {fileID: 1095040265382930757}
   m_Layer: 5
   m_Name: Folder
-  m_TagString: File
+  m_TagString: Folder
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -621,6 +622,7 @@ MonoBehaviour:
   changePreviewButton: {fileID: 0}
   deleteButton: {fileID: 0}
   fileContainer: {fileID: 8545549196237343281}
+  toolbar: {fileID: 0}
 --- !u!1001 &647921185617931161
 PrefabInstance:
   m_ObjectHideFlags: 0

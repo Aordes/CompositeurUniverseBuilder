@@ -35,10 +35,10 @@ namespace Com.Docaret.UniverseBuilder
             FileStruct fileStruct = new FileStruct();
 
             fileStruct.instance = instance;
+            fileStruct.instance.GetComponent<FileSelection>().toolBar = toolBar;
             fileStruct.folderstruct = currentFolderStruct;
             fileStruct.textMesh = instance.GetComponent<TextMesh>();
             fileStruct.button = instance.GetComponent<Button>();
-            fileStruct.button.GetComponent<FileSelection>().toolBar = toolBar;
             fileStruct.path = path;
             fileStruct.metaData = new MetaData();
 
