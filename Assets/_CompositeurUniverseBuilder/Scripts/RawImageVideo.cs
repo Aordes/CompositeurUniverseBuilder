@@ -59,6 +59,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
         private void ButtonPlay_OnClick()
         {
             OnPlay?.Invoke();
+            videoPlayer.time = 0;
         }
     }
 }
