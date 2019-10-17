@@ -8,6 +8,7 @@ using SFB;
 using System;
 using System.Collections;
 using System.IO;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
@@ -21,6 +22,7 @@ namespace Com.Docaret.UniverseBuilder
         [Header("Buttons")]
         [SerializeField] private Button btnCreateUniverse;
         [SerializeField] private Button btnOpenUniverse;
+        [SerializeField] private Button btnReload;
 
         [Header("References")]
         [SerializeField] private Transform projectGrid;
@@ -28,10 +30,13 @@ namespace Com.Docaret.UniverseBuilder
         [SerializeField] private DialogScreen dialogScreen;
 
         private static string PREVIEW_FILE_NAME = "_preview.*";
+        private static float WAIT_TIME = 0.025f;
 
         private string compositeurFolderPath;
         private DirectoryInfo compositeurDirectory;
         private DirectoryInfo universeDirectory;
+
+        private Coroutine getProjectCoroutine;
 
         #region Unity Methods
         void Start()
@@ -49,21 +54,22 @@ namespace Com.Docaret.UniverseBuilder
                 btnCreateUniverse.onClick.AddListener(ButtonCreateUniverse_OnClick);
             if (btnOpenUniverse)
                 btnOpenUniverse.onClick.AddListener(ButtonOpenUniverse_OnClick);
+            if (btnReload)
+                btnReload.onClick.AddListener(ButtonReload_OnClick);
 
-            GetProjects();
+            StartGetProjects();
         }
         #endregion
 
-        private void GetProjects()
+        private void StartGetProjects(bool wait = true)
         {
-            DirectoryInfo info = new DirectoryInfo(compositeurFolderPath);
-            DirectoryInfo[] directories = info.GetDirectories();
-
-            for (int i = 0; i < directories.Length; i++)
+            if (getProjectCoroutine != null)
             {
-                AddProject(directories[i]);
-                //Debug.Log(directories[i]);
+                StopCoroutine(getProjectCoroutine);
+                RemoveProjects();
             }
+
+            getProjectCoroutine = StartCoroutine(GetProjects(wait));
         }
 
         private void AddProject(DirectoryInfo directoryInfo)
@@ -86,19 +92,18 @@ namespace Com.Docaret.UniverseBuilder
                 preview = Sprite.Create(texture2D, new Rect((texture2D.width - minSize) / 2, (texture2D.height - minSize) / 2, minSize, minSize), Vector2.zero);
             }
 
-            //if (File.Exists(previewPath))
-            //{
-            //    byte[] data = File.ReadAllBytes(previewPath);
-
-            //    Texture2D texture2D = new Texture2D(2, 2);
-            //    texture2D.LoadImage(data);
-
-            //    float minSize = Mathf.Min(texture2D.width, texture2D.height);
-            //    preview = Sprite.Create(texture2D, new Rect((texture2D.width - minSize) / 2, (texture2D.height - minSize) / 2, minSize, minSize), Vector2.zero);
-            //}
-
             instance.Init(directoryInfo, preview);
             instance.OnClick += ProjectItem_OnClick;
+        }
+
+        private void RemoveProjects()
+        {
+            int nChildren = projectGrid.childCount;
+
+            for (int i = nChildren - 1; i >= 0; i--)
+            {
+                Destroy(projectGrid.GetChild(i).gameObject);
+            }
         }
 
         private void ProjectItem_OnClick(DirectoryInfo source)
@@ -112,8 +117,20 @@ namespace Com.Docaret.UniverseBuilder
             DirectoryData.CompositeurFolderPath = compositeurFolderPath;
 
             StartCoroutine(AsyncLoadEditor());
+
         }
 
+        private void CreateProject(string name)
+        {
+            universeDirectory = Directory.CreateDirectory(compositeurFolderPath + "/" + name);
+
+            DirectoryData.CurrentUniverseName = name;
+            DirectoryData.CurrentDirectory = universeDirectory;
+            DirectoryData.CurrentUniversePath = universeDirectory.FullName;
+            DirectoryData.CompositeurFolderPath = compositeurFolderPath;
+
+            StartCoroutine(AsyncLoadEditor());
+        }
 
         #region OnClick Methods
         private void ButtonCreateUniverse_OnClick()
@@ -133,24 +150,18 @@ namespace Com.Docaret.UniverseBuilder
             StartCoroutine(AsyncLoadEditor());
         }
 
+        private void ButtonReload_OnClick()
+        {
+            RemoveProjects();
+            StartGetProjects();
+        }
+
         private void InputDialog_OnStatus(bool state, string output)
         {
             dialogScreen.CloseScreen();
 
             if (state)
                 CreateProject(output);
-        }
-
-        private void CreateProject(string name)
-        {
-            universeDirectory = Directory.CreateDirectory(compositeurFolderPath + "/" + name);
-
-            DirectoryData.CurrentUniverseName = name;
-            DirectoryData.CurrentDirectory = universeDirectory;
-            DirectoryData.CurrentUniversePath = universeDirectory.FullName;
-            DirectoryData.CompositeurFolderPath = compositeurFolderPath;
-
-            StartCoroutine(AsyncLoadEditor());
         }
         #endregion
 
@@ -164,7 +175,26 @@ namespace Com.Docaret.UniverseBuilder
             {
                 yield return null;
             }
+
             StopCoroutine(AsyncLoadEditor());
+        }
+
+        private IEnumerator GetProjects(bool wait)
+        {
+
+            DirectoryInfo info = new DirectoryInfo(compositeurFolderPath);
+            DirectoryInfo[] directories = info.GetDirectories();
+
+            for (int i = 0; i < directories.Length; i++)
+            {
+                //Debug.Log(directories[i]);
+                if (wait)
+                    yield return new WaitForSeconds(WAIT_TIME);
+
+                AddProject(directories[i]);
+            }
+
+            StopCoroutine(getProjectCoroutine);
         }
         #endregion
     }
