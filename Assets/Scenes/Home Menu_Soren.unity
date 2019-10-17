@@ -3963,6 +3963,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1998126334}
+  - component: {fileID: 1998126336}
   - component: {fileID: 1998126335}
   m_Layer: 5
   m_Name: Progress
@@ -4045,6 +4046,18 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Slider+SliderEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!114 &1998126336
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1998126333}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb66e85ce8848c04486b3d4f2f36de5a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2008261102
 GameObject:
   m_ObjectHideFlags: 0
@@ -4242,7 +4255,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   videoPlayer: {fileID: 1642421011}
   imgTarget: {fileID: 320327688}
-  sliderProgress: {fileID: 1998126335}
+  sliderProgress: {fileID: 1998126336}
 --- !u!114 &2034802196
 MonoBehaviour:
   m_ObjectHideFlags: 0

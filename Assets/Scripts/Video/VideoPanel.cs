@@ -10,13 +10,13 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityEngine.Video;
 
-namespace Com.Docaret {
+namespace Com.Docaret.Video {
 
-    public class VideoPanel : MonoBehaviour, IPointerDownHandler {
+    public class VideoPanel : MonoBehaviour {
 
         public VideoPlayer videoPlayer;
         [SerializeField] private RawImage imgTarget;
-        [SerializeField] private Slider sliderProgress;
+        [SerializeField] private VideoSlider sliderProgress;
 
         private ulong totalFrames;
         private Action doAction;
@@ -29,15 +29,17 @@ namespace Com.Docaret {
         {
             await Task.Delay(1000);
             videoPlayer = player;
+
             imgTarget.texture = videoPlayer.texture;
 
             totalFrames = videoPlayer.frameCount;
             videoPlayer.Play();
 
+            sliderProgress.OnClick += SetModeScrub;
             SetModeUpdateInterface();
         }
 
-        private void Update()
+        private void LateUpdate()
         {
             doAction?.Invoke();
         }
@@ -52,7 +54,7 @@ namespace Com.Docaret {
 
         public void SetModeUpdateInterface()
         {
-            sliderProgress.onValueChanged.RemoveListener(SliderProgress_OnValueChanged);
+            sliderProgress.Slider.onValueChanged.RemoveListener(SliderProgress_OnValueChanged);
 
             doAction = DoActionUpdateInterface;
         }
@@ -60,7 +62,7 @@ namespace Com.Docaret {
         public void SetModeScrub()
         {
             if (sliderProgress)
-                sliderProgress.onValueChanged.AddListener(SliderProgress_OnValueChanged);
+                sliderProgress.Slider.onValueChanged.AddListener(SliderProgress_OnValueChanged);
 
             doAction = DoActionScrub;
         }
@@ -76,17 +78,7 @@ namespace Com.Docaret {
 
         private void DoActionUpdateInterface()
         {
-            sliderProgress.value = (float)videoPlayer.frame / totalFrames;
-
-            if (Input.GetMouseButtonDown(0)) {
-                SetModeScrub();
-            }
-        }
-
-        public void OnPointerDown(PointerEventData eventData)
-        {
-            
-            Debug.Log(eventData.lastPress + " Was Clicked.");
+            sliderProgress.Slider.value = (float)videoPlayer.frame / totalFrames;
         }
     }
 }
