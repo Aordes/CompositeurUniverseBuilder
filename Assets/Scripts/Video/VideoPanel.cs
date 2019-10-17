@@ -46,9 +46,6 @@ namespace Com.Docaret.Video {
 
         private void SliderProgress_OnValueChanged(float ratio)
         {
-            if (doAction == DoActionUpdateInterface)
-                doAction = null;
-
             videoPlayer.frame = (long)(totalFrames * ratio);
         }
 
