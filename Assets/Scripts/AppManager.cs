@@ -4,6 +4,7 @@
 ///-----------------------------------------------------------------
 
 using Com.Docaret.CompositeurUniverseBuilder;
+using SFB;
 using System;
 using System.Collections;
 using System.IO;
@@ -46,8 +47,8 @@ namespace Com.Docaret.UniverseBuilder
 
             if (btnCreateUniverse)
                 btnCreateUniverse.onClick.AddListener(ButtonCreateUniverse_OnClick);
-            //if (btnOpenUniverse)
-            //btnOpenUniverse.onClick.AddListener(OnClick_OpenUniverse);
+            if (btnOpenUniverse)
+                btnOpenUniverse.onClick.AddListener(ButtonOpenUniverse_OnClick);
 
             GetProjects();
         }
@@ -121,14 +122,23 @@ namespace Com.Docaret.UniverseBuilder
             //universeNameInputField.gameObject.SetActive(true);
         }
 
+        private void ButtonOpenUniverse_OnClick()
+        {
+            string[] folder = StandaloneFileBrowser.OpenFolderPanel("Select project", compositeurFolderPath, false);
+
+            if (folder.Length == 0)
+                return;
+
+            Debug.Log(folder[0]);
+            StartCoroutine(AsyncLoadEditor());
+        }
+
         private void InputDialog_OnStatus(bool state, string output)
         {
             dialogScreen.CloseScreen();
 
             if (state)
-            {
                 CreateProject(output);
-            }
         }
 
         private void CreateProject(string name)
