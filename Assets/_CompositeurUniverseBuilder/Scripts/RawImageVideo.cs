@@ -38,18 +38,22 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
                 yield return null;
             }
 
-            targetImage.texture = videoPlayer.texture;
             videoPlayer.Play();
+            targetImage.texture = videoPlayer.texture;
+
+            yield return null;
+            videoPlayer.Pause();
         }
 
         public void BeginPreview()
         {
-            //videoPlayer.Play();
+            videoPlayer.Play();
         }
 
         public void StopPreview()
         {
-            //videoPlayer.Stop();
+            videoPlayer.Pause();
+            videoPlayer.time = 0;
         }
 
         private void ButtonPlay_OnClick()
