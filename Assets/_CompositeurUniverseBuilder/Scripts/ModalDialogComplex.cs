@@ -45,16 +45,12 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
 
         protected override void ButtonCancel_OnClick()
         {
-            OnClose?.Invoke();
-
             OnStatus?.Invoke(1);
             OnStatus = null;
         }
 
         protected void ButtonOther_OnClick()
         {
-            OnClose?.Invoke();
-
             OnStatus?.Invoke(2);
             OnStatus = null;
         }

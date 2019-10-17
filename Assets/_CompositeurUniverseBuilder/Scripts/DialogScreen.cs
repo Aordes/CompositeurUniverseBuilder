@@ -56,7 +56,6 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
                 inputDialog.gameObject.SetActive(false);
 
             modalDialog.Init(Callback, title, message, ok, cancel);
-            modalDialog.OnClose = CloseScreen;
 
             animator.SetTrigger(initTrigger);
         }
@@ -71,12 +70,11 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
                 inputDialog.gameObject.SetActive(false);
 
             modalDialogComplex.Init(Callback, title, message, ok, alt, cancel);
-            modalDialogComplex.OnClose = CloseScreen;
 
             animator.SetTrigger(initTrigger);
         }
 
-        public void DisplayInputDialog(Action<bool, string> Callback, string title, string ok, string cancel)
+        public void DisplayInputDialog(Action<bool, string> Callback, string title, string ok, string cancel, string placeHolder = "")
         {
             modalDialogComplex.gameObject.SetActive(true);
 
@@ -87,19 +85,14 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
             if (modalDialogComplex)
                 modalDialogComplex.gameObject.SetActive(false);
 
-            inputDialog.Init(Callback, title, ok, cancel);
-            inputDialog.OnClose = CloseScreen;
+            inputDialog.Init(Callback, title, ok, cancel, placeHolder);
 
             animator.SetTrigger(initTrigger);
         }
 
-        private void CloseScreen()
+        public void CloseScreen()
         {
             animator.SetTrigger(removeTrigger);
-
-            inputDialog.OnClose = null;
-            modalDialog.OnClose = null;
-            modalDialogComplex.OnClose = null;
         }
     }
 }

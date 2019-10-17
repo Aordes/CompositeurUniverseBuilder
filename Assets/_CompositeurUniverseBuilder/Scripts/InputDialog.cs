@@ -13,15 +13,19 @@ namespace Com.Docaret.CompositeurUniverseBuilder
     public class InputDialog : Dialog {
 
         [Header("Input")]
+        [SerializeField] protected Text txtPlaceHolder;
         [SerializeField] protected InputField txtInput;
 
         public new event Action<bool, string> OnStatus;
 
-        public void Init(Action<bool, string> Callback, string title, string ok, string cancel)
+        public void Init(Action<bool, string> Callback, string title, string ok, string cancel, string placeHolder)
         {
             OnStatus = Callback;
 
             txtAlert.text = title;
+            
+            txtPlaceHolder.text = placeHolder;
+            txtInput.text = string.Empty;
 
             txtConfirm.text = ok;
             txtCancel.text = cancel;

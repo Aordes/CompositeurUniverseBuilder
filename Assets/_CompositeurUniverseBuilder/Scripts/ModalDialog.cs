@@ -45,20 +45,14 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
 
         protected override void ButtonConfirm_OnClick()
         {
-            base.ButtonConfirm_OnClick();
-
             OnStatus?.Invoke(true);
             OnStatus = null;
-
         }
 
         protected override void ButtonCancel_OnClick()
         {
-            base.ButtonCancel_OnClick();
-
             OnStatus?.Invoke(false);
             OnStatus = null;
-
         }
     }
 }

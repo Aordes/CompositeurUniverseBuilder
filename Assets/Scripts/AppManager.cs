@@ -21,9 +21,10 @@ namespace Com.Docaret.UniverseBuilder
         [SerializeField] private Button btnCreateUniverse;
         [SerializeField] private Button btnOpenUniverse;
 
-        [Header("Projects")]
+        [Header("References")]
         [SerializeField] private Transform projectGrid;
         [SerializeField] private ProjectItem prefabProjectItem;
+        [SerializeField] private DialogScreen dialogScreen;
 
         private static string PREVIEW_FILE_NAME = "_preview.*";
 
@@ -44,7 +45,7 @@ namespace Com.Docaret.UniverseBuilder
             }
 
             if (btnCreateUniverse)
-                btnCreateUniverse.onClick.AddListener(OnClick_CreateUniverse);
+                btnCreateUniverse.onClick.AddListener(ButtonCreateUniverse_OnClick);
             //if (btnOpenUniverse)
             //btnOpenUniverse.onClick.AddListener(OnClick_OpenUniverse);
 
@@ -114,12 +115,23 @@ namespace Com.Docaret.UniverseBuilder
 
 
         #region OnClick Methods
-        private void OnClick_CreateUniverse()
+        private void ButtonCreateUniverse_OnClick()
         {
+            dialogScreen.DisplayInputDialog(InputDialog_OnStatus, "Universe Name", "Create", "Cancel");
             //universeNameInputField.gameObject.SetActive(true);
         }
 
-        private void OnEndEdit_LoadScene(string name)
+        private void InputDialog_OnStatus(bool state, string output)
+        {
+            dialogScreen.CloseScreen();
+
+            if (state)
+            {
+                CreateProject(output);
+            }
+        }
+
+        private void CreateProject(string name)
         {
             universeDirectory = Directory.CreateDirectory(compositeurFolderPath + "/" + name);
 
