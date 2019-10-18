@@ -7,13 +7,23 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Com.Docaret.CompositeurUniverseBuilder {
+namespace Com.Docaret.UniverseBuilder
+{
 
     public class ToolBar : MonoBehaviour {
 
         [Header("Meta")]
         [SerializeField] private Button btnAddMetaToMainFolder;
         [SerializeField] private Button btnAddMetaToSelection;
+        [SerializeField] private GameObject metaMenu;
+
+        [Header("MetaData")]
+        [SerializeField] private Toggle desiredWidth;
+        [SerializeField] private Slider desiredWidthSlider;
+        [SerializeField] private Toggle showOnStart;
+        [SerializeField] private Toggle videoLoop;
+        [SerializeField] private Toggle videoAutoPlay;
+        [SerializeField] private Toggle videoMute;
 
         [Header("Rename")]
         [SerializeField] private Button btnRenameMainFolder;
@@ -27,13 +37,18 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
         [SerializeField] private Button btnDeleteMainfolder;
         [SerializeField] private Button btnDeleteSelection;
 
-        public event Action<string> OnAddMeta;
-        public event Action<string> OnRenameItem;
-        public event Action<string> OnAddPreview;
-        public event Action<string> OnDeleteItem;
+        [Header("Content")]
+        [SerializeField] private Button btnAddContent;
 
-        private string _currentFolder;
-        public string CurrentFolder
+        [Header("Animator")]
+        [SerializeField] private OpenCloseAnimator animator;
+
+        public event Action<GameObject> OnSelectionChangeEvent;
+
+        private bool isFile;
+
+        private Button _currentFolder;
+        public Button CurrentFolder
         {
             set {
                 _currentFolder = value;
@@ -41,82 +56,200 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
             }
         }
 
-        private string _currentSelection;
-        public string CurrentSelection
+        private Button _currentSelection;
+        public Button CurrentSelection
         {
+            //OnSelectionChange();
             set
             {
-                _currentSelection = value;
-
+                if (_currentSelection == value) return;
+                else if (value == null) CloseToolbar();
+                else
+                {
+                    _currentSelection = value;
+                    OnSelectionChangeEvent?.Invoke(value.gameObject);
+                }
                 //set button state
             }
         }
 
-        private void Start () {
+        private void Start() {
+            OnSelectionChangeEvent += OnSelectionChange;
+
+            #region Buttons AddListeners
             if (btnAddMetaToMainFolder)
-                btnAddMetaToMainFolder.onClick.AddListener(AddMetaToMainFolder_OnClick);
-            if (btnAddMetaToSelection)
-                btnAddMetaToMainFolder.onClick.AddListener(AddMetaToSelection_OnClick);
+                btnAddMetaToMainFolder.onClick.AddListener(OpenMetaToMenu_OnClick);
 
             if (btnRenameMainFolder)
-                btnAddMetaToMainFolder.onClick.AddListener(RenameMainFolder_OnClick);
-            if (btnRenameSelection)
-                btnAddMetaToMainFolder.onClick.AddListener(RenameSelection_OnClick);
+                btnRenameMainFolder.onClick.AddListener(RenameSelection_OnClick);
 
             if (btnPreviewToMainfolder)
-                btnAddMetaToMainFolder.onClick.AddListener(PreviewToMainFolder_OnClick);
-            if (btnPreviewToSelection)
-                btnAddMetaToMainFolder.onClick.AddListener(PreviewToSelection_OnClick);
+                btnPreviewToMainfolder.onClick.AddListener(PreviewToSelection_OnClick);
 
             if (btnDeleteMainfolder)
-                btnAddMetaToMainFolder.onClick.AddListener(DeleteMainFolder_OnClick);
-            if (btnDeleteSelection)
-                btnAddMetaToMainFolder.onClick.AddListener(DeleteSelection_OnClick);
+                btnDeleteMainfolder.onClick.AddListener(DeleteSelection_OnClick);
+
+            if (btnAddContent)
+                btnAddContent.onClick.AddListener(AddContent_OnClick);
+            #endregion
+
+            #region Toggles & Sliders AddListeners
+            //MetaData Toggles & Sliders
+            if (desiredWidth) desiredWidth.onValueChanged.AddListener((value) => {
+                DesiredWidth_OnValueChanged(value);
+            });
+
+            if (desiredWidth) desiredWidthSlider.onValueChanged.AddListener((value) => {
+                DesiredWidthSlider_OnValueChanged(value);
+            });
+
+            if (showOnStart) showOnStart.onValueChanged.AddListener((value) => {
+                ShowOnStart_OnValueChanged(value);
+            });
+
+            if (videoLoop) videoLoop.onValueChanged.AddListener((value) => {
+                VideoLoop_OnValueChanged(value);
+            });
+
+            if (videoAutoPlay) videoAutoPlay.onValueChanged.AddListener((value) => {
+                VideoAutoPlay_OnValueChanged(value);
+            });
+
+            if (videoMute) videoMute.onValueChanged.AddListener((value) => {
+                VideoMute_OnValueChanged(value);
+            });
+            #endregion
         }
 
-        private void AddMetaToMainFolder_OnClick()
+        private void Update()
         {
-            OnAddMeta?.Invoke(_currentFolder);
+            Debug.Log(_currentSelection);
         }
 
-        private void AddMetaToSelection_OnClick()
+        private void CloseMetaToMenu()
         {
-            OnAddMeta?.Invoke(_currentSelection);
+            metaMenu.SetActive(false);
         }
 
-        private void RenameMainFolder_OnClick()
+        private void UpdateMetaMenuToCurrentSelection()
         {
-            OnRenameItem?.Invoke(_currentFolder);
+            MetaData md;
+
+            if (isFile)
+            {
+               FileStruct fileStruct = FileManager.GetFileStructFromFileButton(_currentSelection);
+               md = fileStruct.metaData;
+            }
+            else
+            {
+                FolderStruct folderStruct = FileManager.GetFolderStructFromFolderButton(_currentSelection);
+                md = folderStruct.metaData;
+            }
+
+            desiredWidth.isOn = md.desiredWidth;
+            desiredWidthSlider.value = md.desiredWidthValue;
+
+            showOnStart.isOn = md.showOnStart;
+
+            videoLoop.isOn = md.videoLoop;
+
+            videoAutoPlay.isOn = md.videoAutoplay;
+
+            videoMute.isOn = md.videoMute;
+        }
+
+        #region Meta OnValueChanged
+        private void DesiredWidth_OnValueChanged(bool value)
+        {
+            FileManager.ChangeMetaData(isFile, _currentSelection, MetaData.DESIRED_WIDTH, value, Mathf.RoundToInt(desiredWidthSlider.value));
+        }
+
+        private void DesiredWidthSlider_OnValueChanged(float value)
+        {
+            FileManager.ChangeMetaData(isFile, _currentSelection, MetaData.DESIRED_WIDTH, desiredWidth.isOn, Mathf.RoundToInt(value));
+        }
+
+        private void ShowOnStart_OnValueChanged(bool value)
+        {
+            FileManager.ChangeMetaData(isFile, _currentSelection, MetaData.SHOW_ON_START, value);
+        }
+
+        private void VideoLoop_OnValueChanged(bool value)
+        {
+            FileManager.ChangeMetaData(isFile, _currentSelection, MetaData.VDEO_LOOP, value);
+        }
+
+        private void VideoAutoPlay_OnValueChanged(bool value)
+        {
+            FileManager.ChangeMetaData(isFile, _currentSelection, MetaData.VDEO_AUTOPLAY, value);
+        }
+
+        private void VideoMute_OnValueChanged(bool value)
+        {
+            Debug.Log(value);
+            FileManager.ChangeMetaData(isFile, _currentSelection, MetaData.VDEO_MUTE, value);
+        }
+        #endregion
+
+        #region ToolBar Buttons On_Click
+        private void OpenMetaToMenu_OnClick()
+        {
+            metaMenu.SetActive(true);
         }
 
         private void RenameSelection_OnClick()
         {
-            OnRenameItem?.Invoke(_currentSelection);
-        }
-
-        private void PreviewToMainFolder_OnClick()
-        {
-            OnAddPreview?.Invoke(_currentFolder);
+            if (isFile)
+            {
+                FileManager.FileButton_RenameFile("newName", _currentSelection);
+            }
+            else
+            {
+                FileManager.FolderButton_RenameFolder("newName", _currentSelection);
+            }
         }
 
         private void PreviewToSelection_OnClick()
         {
-            OnAddPreview?.Invoke(_currentSelection);
-        }
-
-        private void DeleteMainFolder_OnClick()
-        {
-            OnDeleteItem(_currentFolder);
+            if (!isFile)
+            {
+                FileManager.FolderButton_OnChangePreview(_currentFolder);
+            }
         }
 
         private void DeleteSelection_OnClick()
         {
-            OnDeleteItem(_currentSelection);
+            if (isFile)
+            {
+                FileManager.DeleteFileDirectory(_currentSelection);
+            }
+            else
+            {
+                FileManager.FolderButton_OnDeleteDirectory(_currentSelection);
+            }
         }
 
-        public void OnSelectionChange(GameObject selection)
+        private void AddContent_OnClick()
         {
+            FileManager.FolderButton_OnChangeDirectoryContent(_currentSelection);
+        }
+        #endregion
 
+        private void OnSelectionChange(GameObject selection)
+        {
+            if (_currentSelection != null)
+            {
+                if (!animator.isOpen) animator.Open();
+                isFile = selection.CompareTag("File");
+                CloseMetaToMenu();
+                UpdateMetaMenuToCurrentSelection();
+            }
+        }
+
+        private void CloseToolbar()
+        {
+            Debug.Log("ftfttt");
+            animator.Close();
         }
     }
 }

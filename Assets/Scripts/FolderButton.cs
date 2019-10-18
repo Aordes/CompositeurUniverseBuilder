@@ -23,8 +23,9 @@ namespace Com.Docaret.UniverseBuilder
         [SerializeField] private Button openButton;
         [SerializeField] private Button changePreviewButton;
         [SerializeField] private Button deleteButton;
-        [SerializeField] private GameObject fileContainer;
 
+        public GameObject fileContainer;
+        public ToolBar toolbar;
         public delegate void OnEndEditFolderNameDelegate(string name, Button button);
         public OnEndEditFolderNameDelegate onEndEditFolderName;
 
@@ -47,35 +48,33 @@ namespace Com.Docaret.UniverseBuilder
             fileContainer.SetActive(false);
 
             button = gameObject.GetComponent<Button>();
-            button.onClick.AddListener(AddFolder);
-
-            //openButton.onClick.AddListener(OnClick_ChangeDirectoryContent);
-            //changePreviewButton.onClick.AddListener(OnClick_ChangePreview);
-            //deleteButton.onClick.AddListener(OnClick_DeleteButton);
-
-            //inputField.onEndEdit.AddListener(delegate
-            //{
-            //    OnEnd_EditName(inputField.text);
-            //});
+            button.onClick.AddListener(OnSelected);
         }
 
-        public void AddFolder()
+        private void Start()
         {
-            FileManager.CreateFile();
+            fileContainer.GetComponent<DynamicGrid>().toolBar = toolbar;
         }
+        #endregion
 
+
+        #region Pointer Methods
         public void OnPointerEnter(PointerEventData eventData)
         {
-            isMouseOverUi = true;
             if (!isControlPanelOpen)
             {
                 StartCoroutine(MouseOver());
             }
         }
 
+        private void OnSelected()
+        {
+            toolbar.CurrentSelection = button;
+            toolbar.CurrentFolder = button;
+        }
+
         public void OnPointerExit(PointerEventData eventData)
         {
-            isMouseOverUi = false;
             if (isControlPanelOpen)
             {
                 StartCoroutine(MouseExit());
@@ -83,30 +82,25 @@ namespace Com.Docaret.UniverseBuilder
         }
         #endregion
 
-        
+        #region Coroutine
         private IEnumerator MouseOver()
         {
-            while (!Input.GetMouseButtonDown(leftClick) || !isMouseOverUi)
+            while (!Input.GetMouseButtonDown(leftClick) || !EventSystem.current.IsPointerOverGameObject())
             {
-                Debug.Log(Input.GetMouseButtonDown(leftClick));
                 yield return null;
             }
-            fileContainer.SetActive(true);
-            isControlPanelOpen = true;
-            FileManager.fileGrid = fileContainer.GetComponent<DynamicGrid>();
-            StopCoroutine(MouseOver());
+            OpenControlPanel();
         }
 
         private IEnumerator MouseExit()
         {
-            while (!Input.GetMouseButtonDown(leftClick) || isMouseOverUi)
+            while (!Input.GetMouseButtonDown(leftClick) || EventSystem.current.IsPointerOverGameObject())
             {
                 yield return null;
             }
-            fileContainer.SetActive(false);
-            isControlPanelOpen = false;
-            StopCoroutine(MouseExit());
+            CloseControlPanel();
         }
+        #endregion
 
         #region CallBack Methods
         private void OnEnd_EditName(string name)
@@ -129,5 +123,22 @@ namespace Com.Docaret.UniverseBuilder
             onChangeDirectoryContent?.Invoke(button);
         }
         #endregion
+
+        public void OpenControlPanel()
+        {
+            StopCoroutine(MouseOver());
+            fileContainer.SetActive(true);
+            isControlPanelOpen = true;
+            FileManager.fileGrid = fileContainer.GetComponent<DynamicGrid>();
+        }
+
+        public void CloseControlPanel()
+        {
+            StopCoroutine(MouseExit());
+            fileContainer.SetActive(false);
+            isControlPanelOpen = false;
+            toolbar.CurrentFolder = null;
+            toolbar.CurrentSelection = null;
+        }
     }
 }
