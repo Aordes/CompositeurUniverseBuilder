@@ -83,13 +83,7 @@ namespace Com.Docaret.UniverseBuilder
             if (files.Length != 0)
             {
                 //Debug.Log(files[0].FullName);
-                byte[] data = File.ReadAllBytes(files[0].FullName);
-
-                Texture2D texture2D = new Texture2D(2, 2);
-                texture2D.LoadImage(data);
-
-                float minSize = Mathf.Min(texture2D.width, texture2D.height);
-                preview = Sprite.Create(texture2D, new Rect((texture2D.width - minSize) / 2, (texture2D.height - minSize) / 2, minSize, minSize), Vector2.zero);
+                preview = FileImporter.CreateSquareSprite(FileImporter.ImportImage(files[0]));
             }
 
             instance.Init(directoryInfo, preview);
@@ -116,7 +110,8 @@ namespace Com.Docaret.UniverseBuilder
             DirectoryData.CurrentUniversePath = source.FullName;
             DirectoryData.CompositeurFolderPath = compositeurFolderPath;
 
-            StartCoroutine(AsyncLoadEditor());
+            FileImporter.ImportUniverse(source);
+            //StartCoroutine(AsyncLoadEditor());
 
         }
 
