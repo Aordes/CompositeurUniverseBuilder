@@ -31,6 +31,10 @@ namespace Com.Docaret.Video {
         [SerializeField] private Sprite spriteMute;
         [SerializeField] private Sprite spriteSpeaker;
 
+        [Header("Time")]
+        [SerializeField] private Text txtCurrentTime;
+        [SerializeField] private Text txtTotalTime;
+
         private ulong totalFrames;
         private Action doAction;
 
@@ -49,6 +53,7 @@ namespace Com.Docaret.Video {
             togglePlay.onValueChanged.AddListener(TogglePlay_OnValueChanged);
             toggleMute.onValueChanged.AddListener(ToggleMute_OnValueChanged);
 
+            txtTotalTime.text = videoPlayer.clip.length.ToString();
             videoPlayer.Play();
 
             sliderProgress.OnClick += SetModeScrub;
@@ -106,6 +111,8 @@ namespace Com.Docaret.Video {
 
         private void DoActionScrub()
         {
+            UpdateTimeDisplay();
+
             if (!Input.GetMouseButton(0))
             {
                 videoPlayer.Play();
@@ -116,6 +123,12 @@ namespace Com.Docaret.Video {
         private void DoActionUpdateInterface()
         {
             sliderProgress.Slider.value = (float)videoPlayer.frame / totalFrames;
+            UpdateTimeDisplay();
+        }
+
+        private void UpdateTimeDisplay()
+        {
+            txtCurrentTime.text = videoPlayer.time.ToString();
         }
     }
 }
