@@ -40,6 +40,9 @@ namespace Com.Docaret.UniverseBuilder
         [Header("Content")]
         [SerializeField] private Button btnAddContent;
 
+        [Header("Animator")]
+        [SerializeField] private OpenCloseAnimator animator;
+
         public event Action<GameObject> OnSelectionChangeEvent;
 
         private bool isFile;
@@ -60,12 +63,12 @@ namespace Com.Docaret.UniverseBuilder
             set
             {
                 if (_currentSelection == value) return;
+                else if (value == null) CloseToolbar();
                 else
                 {
                     _currentSelection = value;
                     OnSelectionChangeEvent?.Invoke(value.gameObject);
                 }
-
                 //set button state
             }
         }
@@ -120,7 +123,7 @@ namespace Com.Docaret.UniverseBuilder
 
         private void Update()
         {
-            //Debug.Log(_currentSelection.gameObject.name);
+            Debug.Log(_currentSelection);
         }
 
         private void CloseMetaToMenu()
@@ -232,12 +235,21 @@ namespace Com.Docaret.UniverseBuilder
         }
         #endregion
 
-        public void OnSelectionChange(GameObject selection)
+        private void OnSelectionChange(GameObject selection)
         {
-            Debug.Log("Change");
-            isFile = selection.CompareTag("File");
-            CloseMetaToMenu();
-            UpdateMetaMenuToCurrentSelection();
+            if (_currentSelection != null)
+            {
+                if (!animator.isOpen) animator.Open();
+                isFile = selection.CompareTag("File");
+                CloseMetaToMenu();
+                UpdateMetaMenuToCurrentSelection();
+            }
+        }
+
+        private void CloseToolbar()
+        {
+            Debug.Log("ftfttt");
+            animator.Close();
         }
     }
 }

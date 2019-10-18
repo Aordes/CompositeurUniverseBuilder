@@ -69,7 +69,6 @@ namespace Com.Docaret.UniverseBuilder
             folderStruct.button = folderStruct.folderInstance.GetComponent<Button>();
             folderStruct.folderScript = folderStruct.button.gameObject.GetComponent<FolderButton>();
             folderStruct.folderScript.toolbar = toolBar;
-            Debug.Log(folderStruct.folderScript.toolbar);
             folderStruct.image = folderStruct.button.gameObject.GetComponent<RawImage>();
             folderStruct.metaData = new MetaData();
 

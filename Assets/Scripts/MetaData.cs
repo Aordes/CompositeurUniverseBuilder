@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace Com.Docaret.UniverseBuilder
 {
-	public class MetaData : MonoBehaviour {
+	public class MetaData {
 
         public int desiredWidthValue = 75;
         public bool desiredWidth;
@@ -25,10 +25,5 @@ namespace Com.Docaret.UniverseBuilder
         public const string VDEO_LOOP = "video.loop =";
         public const string VDEO_AUTOPLAY = "video.autoplay =";
         public const string VDEO_MUTE = "video.mute =";
-
-        private void Awake()
-        {
-            metaList = new bool[] { desiredWidth, showOnStart, videoLoop, videoAutoplay, videoMute };
-        }
     }
 }

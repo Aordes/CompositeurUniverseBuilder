@@ -122,9 +122,6 @@ namespace Com.Docaret.UniverseBuilder {
 
             currentMetaProperty = metaProperty;
 
-            //if (intValue == 0) metaProperty += " " + value;
-            //else metaProperty += " " + intValue + "%";
-
             UpdateFileOrFolderMetaData(file.metaData, metaProperty, value, intValue);
             AddOrCreateMeta(metaPath, file.metaData);
 
@@ -136,9 +133,6 @@ namespace Com.Docaret.UniverseBuilder {
             string metaPath = Path.Combine(folder.directory.FullName + "_meta.txt");
 
             currentMetaProperty = metaProperty;
-
-            //if (intValue == 0) metaProperty += " " + value;
-            //else metaProperty += " " + intValue + "%";
 
             UpdateFileOrFolderMetaData(folder.metaData, metaProperty, value, intValue);
             AddOrCreateMeta(metaPath, folder.metaData);
@@ -207,7 +201,6 @@ namespace Com.Docaret.UniverseBuilder {
 
         private static void CreateMetaFile(string metaPath, MetaData metaData)
         {
-            Debug.Log(metaData.videoMute);
             string metaLine = "";
             // Create a file to write to.
             using (StreamWriter sw = File.CreateText(metaPath))

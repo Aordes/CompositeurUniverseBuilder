@@ -61,7 +61,6 @@ namespace Com.Docaret.UniverseBuilder
         #region Pointer Methods
         public void OnPointerEnter(PointerEventData eventData)
         {
-            //isMouseOverUi = true;
             if (!isControlPanelOpen)
             {
                 StartCoroutine(MouseOver());
@@ -76,7 +75,6 @@ namespace Com.Docaret.UniverseBuilder
 
         public void OnPointerExit(PointerEventData eventData)
         {
-            //isMouseOverUi = false;
             if (isControlPanelOpen)
             {
                 StartCoroutine(MouseExit());
@@ -128,17 +126,19 @@ namespace Com.Docaret.UniverseBuilder
 
         public void OpenControlPanel()
         {
+            StopCoroutine(MouseOver());
             fileContainer.SetActive(true);
             isControlPanelOpen = true;
             FileManager.fileGrid = fileContainer.GetComponent<DynamicGrid>();
-            StopCoroutine(MouseOver());
         }
 
         public void CloseControlPanel()
         {
+            StopCoroutine(MouseExit());
             fileContainer.SetActive(false);
             isControlPanelOpen = false;
-            StopCoroutine(MouseExit());
+            toolbar.CurrentFolder = null;
+            toolbar.CurrentSelection = null;
         }
     }
 }
