@@ -32,8 +32,8 @@ namespace Com.Docaret.UniverseBuilder
 
         private string universePath;
         private string compositeurFolderPath;
-        private DirectoryInfo universeDirectory;
         private string path;
+        private DirectoryInfo universeDirectory;
         private GameObject nameInputField;
         #endregion
 
@@ -67,18 +67,16 @@ namespace Com.Docaret.UniverseBuilder
             folderStruct.directory = folderDirectory;
             folderStruct.folderInstance = Instantiate(folderPrefab, bottomFolderContainer.transform);
             folderStruct.button = folderStruct.folderInstance.GetComponent<Button>();
+
             folderStruct.folderScript = folderStruct.button.gameObject.GetComponent<FolderButton>();
             folderStruct.folderScript.toolbar = toolBar;
+            folderStruct.folderScript.onSelected += FileManager.FolderButton_OnSelected;
+
             folderStruct.image = folderStruct.button.gameObject.GetComponent<RawImage>();
             folderStruct.metaData = new MetaData();
 
             dynamicGrid = folderStruct.folderScript.fileContainer.GetComponent<DynamicGrid>();
             folderStruct.fileList = dynamicGrid.fileList;
-
-            //folderStruct.folderScript.onEndEditFolderName += FileManager.FolderButton_RenameFolder;
-            //folderStruct.folderScript.onChangePreview += FileManager.FolderButton_OnChangePreview;
-            //folderStruct.folderScript.onChangeDirectoryContent += FileManager.FolderButton_OnChangeDirectoryContent;
-            //folderStruct.folderScript.onDeleteDirectory += FileManager.FolderButton_OnDeleteDirectory;
 
             FileManager.folderList.Add(folderStruct);
             dynamicGrid.currentFolderStruct = folderStruct;

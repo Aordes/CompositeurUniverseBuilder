@@ -63,7 +63,11 @@ namespace Com.Docaret.UniverseBuilder
             set
             {
                 if (_currentSelection == value) return;
-                else if (value == null) CloseToolbar();
+                else if (value == null)
+                {
+                    CloseToolbar();
+                    _currentSelection = value;
+                }
                 else
                 {
                     _currentSelection = value;

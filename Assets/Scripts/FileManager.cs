@@ -73,6 +73,16 @@ namespace Com.Docaret.UniverseBuilder {
             FolderStruct folder = GetFolderStructFromFolderButton(button);
             folder.directory.MoveTo(DirectoryData.CurrentUniversePath + "/" + newName);
         }
+        public static void FolderButton_OnSelected(Button button)
+        {
+            for (int i = 0; i < folderList.Count; i++)
+            {
+                if (folderList[i].button != button)
+                {
+                    folderList[i].folderScript.DeSelect();
+                }
+            }
+        }
         #endregion
 
         #region File Methods
@@ -268,6 +278,9 @@ namespace Com.Docaret.UniverseBuilder {
                 }
             }
         }
+        #endregion
+
+        #region OnFolderSelected
         #endregion
     }
 }
