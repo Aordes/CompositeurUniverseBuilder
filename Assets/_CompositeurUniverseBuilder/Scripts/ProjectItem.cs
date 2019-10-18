@@ -26,10 +26,10 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
 
         public void Init(DirectoryInfo directory, Sprite preview)
         {
-            if (preview != null)
-            {
+            if (preview == null)
+                imgPreview.enabled = false;
+            else
                 imgPreview.sprite = preview;
-            }
 
             txtTitle.text = directory.Name;
             source = directory;

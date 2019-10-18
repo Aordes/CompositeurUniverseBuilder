@@ -23,7 +23,6 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
         [SerializeField] protected Text txtCancel;
 
         public event Action OnStatus;
-        public Action OnClose;
 
         protected virtual void Start()
         {
@@ -35,12 +34,10 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
 
         protected virtual void ButtonConfirm_OnClick()
         {
-            OnClose?.Invoke();
         }
 
         protected virtual void ButtonCancel_OnClick()
         {
-            OnClose?.Invoke();
         }
     }
 }
