@@ -112,6 +112,11 @@ namespace Com.Docaret.UniverseBuilder
             backgroundImage.texture = www.texture;
         }
 
+        public void SetBackground (Texture2D background)
+        {
+            backgroundImage.texture = background;
+        }
+
         private void OnChangeUniversePreview()
         {
             string[] path = StandaloneFileBrowser.OpenFilePanel("Select a Preview", "", FileManager.supportedImageExtantions, false);
@@ -130,6 +135,12 @@ namespace Com.Docaret.UniverseBuilder
 
             leftButtonContainer.universePreview.texture = www.texture;
             rightButtonContainer.universePreview.texture = www.texture;
+        }
+
+        public void SetUniversePreview (Texture2D preview)
+        {
+            leftButtonContainer.universePreview.texture = preview;
+            rightButtonContainer.universePreview.texture = preview;
         }
 
         private void OnChangeUniverseName(string newName)

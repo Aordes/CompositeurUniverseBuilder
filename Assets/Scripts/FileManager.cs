@@ -99,7 +99,7 @@ namespace Com.Docaret.UniverseBuilder {
             Debug.Log(file.path);
             File.Delete(file.path);
             file.folderstruct.fileList.RemoveAt(file.folderstruct.fileList.IndexOf(file));
-            UnityEngine.Object.Destroy(file.instance);
+            UnityEngine.Object.Destroy(file.instance);            
         }
 
         public static void FileButton_RenameFile(string newName, Button button)
@@ -134,7 +134,6 @@ namespace Com.Docaret.UniverseBuilder {
 
             UpdateFileOrFolderMetaData(file.metaData, metaProperty, value, intValue);
             AddOrCreateMeta(metaPath, file.metaData);
-
         }
 
         public static void AddMetaToFolder(Button button, string metaProperty, bool value, int intValue)

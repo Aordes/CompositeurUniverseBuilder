@@ -128,6 +128,7 @@ namespace Com.Docaret.UniverseBuilder
         private void Update()
         {
             Debug.Log(_currentSelection);
+            Debug.Log(isFile);
         }
 
         private void CloseMetaToMenu()
@@ -190,7 +191,6 @@ namespace Com.Docaret.UniverseBuilder
 
         private void VideoMute_OnValueChanged(bool value)
         {
-            Debug.Log(value);
             FileManager.ChangeMetaData(isFile, _currentSelection, MetaData.VDEO_MUTE, value);
         }
         #endregion
@@ -226,10 +226,15 @@ namespace Com.Docaret.UniverseBuilder
             if (isFile)
             {
                 FileManager.DeleteFileDirectory(_currentSelection);
+                _currentSelection = _currentFolder;
+                isFile = false;
+                UpdateMetaMenuToCurrentSelection();
             }
             else
             {
                 FileManager.FolderButton_OnDeleteDirectory(_currentSelection);
+                _currentFolder = null;
+                CloseToolbar();
             }
         }
 
@@ -252,7 +257,6 @@ namespace Com.Docaret.UniverseBuilder
 
         private void CloseToolbar()
         {
-            Debug.Log("ftfttt");
             animator.Close();
         }
     }
