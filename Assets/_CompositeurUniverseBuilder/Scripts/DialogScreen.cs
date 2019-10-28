@@ -29,25 +29,25 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
             inputDialog.OnClose += CloseScreen;
             modalDialog.OnClose += CloseScreen;
             modalDialogComplex.OnClose += CloseScreen;
-            DisplayDialog(Test, "Test", "Confirm", "no", "Cancel");
+        //    DisplayDialog(Test, "Test", "Confirm", "no", "Cancel");
         }
 
-        public void Test(bool yes)
-        {
-            Debug.Log("Result : " + yes);
-            DisplayDialogComplex(End, "Complex test", "OK", "Cancel", "No", "AAAAAAAA");
-        }
+        //public void Test(bool yes)
+        //{
+        //    Debug.Log("Result : " + yes);
+        //    DisplayDialogComplex(End, "Complex test", "OK", "Cancel", "No", "AAAAAAAA");
+        //}
 
-        public void End(int state)
-        {
-            Debug.Log("State : " + state);
-            DisplayInputDialog(TestInput, "Input", "ok", "cancel");
-        }
+        //public void End(int state)
+        //{
+        //    Debug.Log("State : " + state);
+        //    DisplayInputDialog(TestInput, "Input", "ok", "cancel");
+        //}
 
-        private void TestInput(bool result, string output)
-        {
-            Debug.Log("result :" + result + " content :" + output);
-        }
+        //private void TestInput(bool result, string output)
+        //{
+        //    Debug.Log("result :" + result + " content :" + output);
+        //}
         //END DEBUG ====================================================================
 
         public void DisplayDialog(Action<bool> Callback, string title, string ok, string message = "", string cancel = "")
