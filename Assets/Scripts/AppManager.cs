@@ -75,16 +75,16 @@ namespace Com.Docaret.UniverseBuilder
         private void AddProject(DirectoryInfo directoryInfo)
         {
             ProjectItem instance = Instantiate(prefabProjectItem, projectGrid);
-            Sprite preview = null;
+            Sprite preview = FileImporter.GetItemPreview(directoryInfo, PREVIEW_FILE_NAME);
 
-            string previewPath = Path.Combine(directoryInfo.FullName, PREVIEW_FILE_NAME);
-            FileInfo[] files = directoryInfo.GetFiles(PREVIEW_FILE_NAME);
+            //string previewPath = Path.Combine(directoryInfo.FullName, PREVIEW_FILE_NAME);
+            //FileInfo[] files = directoryInfo.GetFiles(PREVIEW_FILE_NAME);
 
-            if (files.Length != 0)
-            {
-                //Debug.Log(files[0].FullName);
-                preview = FileImporter.SquareSpriteFromTexture(FileImporter.ImportImage(files[0]));
-            }
+            //if (files.Length != 0)
+            //{
+            //    //Debug.Log(files[0].FullName);
+            //    preview = FileImporter.SquareSpriteFromTexture(FileImporter.ImportImage(files[0]));
+            //}
 
             instance.Init(directoryInfo, preview);
             instance.OnClick += ProjectItem_OnClick;

@@ -17,6 +17,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder
         [SerializeField] protected InputField txtInput;
 
         public new event Action<bool, string> OnStatus;
+        public Action OnClose;
 
         public void Init(Action<bool, string> Callback, string title, string ok, string cancel, string placeHolder)
         {
@@ -45,6 +46,8 @@ namespace Com.Docaret.CompositeurUniverseBuilder
 
             OnStatus?.Invoke(true, input);
             OnStatus = null;
+
+            OnClose?.Invoke();
         }
 
         protected override void ButtonCancel_OnClick()
@@ -53,6 +56,8 @@ namespace Com.Docaret.CompositeurUniverseBuilder
 
             OnStatus?.Invoke(false, string.Empty);
             OnStatus = null;
+
+            OnClose?.Invoke();
         }
     }
 }

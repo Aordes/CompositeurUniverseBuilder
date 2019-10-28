@@ -22,8 +22,6 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
         [SerializeField] protected Button btnCancel;
         [SerializeField] protected Text txtCancel;
 
-        public event Action OnStatus;
-
         protected virtual void Start()
         {
             if (btnConfirm)
