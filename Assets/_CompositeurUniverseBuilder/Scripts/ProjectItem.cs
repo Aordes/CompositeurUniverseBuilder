@@ -40,7 +40,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
             if (source == null)
                 throw new InvalidOperationException("no path");
 
-            OnClick?.Invoke(source);
+            OnClick?.Invoke(source/*, imgPreview.sprite*/);
         }
     }
 }

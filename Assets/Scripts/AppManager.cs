@@ -75,22 +75,16 @@ namespace Com.Docaret.UniverseBuilder
         private void AddProject(DirectoryInfo directoryInfo)
         {
             ProjectItem instance = Instantiate(prefabProjectItem, projectGrid);
-            Sprite preview = null;
+            Sprite preview = FileImporter.GetItemPreview(directoryInfo, PREVIEW_FILE_NAME);
 
-            string previewPath = Path.Combine(directoryInfo.FullName, PREVIEW_FILE_NAME);
-            FileInfo[] files = directoryInfo.GetFiles(PREVIEW_FILE_NAME);
+            //string previewPath = Path.Combine(directoryInfo.FullName, PREVIEW_FILE_NAME);
+            //FileInfo[] files = directoryInfo.GetFiles(PREVIEW_FILE_NAME);
 
-            if (files.Length != 0)
-            {
-                //Debug.Log(files[0].FullName);
-                byte[] data = File.ReadAllBytes(files[0].FullName);
-
-                Texture2D texture2D = new Texture2D(2, 2);
-                texture2D.LoadImage(data);
-
-                float minSize = Mathf.Min(texture2D.width, texture2D.height);
-                preview = Sprite.Create(texture2D, new Rect((texture2D.width - minSize) / 2, (texture2D.height - minSize) / 2, minSize, minSize), Vector2.zero);
-            }
+            //if (files.Length != 0)
+            //{
+            //    //Debug.Log(files[0].FullName);
+            //    preview = FileImporter.SquareSpriteFromTexture(FileImporter.ImportImage(files[0]));
+            //}
 
             instance.Init(directoryInfo, preview);
             instance.OnClick += ProjectItem_OnClick;
@@ -116,7 +110,8 @@ namespace Com.Docaret.UniverseBuilder
             DirectoryData.CurrentUniversePath = source.FullName;
             DirectoryData.CompositeurFolderPath = compositeurFolderPath;
 
-            StartCoroutine(AsyncLoadEditor());
+            FileImporter.ImportUniverse(source);
+            //StartCoroutine(AsyncLoadEditor());
 
         }
 

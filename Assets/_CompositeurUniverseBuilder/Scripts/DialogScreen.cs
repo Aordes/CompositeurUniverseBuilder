@@ -25,7 +25,11 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
             inputDialog.gameObject.SetActive(false);
             modalDialog.gameObject.SetActive(false);
             modalDialogComplex.gameObject.SetActive(false);
-            //DisplayDialog(Test, "Test", "Confirm", "no", "Cancel");
+
+            inputDialog.OnClose += CloseScreen;
+            modalDialog.OnClose += CloseScreen;
+            modalDialogComplex.OnClose += CloseScreen;
+        //    DisplayDialog(Test, "Test", "Confirm", "no", "Cancel");
         }
 
         //public void Test(bool yes)
