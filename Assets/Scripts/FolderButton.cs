@@ -29,10 +29,7 @@ namespace Com.Docaret.UniverseBuilder
         public delegate void OnEndEditFolderNameDelegate(string name, Button button);
         public OnEndEditFolderNameDelegate onEndEditFolderName;
 
-        public delegate void OnClickDelegate(Button button);
-        public OnClickDelegate onChangePreview;
-        public OnClickDelegate onChangeDirectoryContent;
-        public OnClickDelegate onDeleteDirectory;
+        public event Action<Button> onSelected;
 
         private Button button;
         private bool isControlPanelOpen;
@@ -48,7 +45,6 @@ namespace Com.Docaret.UniverseBuilder
             fileContainer.SetActive(false);
 
             button = gameObject.GetComponent<Button>();
-            button.onClick.AddListener(OnSelected);
         }
 
         private void Start()
@@ -63,12 +59,14 @@ namespace Com.Docaret.UniverseBuilder
         {
             if (!isControlPanelOpen)
             {
+                StopAllCoroutines();
                 StartCoroutine(MouseOver());
             }
         }
 
         private void OnSelected()
         {
+            onSelected?.Invoke(button);
             toolbar.CurrentSelection = button;
             toolbar.CurrentFolder = button;
         }
@@ -77,6 +75,7 @@ namespace Com.Docaret.UniverseBuilder
         {
             if (isControlPanelOpen)
             {
+                StopAllCoroutines();
                 StartCoroutine(MouseExit());
             }
         }
@@ -103,33 +102,16 @@ namespace Com.Docaret.UniverseBuilder
         #endregion
 
         #region CallBack Methods
-        private void OnEnd_EditName(string name)
-        {
-            onEndEditFolderName?.Invoke(name, button);          
-        }
-
-        private void OnClick_DeleteButton()
-        {
-            onDeleteDirectory?.Invoke(button);
-        }
-
-        private void OnClick_ChangePreview()
-        {
-            onChangePreview?.Invoke(button);
-        }
-
-        private void OnClick_ChangeDirectoryContent()
-        {    
-            onChangeDirectoryContent?.Invoke(button);
-        }
         #endregion
 
+        #region Open & Close Panel Methods
         public void OpenControlPanel()
         {
             StopCoroutine(MouseOver());
             fileContainer.SetActive(true);
             isControlPanelOpen = true;
             FileManager.fileGrid = fileContainer.GetComponent<DynamicGrid>();
+            OnSelected();
         }
 
         public void CloseControlPanel()
@@ -140,5 +122,13 @@ namespace Com.Docaret.UniverseBuilder
             toolbar.CurrentFolder = null;
             toolbar.CurrentSelection = null;
         }
+
+        public void DeSelect()
+        {
+            StopAllCoroutines();
+            fileContainer.SetActive(false);
+            isControlPanelOpen = false;
+        }
+        #endregion
     }
 }
