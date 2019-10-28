@@ -83,7 +83,7 @@ namespace Com.Docaret.UniverseBuilder
             if (files.Length != 0)
             {
                 //Debug.Log(files[0].FullName);
-                preview = FileImporter.CreateSquareSprite(FileImporter.ImportImage(files[0]));
+                preview = FileImporter.SquareSpriteFromTexture(FileImporter.ImportImage(files[0]));
             }
 
             instance.Init(directoryInfo, preview);
