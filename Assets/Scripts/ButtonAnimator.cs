@@ -32,7 +32,6 @@ namespace Com.Docaret.CompositeurUniverseBuilder
                 animator.SetTrigger("close");
                 isOpen = false;
             }
-        }
-	
+        }	
 	}
 }

@@ -11,7 +11,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-
+using TMPro;
 
 namespace Com.Docaret.CompositeurUniverseBuilder
 {
@@ -19,7 +19,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder
     {
         #region Fields
         [SerializeField] private InputField inputField;
-        [SerializeField] private Text text;
+        [SerializeField] private TextMeshProUGUI folderName;
         [SerializeField] private Button openButton;
         [SerializeField] private Button changePreviewButton;
         [SerializeField] private Button deleteButton;
@@ -52,7 +52,6 @@ namespace Com.Docaret.CompositeurUniverseBuilder
             fileContainer.GetComponent<DynamicGrid>().toolBar = toolbar;
         }
         #endregion
-
 
         #region Pointer Methods
         public void OnPointerEnter(PointerEventData eventData)
@@ -101,9 +100,6 @@ namespace Com.Docaret.CompositeurUniverseBuilder
         }
         #endregion
 
-        #region CallBack Methods
-        #endregion
-
         #region Open & Close Panel Methods
         public void OpenControlPanel()
         {
@@ -128,6 +124,13 @@ namespace Com.Docaret.CompositeurUniverseBuilder
             StopAllCoroutines();
             fileContainer.SetActive(false);
             isControlPanelOpen = false;
+        }
+        #endregion
+
+        #region Utils
+        public void SetName (string name)
+        {
+            folderName.text = name;
         }
         #endregion
     }

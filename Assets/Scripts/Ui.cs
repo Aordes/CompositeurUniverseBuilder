@@ -12,35 +12,54 @@ using UnityEditor;
 using UnityEngine.Networking;
 using SFB;
 using TMPro;
+using System.Diagnostics;
+using System;
+using UnityEngine.SceneManagement;
 
 namespace Com.Docaret.CompositeurUniverseBuilder
 {
     public class Ui : MonoBehaviour
     {
         #region Fields
+        [Header("Containers")]
         [SerializeField] Transform bottomFolderContainer;
-        [SerializeField] GameObject folderPrefab;
-        [SerializeField] Button newFolderButton;
-        [SerializeField] GameObject newFolderButtonPrefab;
-        [SerializeField] Background background;
-        [SerializeField] RawImage backgroundImage;
         [SerializeField] SlidePanelButtonContainer leftButtonContainer;
         [SerializeField] SlidePanelButtonContainer rightButtonContainer;
-        [SerializeField] GameObject inputFieldPrefab;
         [SerializeField] GameObject uiContainer;
+
+        [Header("Prefabs")]
+        [SerializeField] GameObject folderPrefab;
+        [SerializeField] GameObject newFolderButtonPrefab;
+
+        [Header("Background")]
+        [SerializeField] RawImage backgroundImage;
+
+        [Header("ToolBar")]
         [SerializeField] ToolBar toolBar;
+
+        [Header("DialogScreen")]
+        [SerializeField] DialogScreen dialogScreen;
 
         private string universePath;
         private string compositeurFolderPath;
         private string path;
+
+        private Button newFolderButton;
         private DirectoryInfo universeDirectory;
         private GameObject nameInputField;
+
+        private event Action<bool> OnExitDialog;
+        private event Action<bool,string> OnRenameUniverseDialog;
         #endregion
 
         #region Unity Methods
+
         //Get Directory Path information & AddListeners to SlideButtonContainers
         private void Start()
         {
+            OnExitDialog += ExitToHomeMenu;
+            OnRenameUniverseDialog += ChangeUniverseName;
+
             UpdateDirectoryData();
 
             leftButtonContainer.universeName.text = DirectoryData.CurrentUniverseName;
@@ -51,9 +70,11 @@ namespace Com.Docaret.CompositeurUniverseBuilder
             SlideButtonContainerAddListeners(leftButtonContainer);
             SlideButtonContainerAddListeners(rightButtonContainer);
         }
+
         #endregion
 
         #region UI Elements Creation Methods
+
         //Create new folder & Event subscriptions
         private void OnCLick_CreateFolder()
         {
@@ -90,6 +111,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder
             newFolderButton = Instantiate(newFolderButtonPrefab, bottomFolderContainer.transform).GetComponent<Button>();
             newFolderButton.onClick.AddListener(OnCLick_CreateFolder);
         }
+
         #endregion
 
         #region Callback Methods
@@ -143,9 +165,20 @@ namespace Com.Docaret.CompositeurUniverseBuilder
             rightButtonContainer.universePreview.texture = preview;
         }
 
-        private void OnChangeUniverseName(string newName)
+
+        private void OnOpenCompositeur()
         {
-            if (Directory.Exists(universePath + "/" + newName) || string.IsNullOrEmpty(newName)) return;
+            Process.Start("cdux://");
+        }
+
+        private void OnChangeUniverseName()
+        {
+            dialogScreen.DisplayInputDialog(OnRenameUniverseDialog, "Rename", "Ok", "Cancel", "New name");
+        }
+
+        private void ChangeUniverseName(bool confirm, string newName)
+        {
+            if (!confirm || Directory.Exists(universePath + "/" + newName) || string.IsNullOrEmpty(newName)) return;
 
             universeDirectory.MoveTo(compositeurFolderPath + "/" + newName);
 
@@ -159,28 +192,37 @@ namespace Com.Docaret.CompositeurUniverseBuilder
             Destroy(nameInputField);
         }
 
+        private void OnExitToHomeMenu ()
+        {
+            dialogScreen.DisplayDialog(OnExitDialog, "Exit", "Ok", "Are you sure you want to exit?", "Cancel");
+        }
+
+        private void ExitToHomeMenu (bool confirm)
+        {
+            if (!confirm) return;
+            SceneManager.LoadScene("Home Menu_Soren");
+        }
+
+        #endregion
+
+        #region Utils
+
         private void UpdateDirectoryData()
         {
             universePath = DirectoryData.CurrentUniversePath;
             universeDirectory = DirectoryData.CurrentDirectory;
             compositeurFolderPath = DirectoryData.CompositeurFolderPath;
         }
-        #endregion
-
-        #region Utils
-
-        private void CreateInputField()
-        {
-            nameInputField = Instantiate(inputFieldPrefab, uiContainer.transform);
-            nameInputField.GetComponentInChildren<TMP_InputField>().onEndEdit.AddListener(OnChangeUniverseName);
-        }
 
         private void SlideButtonContainerAddListeners(SlidePanelButtonContainer buttonContainer)
         {
             buttonContainer.changeBackgroundButton.onClick.AddListener(OnChangeBackground);
-            buttonContainer.changeUniverseNameButton.onClick.AddListener(CreateInputField);
+            buttonContainer.changeUniverseNameButton.onClick.AddListener(OnChangeUniverseName);
             buttonContainer.changeUniversePreviewButton.onClick.AddListener(OnChangeUniversePreview);
+            buttonContainer.openCompositeurButton.onClick.AddListener(OnOpenCompositeur);
+            buttonContainer.homeButton.onClick.AddListener(OnExitToHomeMenu);
         }
+
         #endregion
     }
 }

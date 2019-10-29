@@ -12,6 +12,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder
 
     public class ToolBar : MonoBehaviour {
 
+        #region Fields
         [Header("Meta")]
         [SerializeField] private Button btnAddMetaToMainFolder;
         [SerializeField] private Button btnAddMetaToSelection;
@@ -51,7 +52,9 @@ namespace Com.Docaret.CompositeurUniverseBuilder
         public event Action<bool,string> OnRenameDialog;
 
         private bool isFile;
+        #endregion
 
+        #region Current Selection Get&Set
         private Button _currentFolder;
         public Button CurrentFolder
         {
@@ -81,7 +84,9 @@ namespace Com.Docaret.CompositeurUniverseBuilder
                 //set button state
             }
         }
+        #endregion
 
+        #region Unity Methods
         private void Start() {
             OnSelectionChangeEvent += OnSelectionChange;
             OnDeleteDialog += OnDeleteConfirm;
@@ -131,6 +136,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder
             });
             #endregion
         }
+        #endregion
 
         #region Meta Menu
         private void CloseMetaToMenu()
@@ -273,6 +279,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder
         }
         #endregion
 
+        #region Utils
         private void OnSelectionChange(GameObject selection)
         {
             if (_currentSelection != null)
@@ -288,5 +295,6 @@ namespace Com.Docaret.CompositeurUniverseBuilder
         {
             animator.Close();
         }
+        #endregion
     }
 }

@@ -72,8 +72,10 @@ namespace Com.Docaret.CompositeurUniverseBuilder
 
             FolderStruct folder = GetFolderStructFromFolderButton(button);
             folder.directory.MoveTo(DirectoryData.CurrentUniversePath + "/" + newName);
+            folder.folderScript.SetName(newName);
             UpdateFolderStruct(folder, button);
         }
+
         public static void FolderButton_OnSelected(Button button)
         {
             for (int i = 0; i < folderList.Count; i++)
