@@ -4,10 +4,14 @@
 ///-----------------------------------------------------------------
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
 using UnityEngine;
+using UnityEngine.Networking;
+using Debug = UnityEngine.Debug;
 
 namespace Com.Docaret.CompositeurUniverseBuilder {
 
@@ -44,20 +48,23 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
 
             public static string UNDERSCORE = "_";
             public static string BACKGROUND = "_background";
+            public static string FILE = "file://";
             public static string FOLDER_ICON = "_icon";
             public static string META = "_meta";
             public static string PREVIEW = "_preview";
         }
 
-        public static void ImportUniverse(DirectoryInfo directory)
+        public static IEnumerator ImportUniverse(DirectoryInfo directory)
         {
             //Folders
             DirectoryInfo[] directories = directory.GetDirectories();
             Debug.Log("Project has " + directories.Length + " folders");
+            yield return null;
 
             //Files
             FileInfo[] files = directory.GetFiles();
             Debug.Log(files.Length + " files");
+            yield return null;
 
             UniverseStruct universe = new UniverseStruct();
              
@@ -70,7 +77,8 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
                 {
                     if (fileInfo.Name.Contains(FileTypes.BACKGROUND))
                     {
-                        universe.background = ImportSprite(fileInfo);
+                        yield return ImportSprite(fileInfo, (output) => { output = universe.background;});
+                        //yield return null;
                     }
                 }
             }
@@ -78,44 +86,46 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
             universe.folders = new List<UniverseFolderStruct>();
             for (int i = 0; i < directories.Length; i++)
             {
-                GetFolderStruct(directories[i], universe.folders);
+                yield return GetFolderStruct(directories[i], universe.folders);
             }
 
             Debug.Log(universe);
         }
 
-        public static void GetFolderStruct(DirectoryInfo folder, List<UniverseFolderStruct> list)
+        public static IEnumerator GetFolderStruct(DirectoryInfo folder, List<UniverseFolderStruct> list)
         {
             if (folder.Name.StartsWith(FileTypes.UNDERSCORE) || folder.Name.EndsWith(FileTypes.CONTENT_FOLDER))
-                return;
+                yield break;
 
             UniverseFolderStruct currentFolder;
             Debug.Log(folder.Name + " has " + folder.GetFiles().Length + " files \n" + folder.GetDirectories().Length);
 
-            currentFolder = new UniverseFolderStruct
-            {
-                icon = GetItemPreview(folder, FileTypes.FOLDER_ICON + FileTypes.ALL_EXTENSION),
-                files = GetFileStruct(folder)
-            };
+            currentFolder = new UniverseFolderStruct();
+
+            yield return GetItemPreview(folder, FileTypes.FOLDER_ICON + FileTypes.ALL_EXTENSION, (output) => { currentFolder.icon = output; });
+            yield return GetFileStruct(folder, currentFolder.files);
 
             currentFolder.subFolders = new List<UniverseFolderStruct>();
             DirectoryInfo[] directories = folder.GetDirectories();
             for (int i = 0; i < directories.Length; i++)
             {
-                GetFolderStruct(directories[i], currentFolder.subFolders);
+                yield return GetFolderStruct(directories[i], currentFolder.subFolders);
             }
 
             list.Add(currentFolder);
         }
 
-        private static List<UniverseFileStruct> GetFileStruct(DirectoryInfo folder)
+        private static IEnumerator GetFileStruct(DirectoryInfo folder, List<UniverseFileStruct> universeFiles)
         {
-            List<UniverseFileStruct> universeFiles = new List<UniverseFileStruct>();
+            universeFiles = new List<UniverseFileStruct>();
 
             FileInfo[] files = folder.GetFiles();
-            DirectoryInfo fileDirectory;
+            yield return null;
 
+            UniverseFileStruct fileStruct;
+            DirectoryInfo fileDirectory;
             string fileName;
+
 
             for (int i = 0; i < files.Length; i++)
             {
@@ -123,46 +133,53 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
                 fileDirectory = files[i].Directory;
 
                 if (!(fileName.Contains(FileTypes.FOLDER_ICON) || fileName.Contains(FileTypes.META)))
-                    universeFiles.Add(
-                        new UniverseFileStruct()
-                        {
-                            file = files[i],
-                            preview = GetItemPreview(fileDirectory, fileName),
-                            meta = GetItemMeta(fileDirectory, fileName)
-                        }
-                    );
-            }
+                {
+                    fileStruct = new UniverseFileStruct
+                    {
+                        file = files[i]//,
+                        //meta = GetItemMeta(fileDirectory, fileName)
+                    };
 
-            return universeFiles;
+                    yield return GetItemPreview(fileDirectory, fileName, (output) => { fileStruct.preview = output; });
+
+                    Stopwatch st = new Stopwatch();
+                    st.Start();
+                    fileStruct.meta = GetItemMeta(fileDirectory, fileName);
+                    st.Stop();
+
+                    Debug.Log(string.Format("MyMethod took {0} ms to complete", st.ElapsedMilliseconds));
+                    universeFiles.Add(fileStruct);
+                }
+            }
         }
 
         private static string GetItemMeta(DirectoryInfo directoryInfo, string fileName)
         {
             FileInfo[] files = directoryInfo.GetFiles(fileName);
-            
+
             if (files.Length != 0)
             {
-                return File.ReadAllText(files[0].FullName, Encoding.UTF8);
+                return string.Empty;
             }
 
-            return null;
+
+            return File.ReadAllText(files[0].FullName, Encoding.UTF8);
         }
 
-        public static Sprite GetItemPreview(DirectoryInfo directoryInfo, string fileName)
+        public static IEnumerator GetItemPreview(DirectoryInfo directoryInfo, string fileName, Action<Sprite> Callback)
         {
             FileInfo[] files = directoryInfo.GetFiles(fileName);
-            Sprite image;
 
-            if (files.Length != 0)
+            if (files.Length == 0)
             {
-                image = SquareSpriteFromTexture(ImportImage(files[0]));
-                return image;
+                yield break;
             }
 
-            return null;
+            Texture2D texture2D = null;
+            yield return ImportTexture(files[0], (output) => { texture2D = output; });
+
+            Callback?.Invoke(SquareSpriteFromTexture(texture2D));
         }
-
-
 
         public static bool CheckIsImage(string fileName)
         {
@@ -171,26 +188,47 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
             return (extension == FileTypes.PNG || extension == FileTypes.JPG);
         }
 
-        public static Texture2D ImportImage(FileInfo file)
+        public static IEnumerator ImportTexture(FileInfo file, Action<Texture2D> Callback)
         {
-            byte[] data = File.ReadAllBytes(file.FullName);
+            using (UnityWebRequest request = UnityWebRequestTexture.GetTexture(FileTypes.FILE + file.FullName))
+            {
+                yield return request.SendWebRequest();
 
-            Texture2D texture2D = new Texture2D(2, 2);
-            texture2D.LoadImage(data);
+                if (string.IsNullOrEmpty(request.error))
+                {
+                    Callback?.Invoke(DownloadHandlerTexture.GetContent(request));
+                }
+                else
+                {
+                    Debug.LogError(request.error);
+                    yield break;
+                }
+            }
 
-            return texture2D;
+            //byte[] data = File.ReadAllBytes(file.FullName);
+
+            //Texture2D texture2D = new Texture2D(2, 2);
+            //texture2D.LoadImage(data);
+
+            //return texture2D;
         }
 
-        public static Sprite ImportSprite(FileInfo file)
+        public static IEnumerator ImportSprite(FileInfo file, Action<Sprite> Callback)
         {
-            Texture2D texture2D = ImportImage(file);
-            return Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), Vector2.zero);
+            Texture2D texture2D = null;
+            yield return ImportTexture(file, (output) => { texture2D = output; });
+
+            Callback?.Invoke(Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), Vector2.zero));
+            Debug.Log("Imported " + file.Name);
         }
 
+
+        #region Synchronous
         public static Sprite SquareSpriteFromTexture(Texture2D texture2D)
         {
             float minSize = Mathf.Min(texture2D.width, texture2D.height);
             return Sprite.Create(texture2D, new Rect((texture2D.width - minSize) / 2, (texture2D.height - minSize) / 2, minSize, minSize), Vector2.zero);
         }
+        #endregion
     }
 }
