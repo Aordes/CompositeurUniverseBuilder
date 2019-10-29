@@ -3,14 +3,16 @@
 /// Date : 16/10/2019 17:47
 ///-----------------------------------------------------------------
 
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Com.Docaret.UniverseBuilder
+namespace Com.Docaret.CompositeurUniverseBuilder
 {
 	public class FileSelection : MonoBehaviour {
 
         [SerializeField] private Button button;
+        [SerializeField] private TextMeshProUGUI fileName;
 
         public ToolBar toolBar;
 
@@ -22,6 +24,11 @@ namespace Com.Docaret.UniverseBuilder
         private void SetCurrentSelection_OnClick()
         {
             toolBar.CurrentSelection = button;
+        }
+
+        public void SetName(string name)
+        {
+            fileName.text = name;
         }
 
     }

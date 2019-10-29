@@ -8,7 +8,7 @@ using UnityEngine.UI;
 using TMPro;
 using System.Diagnostics;
 
-namespace Com.Docaret.UniverseBuilder
+namespace Com.Docaret.CompositeurUniverseBuilder
 {
 	public class SlidePanelButtonContainer : MonoBehaviour {
 

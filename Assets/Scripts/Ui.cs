@@ -13,7 +13,7 @@ using UnityEngine.Networking;
 using SFB;
 using TMPro;
 
-namespace Com.Docaret.UniverseBuilder
+namespace Com.Docaret.CompositeurUniverseBuilder
 {
     public class Ui : MonoBehaviour
     {

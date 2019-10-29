@@ -10,7 +10,8 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Com.Docaret.UniverseBuilder {
+namespace Com.Docaret.CompositeurUniverseBuilder
+{
 	public class FileManager {
 
         #region Fields
@@ -58,7 +59,6 @@ namespace Com.Docaret.UniverseBuilder {
 
         public static void FolderButton_OnDeleteDirectory(Button button)
         {
-            Debug.Log("Delete Directory");
             FolderStruct folder = GetFolderStructFromFolderButton(button);
 
             folder.directory.Delete(true);
@@ -72,6 +72,7 @@ namespace Com.Docaret.UniverseBuilder {
 
             FolderStruct folder = GetFolderStructFromFolderButton(button);
             folder.directory.MoveTo(DirectoryData.CurrentUniversePath + "/" + newName);
+            UpdateFolderStruct(folder, button);
         }
         public static void FolderButton_OnSelected(Button button)
         {
@@ -93,7 +94,6 @@ namespace Com.Docaret.UniverseBuilder {
 
         public static void DeleteFileDirectory(Button button)
         {
-            Debug.Log("Delete File");
             FileStruct file = GetFileStructFromFileButton(button);
 
             Debug.Log(file.path);
@@ -107,8 +107,10 @@ namespace Com.Docaret.UniverseBuilder {
             if (Directory.Exists(fileGrid.currentFolderStruct.directory.FullName + "/" + newName) || string.IsNullOrEmpty(newName)) return;
 
             FileStruct file = GetFileStructFromFileButton(button);
-            Debug.Log(file.folderstruct.directory.FullName);
-            file.folderstruct.directory.MoveTo(fileGrid.currentFolderStruct.directory.FullName + "/" + newName);
+            File.Move(file.path, file.folderstruct.directory.FullName + "/" + newName + Path.GetExtension(file.path));
+            file.path = file.folderstruct.directory.FullName + "/" + newName + Path.GetExtension(file.path);
+            file.fileScript.SetName(newName);
+            UpdateFileStruct(file, button);
         }
         #endregion
 
@@ -172,6 +174,8 @@ namespace Com.Docaret.UniverseBuilder {
         #endregion
 
         #region Utils
+
+        #region Folder
         public static FolderStruct GetFolderStructFromFolderButton(Button button)
         {
             for (int i = 0; i < folderList.Count; i++)
@@ -184,6 +188,19 @@ namespace Com.Docaret.UniverseBuilder {
             return folderList[0];
         }
 
+        public static void UpdateFolderStruct(FolderStruct folderStruct, Button button)
+        {
+            for (int i = 0; i < folderList.Count; i++)
+            {
+                if (folderList[i].button == button)
+                {
+                    folderList[i] = folderStruct;
+                }
+            }
+        }
+        #endregion
+
+        #region File
         public static FileStruct GetFileStructFromFileButton(Button button)
         {
             for (int i = 0; i < fileGrid.fileList.Count; i++)
@@ -196,6 +213,19 @@ namespace Com.Docaret.UniverseBuilder {
             return fileGrid.fileList[0];
         }
 
+        public static void UpdateFileStruct (FileStruct fileStruct, Button button)
+        {
+            for (int i = 0; i < fileGrid.fileList.Count; i++)
+            {
+                if (fileGrid.fileList[i].button == button)
+                {
+                    fileGrid.fileList[i] = fileStruct;
+                }
+            }
+        }
+        #endregion
+
+        #region Meta Utils
         private static void AddOrCreateMeta(string metaPath, MetaData metaData)
         {
             if (!File.Exists(metaPath))
@@ -279,7 +309,6 @@ namespace Com.Docaret.UniverseBuilder {
         }
         #endregion
 
-        #region OnFolderSelected
         #endregion
     }
 }

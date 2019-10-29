@@ -3,7 +3,6 @@
 /// Date : #10.09.2019#
 ///-----------------------------------------------------------------
 
-using Com.Docaret.CompositeurUniverseBuilder;
 using SFB;
 using System;
 using System.Collections;
@@ -14,7 +13,7 @@ using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-namespace Com.Docaret.UniverseBuilder
+namespace Com.Docaret.CompositeurUniverseBuilder
 {
     public class AppManager : MonoBehaviour
     {

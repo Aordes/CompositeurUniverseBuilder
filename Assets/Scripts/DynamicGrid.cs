@@ -4,10 +4,11 @@
 ///-----------------------------------------------------------------
 
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Com.Docaret.UniverseBuilder
+namespace Com.Docaret.CompositeurUniverseBuilder
 {
 	public class DynamicGrid : MonoBehaviour
     {
@@ -35,9 +36,10 @@ namespace Com.Docaret.UniverseBuilder
             FileStruct fileStruct = new FileStruct();
 
             fileStruct.instance = instance;
-            fileStruct.instance.GetComponent<FileSelection>().toolBar = toolBar;
+            fileStruct.fileScript = instance.GetComponent<FileSelection>();
+            fileStruct.fileScript.toolBar = toolBar;
+            fileStruct.fileScript.SetName(Path.GetFileNameWithoutExtension(path));
             fileStruct.folderstruct = currentFolderStruct;
-            fileStruct.textMesh = instance.GetComponent<TextMesh>();
             fileStruct.button = instance.GetComponent<Button>();
             fileStruct.path = path;
             fileStruct.metaData = new MetaData();

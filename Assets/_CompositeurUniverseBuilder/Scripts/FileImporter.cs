@@ -12,18 +12,18 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
     public struct UniverseStruct
     {
         public Sprite background;
-        public List<FolderStruct> folders;
-        public List<FileStruct> files;
+        public List<UniverseFolderStruct> folders;
+        public List<UniverseFileStruct> files;
     }
 
-    public struct FolderStruct
+    public struct UniverseFolderStruct
     {
         public Sprite icon;
-        public List<FolderStruct> subFolders;
-        public List<FileStruct> files;
+        public List<UniverseFolderStruct> subFolders;
+        public List<UniverseFileStruct> files;
     }
 
-    public struct FileStruct
+    public struct UniverseFileStruct
     {
         public Sprite preview;
         public FileInfo meta;
@@ -73,32 +73,32 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
                 }
             }
 
-            universe.folders = new List<FolderStruct>();
+            universe.folders = new List<UniverseFolderStruct>();
             for (int i = 0; i < directories.Length; i++)
             {
-                GetFolderStruct(directories[i], universe.folders);
+                GetUniverseFolderStruct(directories[i], universe.folders);
             }
 
         }
 
-        public static void GetFolderStruct(DirectoryInfo folder, List<FolderStruct> list)
+        public static void GetUniverseFolderStruct(DirectoryInfo folder, List<UniverseFolderStruct> list)
         {
             if (folder.Name.StartsWith(FileTypes.UNDERSCORE) || folder.Name.EndsWith(FileTypes.CONTENT_FOLDER))
                 return;
 
-            FolderStruct currentFolder;
+            UniverseFolderStruct currentFolder;
             Debug.Log(folder.Name + " has " + folder.GetFiles().Length + " files \n" + folder.GetDirectories().Length);
 
-            currentFolder = new FolderStruct();
+            currentFolder = new UniverseFolderStruct();
             currentFolder.icon = GetItemPreview(folder, FileTypes.FOLDER_ICON + FileTypes.ALL_EXTENSION);
 
-            currentFolder.files = new List<FileStruct>();
+            currentFolder.files = new List<UniverseFileStruct>();
             FileInfo[] files = folder.GetFiles();
             for (int i = 0; i < files.Length; i++)
             {
                 if (!(files[i].Name.Contains(FileTypes.FOLDER_ICON) || files[i].Name.Contains(FileTypes.META)))
                     currentFolder.files.Add(
-                        new FileStruct()
+                        new UniverseFileStruct()
                         {
                             file = files[i],
                             preview = GetItemPreview(files[i].Directory, files[i].Name)
@@ -106,11 +106,11 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
                     );
             }
 
-            currentFolder.subFolders = new List<FolderStruct>();
+            currentFolder.subFolders = new List<UniverseFolderStruct>();
             DirectoryInfo[] directories = folder.GetDirectories();
             for (int i = 0; i < directories.Length; i++)
             {
-                GetFolderStruct(directories[i], currentFolder.subFolders);
+                GetUniverseFolderStruct(directories[i], currentFolder.subFolders);
             }
 
             list.Add(currentFolder);

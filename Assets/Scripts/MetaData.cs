@@ -6,7 +6,7 @@
 using System;
 using UnityEngine;
 
-namespace Com.Docaret.UniverseBuilder
+namespace Com.Docaret.CompositeurUniverseBuilder
 {
 	public class MetaData {
 

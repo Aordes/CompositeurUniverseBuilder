@@ -13,7 +13,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 
-namespace Com.Docaret.UniverseBuilder
+namespace Com.Docaret.CompositeurUniverseBuilder
 {
     public class FolderButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
