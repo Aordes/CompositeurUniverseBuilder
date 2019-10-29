@@ -6,12 +6,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
-using Debug = UnityEngine.Debug;
 
 namespace Com.Docaret.CompositeurUniverseBuilder {
 
@@ -27,13 +25,14 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
         public Sprite icon;
         public List<UniverseFolderStruct> subFolders;
         public List<UniverseFileStruct> files;
+        public DirectoryInfo fileInfo;
     }
 
     public struct UniverseFileStruct
     {
         public Sprite preview;
         public string meta;
-        public FileInfo file;
+        public FileInfo fileInfo;
     }
 
     public class FileImporter {
@@ -98,9 +97,10 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
                 yield break;
 
             UniverseFolderStruct currentFolder;
-            Debug.Log(folder.Name + " has " + folder.GetFiles().Length + " files \n" + folder.GetDirectories().Length);
+            Debug.Log(folder.Name + " has " + folder.GetFiles().Length + " files \n" + folder.GetDirectories().Length + " folders");
 
             currentFolder = new UniverseFolderStruct();
+            currentFolder.fileInfo = folder;
 
             yield return GetItemPreview(folder, FileTypes.FOLDER_ICON + FileTypes.ALL_EXTENSION, (output) => { currentFolder.icon = output; });
             yield return GetFileStruct(folder, currentFolder.files);
@@ -136,18 +136,16 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
                 {
                     fileStruct = new UniverseFileStruct
                     {
-                        file = files[i]//,
-                        //meta = GetItemMeta(fileDirectory, fileName)
+                        fileInfo = files[i],
+                        meta = GetItemMeta(fileDirectory, fileName)
                     };
+
+                    float t = Time.realtimeSinceStartup;
+                    GetItemMeta(fileDirectory, fileName);
+                    Debug.Log("Got meta in " + (Time.realtimeSinceStartup - t) + "s");
 
                     yield return GetItemPreview(fileDirectory, fileName, (output) => { fileStruct.preview = output; });
 
-                    Stopwatch st = new Stopwatch();
-                    st.Start();
-                    fileStruct.meta = GetItemMeta(fileDirectory, fileName);
-                    st.Stop();
-
-                    Debug.Log(string.Format("MyMethod took {0} ms to complete", st.ElapsedMilliseconds));
                     universeFiles.Add(fileStruct);
                 }
             }
