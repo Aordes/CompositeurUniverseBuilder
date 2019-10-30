@@ -15,14 +15,19 @@ namespace Com.Docaret.CompositeurUniverseBuilder
 
         public void Open()
         {
+            Debug.Log("Open");
+            animator.ResetTrigger("Open");
             animator.SetTrigger("Open");
             isOpen = true;
+            animator.ResetTrigger("Close");
         }
 
         public void Close()
         {
+            Debug.Log("Close");
             animator.SetTrigger("Close");
             isOpen = false;
+            animator.ResetTrigger("Open");
         }
     }
 }

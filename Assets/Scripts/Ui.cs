@@ -55,7 +55,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder
         {
             if (DirectoryData.openExistingProject)
             {
-                StartCoroutine(FileImporter.ImportUniverse(DirectoryData.CurrentDirectory, CreateFolder));
+                StartCoroutine(FileImporter.ImportUniverse(DirectoryData.CurrentDirectory, OpenExistingUniverse));
             }
 
             OnExitDialog += ExitToHomeMenu;
@@ -76,6 +76,12 @@ namespace Com.Docaret.CompositeurUniverseBuilder
 
         #region UI Elements Creation Methods
 
+        private void OpenExistingUniverse(UniverseStruct universeStruct)
+        {
+            CreateFolder(universeStruct);
+            SetBackground(universeStruct.background);
+        }
+
         //Create new folder & Event subscriptions
         private void OnCLick_CreateFolder()
         {
@@ -92,7 +98,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder
 
             folderStruct.folderScript = folderStruct.button.gameObject.GetComponent<FolderButton>();
             folderStruct.folderScript.toolbar = toolBar;
-            folderStruct.folderScript.SetName(Path.GetDirectoryName(folderStruct.path));
+            folderStruct.folderScript.SetName(folderStruct.directory.Name);
             folderStruct.folderScript.onSelected += FileManager.FolderButton_OnSelected;
 
             folderStruct.image = folderStruct.button.gameObject.GetComponent<RawImage>();
@@ -110,7 +116,6 @@ namespace Com.Docaret.CompositeurUniverseBuilder
         public void CreateFolder(UniverseStruct universeStruct)
         {
             Destroy(newFolderButton.gameObject);
-            Debug.Log(universeStruct.folders.Count);
 
             for (int i = 0; i < universeStruct.folders.Count; i++)
             {
@@ -127,10 +132,14 @@ namespace Com.Docaret.CompositeurUniverseBuilder
                 folderStruct.folderScript = folderStruct.button.gameObject.GetComponent<FolderButton>();
                 folderStruct.folderScript.toolbar = toolBar;
                 folderStruct.folderScript.SetName(folderStruct.directory.Name);
-                Debug.Log(folderStruct.directory.Name);
+
                 folderStruct.folderScript.onSelected += FileManager.FolderButton_OnSelected;
 
                 folderStruct.image = folderStruct.button.gameObject.GetComponent<RawImage>();
+                if (universeStruct.folders[i].icon != null)
+                {
+                    folderStruct.image.texture = universeStruct.folders[i].icon.texture;
+                }
                 folderStruct.metaData = new MetaData();
 
                 dynamicGrid = folderStruct.folderScript.fileContainer.GetComponent<DynamicGrid>();
@@ -138,9 +147,30 @@ namespace Com.Docaret.CompositeurUniverseBuilder
 
                 FileManager.folderList.Add(folderStruct);
                 dynamicGrid.currentFolderStruct = folderStruct;
+                if (universeStruct.folders[i].files != null)
+                {
+                    for (int x = 0; x < universeStruct.folders[i].files.Count; x++)
+                    {
+                        dynamicGrid.toolBar = toolBar;
+                        dynamicGrid.currentFolderStruct = folderStruct;
+                        dynamicGrid.CreateFile(universeStruct.folders[i].files[x].fileInfo.FullName);
+                    }
+                }
             }
 
             CreateNewFolderButton();
+        }
+
+        private void SetBackground(Sprite background)
+        {
+            if (background == null) return;
+            backgroundImage.texture = background.texture;
+        }
+
+        private void SetUniversePreview(Sprite preview)
+        {
+            leftButtonContainer.universePreview.texture = preview.texture;
+            rightButtonContainer.universePreview.texture = preview.texture;
         }
 
         //Instanciate new Create Folder Button
@@ -238,6 +268,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder
         private void ExitToHomeMenu (bool confirm)
         {
             if (!confirm) return;
+            //folderStruct.folderScript.onSelected -= FileManager.FolderButton_OnSelected;
             SceneManager.LoadScene("Home Menu_Soren");
         }
 

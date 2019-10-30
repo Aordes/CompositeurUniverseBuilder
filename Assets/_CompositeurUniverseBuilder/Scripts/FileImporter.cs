@@ -48,7 +48,6 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
             public static string UNDERSCORE = "_";
             public static string BACKGROUND = "_background";
             public static string FILE = "file://";
-            public static string FOLDER_ICON = "_icon";
             public static string META = "_meta";
             public static string PREVIEW = "_preview";
         }
@@ -78,7 +77,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
                 {
                     if (fileInfo.Name.Contains(FileTypes.BACKGROUND))
                     {
-                        yield return ImportSprite(fileInfo, (output) => { output = universe.background;});
+                        yield return ImportSprite(fileInfo, (output) => { universe.background = output;});
                         //yield return null;
                     }
                 }
@@ -101,10 +100,13 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
             UniverseFolderStruct currentFolder;
             Debug.Log(folder.Name + " has " + folder.GetFiles().Length + " files \n" + folder.GetDirectories().Length + " folders");
 
-            currentFolder = new UniverseFolderStruct();
-            currentFolder.fileInfo = folder;
+            currentFolder = new UniverseFolderStruct
+            {
+                fileInfo = folder,
+                files = new List<UniverseFileStruct>()
+            };
 
-            yield return GetItemPreview(folder, FileTypes.FOLDER_ICON + FileTypes.ALL_EXTENSION, (output) => { currentFolder.icon = output; });
+            yield return GetItemPreview(folder, FileTypes.PREVIEW + FileTypes.ALL_EXTENSION, (output) => { currentFolder.icon = output; });
             yield return GetFileStruct(folder, currentFolder.files);
 
             currentFolder.subFolders = new List<UniverseFolderStruct>();
@@ -119,10 +121,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
 
         private static IEnumerator GetFileStruct(DirectoryInfo folder, List<UniverseFileStruct> universeFiles)
         {
-            universeFiles = new List<UniverseFileStruct>();
-
             FileInfo[] files = folder.GetFiles();
-            yield return null;
 
             UniverseFileStruct fileStruct;
             DirectoryInfo fileDirectory;
@@ -134,7 +133,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
                 fileName = files[i].Name;
                 fileDirectory = files[i].Directory;
 
-                if (!(fileName.Contains(FileTypes.FOLDER_ICON) || fileName.Contains(FileTypes.META)))
+                if (!(fileName.Contains(FileTypes.PREVIEW) || fileName.Contains(FileTypes.META)))
                 {
                     fileStruct = new UniverseFileStruct
                     {
