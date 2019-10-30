@@ -5,7 +5,7 @@
 
 using UnityEngine;
 
-namespace Com.Docaret.UniverseBuilder
+namespace Com.Docaret.CompositeurUniverseBuilder
 {
 	public class OpenCloseAnimator : MonoBehaviour
     {
@@ -15,14 +15,12 @@ namespace Com.Docaret.UniverseBuilder
 
         public void Open()
         {
-            Debug.Log("Open");
             animator.SetTrigger("Open");
             isOpen = true;
         }
 
         public void Close()
         {
-            Debug.Log("Close");
             animator.SetTrigger("Close");
             isOpen = false;
         }

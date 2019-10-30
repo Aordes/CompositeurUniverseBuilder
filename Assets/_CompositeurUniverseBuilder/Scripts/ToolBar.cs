@@ -7,11 +7,12 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Com.Docaret.UniverseBuilder
+namespace Com.Docaret.CompositeurUniverseBuilder
 {
 
     public class ToolBar : MonoBehaviour {
 
+        #region Fields
         [Header("Meta")]
         [SerializeField] private Button btnAddMetaToMainFolder;
         [SerializeField] private Button btnAddMetaToSelection;
@@ -43,10 +44,17 @@ namespace Com.Docaret.UniverseBuilder
         [Header("Animator")]
         [SerializeField] private OpenCloseAnimator animator;
 
+        [Header("DialogScreen")]
+        [SerializeField] private DialogScreen dialogScreen;
+
         public event Action<GameObject> OnSelectionChangeEvent;
+        public event Action<bool> OnDeleteDialog;
+        public event Action<bool,string> OnRenameDialog;
 
         private bool isFile;
+        #endregion
 
+        #region Current Selection Get&Set
         private Button _currentFolder;
         public Button CurrentFolder
         {
@@ -76,9 +84,13 @@ namespace Com.Docaret.UniverseBuilder
                 //set button state
             }
         }
+        #endregion
 
+        #region Unity Methods
         private void Start() {
             OnSelectionChangeEvent += OnSelectionChange;
+            OnDeleteDialog += OnDeleteConfirm;
+            OnRenameDialog += OnRenameConfirm;
 
             #region Buttons AddListeners
             if (btnAddMetaToMainFolder)
@@ -124,13 +136,9 @@ namespace Com.Docaret.UniverseBuilder
             });
             #endregion
         }
+        #endregion
 
-        private void Update()
-        {
-            Debug.Log(_currentSelection);
-            Debug.Log(isFile);
-        }
-
+        #region Meta Menu
         private void CloseMetaToMenu()
         {
             metaMenu.SetActive(false);
@@ -162,6 +170,7 @@ namespace Com.Docaret.UniverseBuilder
 
             videoMute.isOn = md.videoMute;
         }
+        #endregion
 
         #region Meta OnValueChanged
         private void DesiredWidth_OnValueChanged(bool value)
@@ -201,17 +210,30 @@ namespace Com.Docaret.UniverseBuilder
             metaMenu.SetActive(true);
         }
 
-        private void RenameSelection_OnClick()
+        #region OnRename
+        private void RenameSelection(string newName)
         {
             if (isFile)
             {
-                FileManager.FileButton_RenameFile("newName", _currentSelection);
+                FileManager.FileButton_RenameFile(newName, _currentSelection);
             }
             else
             {
-                FileManager.FolderButton_RenameFolder("newName", _currentSelection);
+                FileManager.FolderButton_RenameFolder(newName, _currentSelection);
             }
         }
+
+        private void RenameSelection_OnClick()
+        {
+            dialogScreen.DisplayInputDialog(OnRenameDialog, "Rename", "Ok", "Cancel", "New name");
+        }
+
+        private void OnRenameConfirm(bool confirm, string newName)
+        {
+            if (!confirm) return;
+            RenameSelection(newName);
+        }
+        #endregion
 
         private void PreviewToSelection_OnClick()
         {
@@ -221,7 +243,8 @@ namespace Com.Docaret.UniverseBuilder
             }
         }
 
-        private void DeleteSelection_OnClick()
+        #region OnDelete
+        private void DeleteSelection()
         {
             if (isFile)
             {
@@ -238,12 +261,25 @@ namespace Com.Docaret.UniverseBuilder
             }
         }
 
+        private void DeleteSelection_OnClick()
+        {
+            dialogScreen.DisplayDialog(OnDeleteDialog, "Delete", "Ok", "Are you shure you want to delete this?", "Cancel"); 
+        }
+
+        private void OnDeleteConfirm(bool confirm)
+        {
+            if (!confirm) return;
+            DeleteSelection();
+        }
+        #endregion
+
         private void AddContent_OnClick()
         {
             FileManager.FolderButton_OnChangeDirectoryContent(_currentSelection);
         }
         #endregion
 
+        #region Utils
         private void OnSelectionChange(GameObject selection)
         {
             if (_currentSelection != null)
@@ -259,5 +295,6 @@ namespace Com.Docaret.UniverseBuilder
         {
             animator.Close();
         }
+        #endregion
     }
 }

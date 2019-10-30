@@ -6,7 +6,8 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Com.Docaret.UniverseBuilder {
+namespace Com.Docaret.CompositeurUniverseBuilder
+{
 	public class ButtonAnimator : MonoBehaviour {
 
         [SerializeField] private Animator animator;
@@ -31,7 +32,6 @@ namespace Com.Docaret.UniverseBuilder {
                 animator.SetTrigger("close");
                 isOpen = false;
             }
-        }
-	
+        }	
 	}
 }

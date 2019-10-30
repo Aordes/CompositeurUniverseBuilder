@@ -16,6 +16,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
         [SerializeField] protected Text txtOther;
 
         public new Action<int> OnStatus;
+        public Action OnClose;
 
         protected override void Start()
         {
@@ -41,18 +42,24 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
         {
             OnStatus?.Invoke(0);
             OnStatus = null;
+
+            OnClose?.Invoke();
         }
 
         protected override void ButtonCancel_OnClick()
         {
             OnStatus?.Invoke(1);
             OnStatus = null;
+
+            OnClose?.Invoke();
         }
 
         protected void ButtonOther_OnClick()
         {
             OnStatus?.Invoke(2);
             OnStatus = null;
+
+            OnClose?.Invoke();
         }
     }
 }

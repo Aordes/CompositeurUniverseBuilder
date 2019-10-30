@@ -7,7 +7,7 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Com.Docaret.UniverseBuilder
+namespace Com.Docaret.CompositeurUniverseBuilder
 {
     public struct FileStruct
     {
@@ -15,8 +15,8 @@ namespace Com.Docaret.UniverseBuilder
         public Button button;
         public Image image;
         public string path;
-        public TextMesh textMesh;
         public FolderStruct folderstruct;
         public MetaData metaData;
+        public FileSelection fileScript;
     }
 }

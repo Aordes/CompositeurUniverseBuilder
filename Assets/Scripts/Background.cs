@@ -10,7 +10,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 
-namespace Com.Docaret.UniverseBuilder
+namespace Com.Docaret.CompositeurUniverseBuilder
 {
     public class Background : MonoBehaviour, IPointerDownHandler
     {

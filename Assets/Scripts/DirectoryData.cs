@@ -6,7 +6,7 @@
 using System.IO;
 using UnityEngine;
 
-namespace Com.Docaret.UniverseBuilder
+namespace Com.Docaret.CompositeurUniverseBuilder
 {
 	public class DirectoryData {
 
