@@ -86,7 +86,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder
             }
         }
 
-        private void ProjectItem_OnClick(DirectoryInfo source)
+        private void ProjectItem_OnClick(DirectoryInfo source, Sprite sprite)
         {
             Debug.Log("Loading " + source.FullName);
             universeDirectory = source;
@@ -148,7 +148,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder
         #region Coroutine
         private IEnumerator AsyncLoadEditor()
         {
-            AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("Universe Builder");
+            AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("Universe Builder_Soren");
 
             // Wait until the asynchronous scene fully loads
             while (!asyncLoad.isDone)
