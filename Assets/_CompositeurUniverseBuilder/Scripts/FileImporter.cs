@@ -53,7 +53,9 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
             public static string PREVIEW = "_preview";
         }
 
-        public static IEnumerator ImportUniverse(DirectoryInfo directory)
+        public static event Action<UniverseStruct> OnFinishLoadUniverse;
+
+        public static IEnumerator ImportUniverse(DirectoryInfo directory, Action<UniverseStruct> OnComplete)
         {
             //Folders
             DirectoryInfo[] directories = directory.GetDirectories();
@@ -88,7 +90,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
                 yield return GetFolderStruct(directories[i], universe.folders);
             }
 
-            Debug.Log(universe);
+            OnComplete?.Invoke(universe);
         }
 
         public static IEnumerator GetFolderStruct(DirectoryInfo folder, List<UniverseFolderStruct> list)

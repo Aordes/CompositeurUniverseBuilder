@@ -95,9 +95,9 @@ namespace Com.Docaret.CompositeurUniverseBuilder
             DirectoryData.CurrentDirectory = source;
             DirectoryData.CurrentUniversePath = source.FullName;
             DirectoryData.CompositeurFolderPath = compositeurFolderPath;
+            DirectoryData.openExistingProject = true;
 
-            StartCoroutine(FileImporter.ImportUniverse(source));
-            //StartCoroutine(AsyncLoadEditor());
+            StartCoroutine(AsyncLoadEditor());
         }
 
         private void CreateProject(string name)
@@ -108,6 +108,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder
             DirectoryData.CurrentDirectory = universeDirectory;
             DirectoryData.CurrentUniversePath = universeDirectory.FullName;
             DirectoryData.CompositeurFolderPath = compositeurFolderPath;
+            DirectoryData.openExistingProject = false;
 
             StartCoroutine(AsyncLoadEditor());
         }
@@ -116,7 +117,6 @@ namespace Com.Docaret.CompositeurUniverseBuilder
         private void ButtonCreateUniverse_OnClick()
         {
             dialogScreen.DisplayInputDialog(InputDialog_OnStatus, "Universe Name", "Create", "Cancel");
-            //universeNameInputField.gameObject.SetActive(true);
         }
 
         private void ButtonOpenUniverse_OnClick()
@@ -127,6 +127,8 @@ namespace Com.Docaret.CompositeurUniverseBuilder
                 return;
 
             Debug.Log(folder[0]);
+            universeDirectory = Directory.CreateDirectory(folder[0]);
+            ProjectItem_OnClick(universeDirectory);
             StartCoroutine(AsyncLoadEditor());
         }
 
