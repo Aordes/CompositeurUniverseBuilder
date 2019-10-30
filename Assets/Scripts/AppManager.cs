@@ -6,6 +6,7 @@
 using SFB;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -49,6 +50,9 @@ namespace Com.Docaret.CompositeurUniverseBuilder
                 compositeurDirectory = Directory.CreateDirectory(compositeurFolderPath);
             }
 
+            btnCreateUniverse.GetComponent<Animator>().SetTrigger(ProjectItem.BTN_INIT_TRIGGER);
+            btnOpenUniverse.GetComponent<Animator>().SetTrigger(ProjectItem.BTN_INIT_TRIGGER);
+
             if (btnCreateUniverse)
                 btnCreateUniverse.onClick.AddListener(ButtonCreateUniverse_OnClick);
             if (btnOpenUniverse)
@@ -64,29 +68,12 @@ namespace Com.Docaret.CompositeurUniverseBuilder
         {
             if (getProjectCoroutine != null)
             {
-                StopCoroutine(getProjectCoroutine);
+                StopAllCoroutines();
+                //StopCoroutine(getProjectCoroutine);
                 RemoveProjects();
             }
 
             getProjectCoroutine = StartCoroutine(GetProjects(wait));
-        }
-
-        private void AddProject(DirectoryInfo directoryInfo)
-        {
-            ProjectItem instance = Instantiate(prefabProjectItem, projectGrid);
-            Sprite preview = FileImporter.GetItemPreview(directoryInfo, PREVIEW_FILE_NAME);
-
-            //string previewPath = Path.Combine(directoryInfo.FullName, PREVIEW_FILE_NAME);
-            //FileInfo[] files = directoryInfo.GetFiles(PREVIEW_FILE_NAME);
-
-            //if (files.Length != 0)
-            //{
-            //    //Debug.Log(files[0].FullName);
-            //    preview = FileImporter.SquareSpriteFromTexture(FileImporter.ImportImage(files[0]));
-            //}
-
-            instance.Init(directoryInfo, preview);
-            instance.OnClick += ProjectItem_OnClick;
         }
 
         private void RemoveProjects()
@@ -109,9 +96,8 @@ namespace Com.Docaret.CompositeurUniverseBuilder
             DirectoryData.CurrentUniversePath = source.FullName;
             DirectoryData.CompositeurFolderPath = compositeurFolderPath;
 
-            FileImporter.ImportUniverse(source);
+            StartCoroutine(FileImporter.ImportUniverse(source));
             //StartCoroutine(AsyncLoadEditor());
-
         }
 
         private void CreateProject(string name)
@@ -179,16 +165,39 @@ namespace Com.Docaret.CompositeurUniverseBuilder
             DirectoryInfo info = new DirectoryInfo(compositeurFolderPath);
             DirectoryInfo[] directories = info.GetDirectories();
 
+            List<ProjectItem> projectItems = new List<ProjectItem>();
+
             for (int i = 0; i < directories.Length; i++)
             {
-                //Debug.Log(directories[i]);
-                if (wait)
-                    yield return new WaitForSeconds(WAIT_TIME);
+                ////Debug.Log(directories[i]);
+                //if (wait)
+                //    yield return new WaitForSeconds(WAIT_TIME);
 
-                AddProject(directories[i]);
+                yield return AddProject(directories[i], projectItems);
             }
 
-            StopCoroutine(getProjectCoroutine);
+            for (int i = 0; i < projectItems.Count; i++)
+            {
+                projectItems[i].Show();
+
+                if (wait)
+                    yield return new WaitForSeconds(WAIT_TIME);
+            }
+
+            //StopCoroutine(getProjectCoroutine);
+        }
+
+        private IEnumerator AddProject(DirectoryInfo directoryInfo, List<ProjectItem> projectItems)
+        {
+            ProjectItem instance = Instantiate(prefabProjectItem, projectGrid);
+
+            Sprite preview = null;
+            yield return FileImporter.GetItemPreview(directoryInfo, PREVIEW_FILE_NAME, (output) => { preview = output; });
+
+            instance.Init(directoryInfo, preview);
+            instance.OnClick += ProjectItem_OnClick;
+
+            projectItems.Add(instance);
         }
         #endregion
     }

@@ -9,30 +9,37 @@ using UnityEngine;
 using UnityEngine.UI;
 
 namespace Com.Docaret.CompositeurUniverseBuilder {
-
-    public class ProjectItem : MonoBehaviour {
+    [RequireComponent(typeof(Animator))]
+    public class ProjectItem : MonoBehaviour
+    {
+        public static string BTN_INIT_TRIGGER = "Init";
 
         [SerializeField] protected Button btnSelf;
         [SerializeField] protected Text txtTitle;
         [SerializeField] protected Image imgPreview;
-        
+
+        protected Animator animator;
         protected DirectoryInfo source;
+
         public event Action<DirectoryInfo> OnClick;
 
-        private void Start()
+        public void Init(DirectoryInfo directory, Sprite image)
         {
-            btnSelf.onClick.AddListener(ButtonSelf_OnClick);
-        }
-
-        public void Init(DirectoryInfo directory, Sprite preview)
-        {
-            if (preview == null)
+            if (image == null)
                 imgPreview.enabled = false;
             else
-                imgPreview.sprite = preview;
+                imgPreview.sprite = image;
 
             txtTitle.text = directory.Name;
             source = directory;
+
+            animator = GetComponent<Animator>();
+        }
+
+        public void Show()
+        {
+            animator.SetTrigger(BTN_INIT_TRIGGER);
+            btnSelf.onClick.AddListener(ButtonSelf_OnClick);
         }
 
         private void ButtonSelf_OnClick()
