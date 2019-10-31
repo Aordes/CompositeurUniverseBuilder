@@ -1,4 +1,4 @@
-﻿///-----------------------------------------------------------------
+///-----------------------------------------------------------------
 /// Author : #Arien Bordes#
 /// Date : #01.09.2019#
 ///-----------------------------------------------------------------
@@ -8,6 +8,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Debug = UnityEngine.Debug;
@@ -69,7 +70,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder
             CreateNewFolderButton();
 
             SlideButtonContainerAddListeners(leftButtonContainer);
-            SlideButtonContainerAddListeners(rightButtonContainer);
+            //SlideButtonContainerAddListeners(rightButtonContainer);
         }
 
         #endregion
@@ -184,11 +185,11 @@ namespace Com.Docaret.CompositeurUniverseBuilder
 
         #region Callback Methods
 
-        private void OnChangeBackground()
+        private void OnChangeBackground(string path)
         {
-            string[] path = StandaloneFileBrowser.OpenFilePanel("Select a Background", "", FileManager.supportedImageExtantions, false);
+            //string[] path = StandaloneFileBrowser.OpenFilePanel("Select a Background", "", FileManager.supportedImageExtantions, false);
 
-            if (path.Length == 0) return;
+            //if (path.Length == 0) return;
 
             string newPath = universePath + "/_background.png";
 
@@ -196,10 +197,11 @@ namespace Com.Docaret.CompositeurUniverseBuilder
             {
                 File.Delete(newPath);
             }
-            File.Copy(path[0], newPath);
+            File.Copy(path, newPath);
 
-            WWW www = new WWW(newPath);
-            backgroundImage.texture = www.texture;
+            Debug.Log("Copied file");
+            //WWW www = new WWW(path[0]);
+            //backgroundImage.texture = www.texture;
         }
 
         public void SetBackground (Texture2D background)
@@ -222,6 +224,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder
             File.Copy(path[0], newPath);
 
             WWW www = new WWW(newPath);
+            Background.Instance.ChangeTexture(www.texture);
 
             leftButtonContainer.universePreview.texture = www.texture;
             rightButtonContainer.universePreview.texture = www.texture;
@@ -285,11 +288,13 @@ namespace Com.Docaret.CompositeurUniverseBuilder
 
         private void SlideButtonContainerAddListeners(SlidePanelButtonContainer buttonContainer)
         {
-            buttonContainer.changeBackgroundButton.onClick.AddListener(OnChangeBackground);
+            //buttonContainer.browseBackgroundButton.onClick.AddListener(OnChangeBackground);
             buttonContainer.changeUniverseNameButton.onClick.AddListener(OnChangeUniverseName);
             buttonContainer.changeUniversePreviewButton.onClick.AddListener(OnChangeUniversePreview);
             buttonContainer.openCompositeurButton.onClick.AddListener(OnOpenCompositeur);
             buttonContainer.homeButton.onClick.AddListener(OnExitToHomeMenu);
+
+            buttonContainer.OnBackgroundChange += OnChangeBackground;
         }
 
         #endregion
