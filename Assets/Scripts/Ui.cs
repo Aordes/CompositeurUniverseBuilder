@@ -271,7 +271,13 @@ namespace Com.Docaret.CompositeurUniverseBuilder
         private void ExitToHomeMenu (bool confirm)
         {
             if (!confirm) return;
-            //folderStruct.folderScript.onSelected -= FileManager.FolderButton_OnSelected;
+            for (int i = 0; i < FileManager.folderList.Count; i++)
+            {
+                FileManager.folderList[i].folderScript.onSelected -= FileManager.FolderButton_OnSelected;
+            }
+            toolBar.CurrentSelection = null;
+            toolBar.CurrentFolder = null;
+            FileManager.folderList.Clear();
             SceneManager.LoadScene("Home Menu_Soren");
         }
 
