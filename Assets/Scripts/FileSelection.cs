@@ -18,6 +18,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder
 
         private void Start()
         {
+            Debug.Log("FileInstance");
             button.onClick.AddListener(SetCurrentSelection_OnClick);
         }
 

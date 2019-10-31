@@ -32,6 +32,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder
 
         public void CreateFile(string path)
         {
+            Debug.Log("uuhhhhuhuhuh");
             GameObject instance = Instantiate(filePrefab, gameObject.transform);
             FileStruct fileStruct = new FileStruct();
 
@@ -43,6 +44,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder
             fileStruct.button = instance.GetComponent<Button>();
             fileStruct.path = path;
             fileStruct.metaData = new MetaData();
+            Debug.Log(fileStruct.fileScript.toolBar);
 
             fileList.Add(fileStruct);
             SetGridSize();

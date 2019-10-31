@@ -3,18 +3,14 @@
 /// Date : #01.09.2019#
 ///-----------------------------------------------------------------
 
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using System.IO;
-using UnityEngine.UI;
-using UnityEditor;
-using UnityEngine.Networking;
 using SFB;
-using TMPro;
-using System.Diagnostics;
 using System;
+using System.Diagnostics;
+using System.IO;
+using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using Debug = UnityEngine.Debug;
 
 namespace Com.Docaret.CompositeurUniverseBuilder
 {
@@ -57,6 +53,11 @@ namespace Com.Docaret.CompositeurUniverseBuilder
         //Get Directory Path information & AddListeners to SlideButtonContainers
         private void Start()
         {
+            if (DirectoryData.openExistingProject)
+            {
+                StartCoroutine(FileImporter.ImportUniverse(DirectoryData.CurrentDirectory, OpenExistingUniverse));
+            }
+
             OnExitDialog += ExitToHomeMenu;
             OnRenameUniverseDialog += ChangeUniverseName;
 
@@ -75,6 +76,12 @@ namespace Com.Docaret.CompositeurUniverseBuilder
 
         #region UI Elements Creation Methods
 
+        private void OpenExistingUniverse(UniverseStruct universeStruct)
+        {
+            CreateFolder(universeStruct);
+            SetBackground(universeStruct.background);
+        }
+
         //Create new folder & Event subscriptions
         private void OnCLick_CreateFolder()
         {
@@ -91,6 +98,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder
 
             folderStruct.folderScript = folderStruct.button.gameObject.GetComponent<FolderButton>();
             folderStruct.folderScript.toolbar = toolBar;
+            folderStruct.folderScript.SetName(folderStruct.directory.Name);
             folderStruct.folderScript.onSelected += FileManager.FolderButton_OnSelected;
 
             folderStruct.image = folderStruct.button.gameObject.GetComponent<RawImage>();
@@ -103,6 +111,66 @@ namespace Com.Docaret.CompositeurUniverseBuilder
             dynamicGrid.currentFolderStruct = folderStruct;
 
             CreateNewFolderButton();
+        }
+
+        public void CreateFolder(UniverseStruct universeStruct)
+        {
+            Destroy(newFolderButton.gameObject);
+
+            for (int i = 0; i < universeStruct.folders.Count; i++)
+            {
+                DynamicGrid dynamicGrid;
+                FolderStruct folderStruct = new FolderStruct();
+                folderStruct.path = universeStruct.folders[i].fileInfo.FullName;
+
+                DirectoryInfo folderDirectory = Directory.CreateDirectory(folderStruct.path);
+
+                folderStruct.directory = folderDirectory;
+                folderStruct.folderInstance = Instantiate(folderPrefab, bottomFolderContainer.transform);
+                folderStruct.button = folderStruct.folderInstance.GetComponent<Button>();
+
+                folderStruct.folderScript = folderStruct.button.gameObject.GetComponent<FolderButton>();
+                folderStruct.folderScript.toolbar = toolBar;
+                folderStruct.folderScript.SetName(folderStruct.directory.Name);
+
+                folderStruct.folderScript.onSelected += FileManager.FolderButton_OnSelected;
+
+                folderStruct.image = folderStruct.button.gameObject.GetComponent<RawImage>();
+                if (universeStruct.folders[i].icon != null)
+                {
+                    folderStruct.image.texture = universeStruct.folders[i].icon.texture;
+                }
+                folderStruct.metaData = new MetaData();
+
+                dynamicGrid = folderStruct.folderScript.fileContainer.GetComponent<DynamicGrid>();
+                folderStruct.fileList = dynamicGrid.fileList;
+
+                FileManager.folderList.Add(folderStruct);
+                dynamicGrid.currentFolderStruct = folderStruct;
+                if (universeStruct.folders[i].files != null)
+                {
+                    for (int x = 0; x < universeStruct.folders[i].files.Count; x++)
+                    {
+                        dynamicGrid.toolBar = toolBar;
+                        dynamicGrid.currentFolderStruct = folderStruct;
+                        dynamicGrid.CreateFile(universeStruct.folders[i].files[x].fileInfo.FullName);
+                    }
+                }
+            }
+
+            CreateNewFolderButton();
+        }
+
+        private void SetBackground(Sprite background)
+        {
+            if (background == null) return;
+            backgroundImage.texture = background.texture;
+        }
+
+        private void SetUniversePreview(Sprite preview)
+        {
+            leftButtonContainer.universePreview.texture = preview.texture;
+            rightButtonContainer.universePreview.texture = preview.texture;
         }
 
         //Instanciate new Create Folder Button
@@ -200,6 +268,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder
         private void ExitToHomeMenu (bool confirm)
         {
             if (!confirm) return;
+            //folderStruct.folderScript.onSelected -= FileManager.FolderButton_OnSelected;
             SceneManager.LoadScene("Home Menu_Soren");
         }
 

@@ -18,11 +18,11 @@ namespace Com.Docaret.CompositeurUniverseBuilder
     public class FolderButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         #region Fields
-        [SerializeField] private InputField inputField;
         [SerializeField] private TextMeshProUGUI folderName;
         [SerializeField] private Button openButton;
         [SerializeField] private Button changePreviewButton;
         [SerializeField] private Button deleteButton;
+        [SerializeField] private OpenCloseAnimator openCloseAnimator;
 
         public GameObject fileContainer;
         public ToolBar toolbar;
@@ -42,7 +42,8 @@ namespace Com.Docaret.CompositeurUniverseBuilder
         #region Unity Methods
         void Awake()
         {
-            fileContainer.SetActive(false);
+            openCloseAnimator.Close();
+            //fileContainer.SetActive(false);
 
             button = gameObject.GetComponent<Button>();
         }
@@ -104,7 +105,8 @@ namespace Com.Docaret.CompositeurUniverseBuilder
         public void OpenControlPanel()
         {
             StopCoroutine(MouseOver());
-            fileContainer.SetActive(true);
+            openCloseAnimator.Open();
+            //fileContainer.SetActive(true);
             isControlPanelOpen = true;
             FileManager.fileGrid = fileContainer.GetComponent<DynamicGrid>();
             OnSelected();
@@ -113,7 +115,8 @@ namespace Com.Docaret.CompositeurUniverseBuilder
         public void CloseControlPanel()
         {
             StopCoroutine(MouseExit());
-            fileContainer.SetActive(false);
+            openCloseAnimator.Close();
+            //fileContainer.SetActive(false);
             isControlPanelOpen = false;
             toolbar.CurrentFolder = null;
             toolbar.CurrentSelection = null;
@@ -122,8 +125,9 @@ namespace Com.Docaret.CompositeurUniverseBuilder
         public void DeSelect()
         {
             StopAllCoroutines();
-            fileContainer.SetActive(false);
-            isControlPanelOpen = false;
+            //fileContainer.SetActive(false);
+            //isControlPanelOpen = false;
+            CloseControlPanel();
         }
         #endregion
 
