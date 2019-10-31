@@ -4,6 +4,8 @@
 ///-----------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
+using System.IO;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
@@ -23,17 +25,25 @@ namespace Com.Docaret.CompositeurUniverseBuilder.Sidebar
         private void OnValidate()
         {
             if (sprite != null) {
-                Debug.Log("Updating sprite");
-                string path = AssetDatabase.GetAssetPath(sprite);
-                assetPath = path.Split(new string[] { "StreamingAssets/" }, StringSplitOptions.RemoveEmptyEntries)[1];
+                //string path = AssetDatabase.GetAssetPath(sprite);
+                string separator = "/";
+                string[] path = (AssetDatabase.GetAssetPath(sprite).Split(new string[] { separator }, StringSplitOptions.RemoveEmptyEntries));
+                assetPath = "Backgrounds/" + path[path.Length - 1];
 
+                string fullPath = Path.Combine(Application.streamingAssetsPath, assetPath);
+                if (!File.Exists(fullPath))
+                {
+                    Debug.LogWarning("File not found in " + fullPath + ", copying");
+                    File.Copy(string.Join(separator, path), fullPath);
+                }
+
+                Debug.Log("Updating sprite " + assetPath);
                 if (image)
                     image.sprite = sprite;
             }
         }
 
         private void Start () {
-            Debug.Log(assetPath);
             button.onClick.AddListener(Button_OnClick);
         }
 

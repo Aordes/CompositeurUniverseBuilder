@@ -27,6 +27,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder
         [Header("Content")]
         [SerializeField] protected GameObject backgroundContainer;
         [SerializeField] protected SidebarBackground[] backgroundButtons;
+        [SerializeField] protected Transform backgroundButtonIndicator;
 
         [Header("Universe Preview & Name")]
         public TextMeshProUGUI universeName;
@@ -47,7 +48,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder
 
             for (int i = 0; i < backgroundButtons.Length; i++)
             {
-                backgroundButtons[i].OnSelect += SlidePanelBackgroundButton_OnSelect;
+                backgroundButtons[i].OnSelect += SidePanelBackgroundButton_OnSelect;
             }
         }
 
@@ -69,7 +70,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder
         }
 
         #region Button Callbacks
-        private void SlidePanelBackgroundButton_OnSelect(Sprite sprite, string path)
+        private void SidePanelBackgroundButton_OnSelect(Sprite sprite, string path)
         {
             path = Path.Combine(Application.streamingAssetsPath, path);
             OnBackgroundChange?.Invoke(path);
@@ -79,6 +80,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder
         private void ButtonChangeBackground_OnClick()
         {
             backgroundContainer.SetActive(!backgroundContainer.activeInHierarchy);
+            backgroundButtonIndicator.localRotation = backgroundContainer.activeInHierarchy ? Quaternion.identity : Quaternion.AngleAxis(180, Vector3.right);
         }
         #endregion
     }

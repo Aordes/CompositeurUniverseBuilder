@@ -21,7 +21,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
         protected Animator animator;
         protected DirectoryInfo source;
 
-        public event Action<DirectoryInfo, Sprite> OnClick;
+        public event Action<DirectoryInfo> OnClick;
 
         public void Init(DirectoryInfo directory, Sprite image)
         {
@@ -47,7 +47,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
             if (source == null)
                 throw new InvalidOperationException("no path");
 
-            OnClick?.Invoke(source, imgPreview.sprite);
+            OnClick?.Invoke(source);
         }
     }
 }

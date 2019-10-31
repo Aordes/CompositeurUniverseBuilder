@@ -86,7 +86,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder
             }
         }
 
-        private void ProjectItem_OnClick(DirectoryInfo source, Sprite sprite)
+        private void OpenProject(DirectoryInfo source)
         {
             Debug.Log("Loading " + source.FullName);
             universeDirectory = source;
@@ -121,14 +121,13 @@ namespace Com.Docaret.CompositeurUniverseBuilder
 
         private void ButtonOpenUniverse_OnClick()
         {
-            string[] folder = StandaloneFileBrowser.OpenFolderPanel("Select project", compositeurFolderPath, false);
+            string[] folders = StandaloneFileBrowser.OpenFolderPanel("Select project", compositeurFolderPath, false);
 
-            if (folder.Length == 0)
+            if (folders.Length == 0)
                 return;
 
-            Debug.Log(folder[0]);
-            universeDirectory = Directory.CreateDirectory(folder[0]);
-            ProjectItem_OnClick(universeDirectory);
+            universeDirectory = Directory.CreateDirectory(folders[0]);
+            OpenProject(universeDirectory);
             StartCoroutine(AsyncLoadEditor());
         }
 
@@ -138,12 +137,23 @@ namespace Com.Docaret.CompositeurUniverseBuilder
             StartGetProjects();
         }
 
-        private void InputDialog_OnStatus(bool state, string output)
+        private void InputDialog_OnStatus(bool validate, string output)
         {
-            dialogScreen.CloseScreen();
+            //dialogScreen.CloseScreen();
+            if (!validate)
+                return;
 
-            if (state)
-                CreateProject(output);
+            string folder = Path.Combine(compositeurFolderPath, output);
+            Debug.Log(folder);
+            if (Directory.Exists(folder))
+            {
+                Debug.Log("project exists");
+                DirectoryInfo directory = new DirectoryInfo(folder);
+                OpenProject(directory);
+                return;
+            }
+
+            CreateProject(output);
         }
         #endregion
 
@@ -197,7 +207,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder
             yield return FileImporter.GetItemPreview(directoryInfo, PREVIEW_FILE_NAME, (output) => { preview = output; });
 
             instance.Init(directoryInfo, preview);
-            instance.OnClick += ProjectItem_OnClick;
+            instance.OnClick += OpenProject;
 
             projectItems.Add(instance);
         }

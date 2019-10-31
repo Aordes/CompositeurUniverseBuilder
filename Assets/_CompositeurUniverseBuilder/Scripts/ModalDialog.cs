@@ -14,7 +14,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
         [Header("Message")]
         [SerializeField] protected Text txtMessage;
 
-        public new Action<bool> OnStatus;
+        public Action<bool> OnStatus;
         public Action OnClose;
 
         public void Init(Action<bool> Callback, string title, string message, string ok, string cancel)

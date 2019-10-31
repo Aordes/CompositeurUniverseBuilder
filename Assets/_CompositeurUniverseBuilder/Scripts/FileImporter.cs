@@ -15,7 +15,8 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
 
     public struct UniverseStruct
     {
-        public Sprite background;
+        public Texture2D preview;
+        public Texture2D background;
         public List<UniverseFolderStruct> folders;
         public List<UniverseFileStruct> files;
     }
@@ -75,10 +76,14 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
                 Debug.Log(fileInfo.FullName + "\n" + CheckIsImage(fileInfo.Name));
                 if (CheckIsImage(fileInfo.Name))
                 {
-                    if (fileInfo.Name.Contains(FileTypes.BACKGROUND))
+                    if (fileInfo.Name.StartsWith(FileTypes.BACKGROUND))
                     {
-                        yield return ImportSprite(fileInfo, (output) => { universe.background = output;});
+                        yield return ImportTexture(fileInfo, (output) => { universe.background = output;});
                         //yield return null;
+                    }
+                    else if (fileInfo.Name.StartsWith(FileTypes.PREVIEW))
+                    {
+                        yield return ImportTexture(fileInfo, (output) => { universe.preview = output; });
                     }
                 }
             }
