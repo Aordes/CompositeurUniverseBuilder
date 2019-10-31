@@ -11,7 +11,8 @@ namespace Com.Docaret.CompositeurUniverseBuilder
 	public class ButtonAnimator : MonoBehaviour {
 
         [SerializeField] private Animator animator;
-        [SerializeField] private Button button;
+
+        public Button button;
 
         private bool isOpen;
 	
@@ -32,6 +33,20 @@ namespace Com.Docaret.CompositeurUniverseBuilder
                 animator.SetTrigger("close");
                 isOpen = false;
             }
-        }	
-	}
+        }
+
+        public void Open()
+        {
+            if (isOpen == true) return;
+            animator.SetTrigger("open");
+            isOpen = true;
+        }
+
+        public void Close()
+        {
+            if (isOpen == false) return;
+            animator.SetTrigger("close");
+            isOpen = false;
+        }
+    }
 }
