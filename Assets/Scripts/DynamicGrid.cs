@@ -32,7 +32,6 @@ namespace Com.Docaret.CompositeurUniverseBuilder
 
         public void CreateFile(string path)
         {
-            Debug.Log("uuhhhhuhuhuh");
             GameObject instance = Instantiate(filePrefab, gameObject.transform);
             FileStruct fileStruct = new FileStruct();
 

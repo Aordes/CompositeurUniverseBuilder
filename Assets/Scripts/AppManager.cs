@@ -160,7 +160,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder
         #region Coroutine
         private IEnumerator AsyncLoadEditor()
         {
-            AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("Universe Builder_Soren");
+            AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("Universe Builder");
 
             // Wait until the asynchronous scene fully loads
             while (!asyncLoad.isDone)

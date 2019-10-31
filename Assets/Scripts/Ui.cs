@@ -70,7 +70,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder
             CreateNewFolderButton();
 
             SlideButtonContainerAddListeners(leftButtonContainer);
-            //SlideButtonContainerAddListeners(rightButtonContainer);
+            SlideButtonContainerAddListeners(rightButtonContainer);
         }
 
         #endregion
@@ -162,10 +162,14 @@ namespace Com.Docaret.CompositeurUniverseBuilder
             CreateNewFolderButton();
         }
 
-        private void SetBackground(Sprite background)
+        private void SetBackground(Texture2D background)
         {
-            if (background == null) return;
-            backgroundImage.texture = background.texture;
+            if (background == null)
+            {
+                Debug.Log("No Background");
+                return;
+            }
+            backgroundImage.texture = background;
         }
 
         private void SetUniversePreview(Sprite preview)
@@ -187,10 +191,6 @@ namespace Com.Docaret.CompositeurUniverseBuilder
 
         private void OnChangeBackground(string path)
         {
-            //string[] path = StandaloneFileBrowser.OpenFilePanel("Select a Background", "", FileManager.supportedImageExtantions, false);
-
-            //if (path.Length == 0) return;
-
             string newPath = universePath + "/_background.png";
 
             if (File.Exists(newPath))
@@ -200,13 +200,6 @@ namespace Com.Docaret.CompositeurUniverseBuilder
             File.Copy(path, newPath);
 
             Debug.Log("Copied file");
-            //WWW www = new WWW(path[0]);
-            //backgroundImage.texture = www.texture;
-        }
-
-        public void SetBackground (Texture2D background)
-        {
-            backgroundImage.texture = background;
         }
 
         private void OnChangeUniversePreview()
@@ -278,7 +271,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder
             toolBar.CurrentSelection = null;
             toolBar.CurrentFolder = null;
             FileManager.folderList.Clear();
-            SceneManager.LoadScene("Home Menu_Soren");
+            SceneManager.LoadScene("Home Menu");
         }
 
         #endregion
