@@ -21,7 +21,9 @@ namespace Com.Docaret.CompositeurUniverseBuilder
         [Header("Containers")]
         [SerializeField] Transform bottomFolderContainer;
         [SerializeField] SlidePanelButtonContainer leftButtonContainer;
+        [SerializeField] ButtonAnimator leftButton;
         [SerializeField] SlidePanelButtonContainer rightButtonContainer;
+        [SerializeField] ButtonAnimator rightButton;
         [SerializeField] GameObject uiContainer;
 
         [Header("Prefabs")]
@@ -101,6 +103,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder
             folderStruct.folderScript.toolbar = toolBar;
             folderStruct.folderScript.SetName(folderStruct.directory.Name);
             folderStruct.folderScript.onSelected += FileManager.FolderButton_OnSelected;
+            folderStruct.folderScript.closeSlidePanels += DeSelectAllSlidePanels;
 
             folderStruct.image = folderStruct.button.gameObject.GetComponent<RawImage>();
             folderStruct.metaData = new MetaData();
@@ -267,6 +270,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder
             for (int i = 0; i < FileManager.folderList.Count; i++)
             {
                 FileManager.folderList[i].folderScript.onSelected -= FileManager.FolderButton_OnSelected;
+                FileManager.folderList[i].folderScript.closeSlidePanels -= DeSelectAllSlidePanels;
             }
             toolBar.CurrentSelection = null;
             toolBar.CurrentFolder = null;
@@ -285,9 +289,24 @@ namespace Com.Docaret.CompositeurUniverseBuilder
             compositeurFolderPath = DirectoryData.CompositeurFolderPath;
         }
 
+        private void DeSelectAllFolders()
+        {
+            toolBar.CurrentSelection = null;
+            toolBar.CurrentFolder = null;
+            FileManager.FolderButton_OnSelected(null);
+        }
+
+        private void DeSelectAllSlidePanels()
+        {
+            Debug.Log("IJJJJJ");
+            rightButton.Close();
+            leftButton.Close();
+        }
+
         private void SlideButtonContainerAddListeners(SlidePanelButtonContainer buttonContainer)
         {
-            //buttonContainer.browseBackgroundButton.onClick.AddListener(OnChangeBackground);
+            rightButton.button.onClick.AddListener(DeSelectAllFolders);
+            leftButton.button.onClick.AddListener(DeSelectAllFolders);
             buttonContainer.changeUniverseNameButton.onClick.AddListener(OnChangeUniverseName);
             buttonContainer.changeUniversePreviewButton.onClick.AddListener(OnChangeUniversePreview);
             buttonContainer.openCompositeurButton.onClick.AddListener(OnOpenCompositeur);

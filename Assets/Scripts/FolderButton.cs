@@ -30,6 +30,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder
         public OnEndEditFolderNameDelegate onEndEditFolderName;
 
         public event Action<Button> onSelected;
+        public event Action closeSlidePanels;
 
         private Button button;
         private bool isControlPanelOpen;
@@ -105,8 +106,8 @@ namespace Com.Docaret.CompositeurUniverseBuilder
         public void OpenControlPanel()
         {
             StopCoroutine(MouseOver());
+            closeSlidePanels?.Invoke();
             openCloseAnimator.Open();
-            //fileContainer.SetActive(true);
             isControlPanelOpen = true;
             FileManager.fileGrid = fileContainer.GetComponent<DynamicGrid>();
             OnSelected();
@@ -125,8 +126,6 @@ namespace Com.Docaret.CompositeurUniverseBuilder
         public void DeSelect()
         {
             StopAllCoroutines();
-            //fileContainer.SetActive(false);
-            //isControlPanelOpen = false;
             CloseControlPanel();
         }
         #endregion
