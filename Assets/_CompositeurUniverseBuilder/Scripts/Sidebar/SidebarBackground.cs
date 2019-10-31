@@ -23,6 +23,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder.Sidebar
         private void OnValidate()
         {
             if (sprite != null) {
+                Debug.Log("Updating sprite");
                 string path = AssetDatabase.GetAssetPath(sprite);
                 assetPath = path.Split(new string[] { "StreamingAssets/" }, StringSplitOptions.RemoveEmptyEntries)[1];
 
