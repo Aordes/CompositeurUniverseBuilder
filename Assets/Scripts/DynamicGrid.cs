@@ -13,26 +13,26 @@ namespace Com.Docaret.CompositeurUniverseBuilder
 	public class DynamicGrid : MonoBehaviour
     {
         [SerializeField] private GameObject filePrefab;
+        [SerializeField] private RectTransform rectTransform;
 
         public ToolBar toolBar;
         public FolderStruct currentFolderStruct;
         public List<FileStruct> fileList = new List<FileStruct>();
 
         private GridLayoutGroup gridLayout;
-        private RectTransform rectTransform;
 
         private int minXCellSize = 80;
         private int minYCellSize = 20;
 
-        private void Awake ()
-        {
-            gridLayout = gameObject.GetComponent<GridLayoutGroup>();
-            rectTransform = gameObject.GetComponent<RectTransform>();
-		}
+  //      private void Awake ()
+  //      {
+  //          gridLayout = gameObject.GetComponent<GridLayoutGroup>();
+  //          rectTransform = gameObject.GetComponent<RectTransform>();
+		//}
 
         public void CreateFile(string path)
         {
-            GameObject instance = Instantiate(filePrefab, gameObject.transform);
+            GameObject instance = Instantiate(filePrefab, rectTransform);
             FileStruct fileStruct = new FileStruct();
 
             fileStruct.instance = instance;
