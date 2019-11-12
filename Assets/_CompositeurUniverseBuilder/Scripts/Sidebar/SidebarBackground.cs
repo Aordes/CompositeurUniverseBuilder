@@ -20,8 +20,10 @@ namespace Com.Docaret.CompositeurUniverseBuilder.Sidebar
         [SerializeField] protected Sprite sprite;
         [SerializeField] protected Image image;
 
-        protected string assetPath;
+        [SerializeField, HideInInspector] protected string assetPath;
+        
         public event Action<Sprite, string> OnSelect;
+
 #if UNITY_EDITOR
         private void OnValidate()
         {
