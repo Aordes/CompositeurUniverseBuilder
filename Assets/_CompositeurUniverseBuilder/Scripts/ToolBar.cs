@@ -52,6 +52,15 @@ namespace Com.Docaret.CompositeurUniverseBuilder
         public event Action<bool,string> OnRenameDialog;
 
         private bool isFile;
+
+        [SerializeField] protected FileToApp[] fileToApps; 
+
+        [Serializable]
+        protected struct FileToApp
+        {
+            public string appId;
+            public string[] extensionList;
+        }
         #endregion
 
         #region Current Selection Get&Set
