@@ -4,9 +4,10 @@
 ///-----------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
 using System.IO;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,7 +22,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder.Sidebar
 
         protected string assetPath;
         public event Action<Sprite, string> OnSelect;
-
+#if UNITY_EDITOR
         private void OnValidate()
         {
             if (sprite != null) {
@@ -42,6 +43,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder.Sidebar
                     image.sprite = sprite;
             }
         }
+#endif
 
         private void Start () {
             button.onClick.AddListener(Button_OnClick);
