@@ -10,6 +10,8 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
 
     public class DialogScreen : MonoBehaviour {
 
+        public static DialogScreen Instance { get; private set; }
+
         [SerializeField] private Animator animator;
         [SerializeField] private string initTrigger = "Init";
         [SerializeField] private string removeTrigger = "Remove";
@@ -22,6 +24,11 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
         ///DEBUG ========================================================================
         private void Start()
         {
+            if (Instance != null)
+                Destroy(Instance.gameObject);
+
+            Instance = this;
+
             inputDialog.gameObject.SetActive(false);
             modalDialog.gameObject.SetActive(false);
             modalDialogComplex.gameObject.SetActive(false);

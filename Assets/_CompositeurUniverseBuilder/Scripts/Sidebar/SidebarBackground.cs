@@ -40,7 +40,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder.Sidebar
                     File.Copy(string.Join(separator, path), fullPath);
                 }
 
-                Debug.Log("Updating sprite " + assetPath);
+                //Debug.Log("Updating sprite " + assetPath);
                 if (image)
                     image.sprite = sprite;
             }

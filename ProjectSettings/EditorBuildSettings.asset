@@ -6,9 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Home Menu.unity
+    path: Assets/_CompositeurUniverseBuilder/Scenes/Home Menu.unity
     guid: 093f5530e74018c41be4336bb55a914f
   - enabled: 1
-    path: Assets/Scenes/Universe Builder.unity
+    path: Assets/_CompositeurUniverseBuilder/Scenes/Universe Builder.unity
     guid: eb8918b63fd89a74584afb9bb31e51f7
   m_configObjects: {}
