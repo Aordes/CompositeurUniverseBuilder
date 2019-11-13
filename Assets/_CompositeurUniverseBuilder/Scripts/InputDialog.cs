@@ -45,7 +45,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder
             base.ButtonConfirm_OnClick();
 
             OnStatus?.Invoke(true, input);
-            OnStatus = null;
+            //OnStatus = null;
 
             OnClose?.Invoke();
         }
