@@ -22,6 +22,8 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
         [SerializeField] private Button changePreviewButton;
         [SerializeField] private Button deleteButton;
         [SerializeField] private OpenCloseAnimator openCloseAnimator;
+        [SerializeField] private GameObject outline;
+        [SerializeField] private GameObject containerOutline;
 
         public GameObject fileContainer;
         public ToolBar toolbar;
@@ -69,6 +71,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
             onSelected?.Invoke(button);
             toolbar.CurrentSelection = button;
             toolbar.CurrentFolder = button;
+            ShowOutline();
         }
 
         public void OnPointerExit(PointerEventData eventData)
@@ -97,7 +100,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
             {
                 yield return null;
             }
-            CloseControlPanel();
+            DeSelect();
         }
         #endregion
 
@@ -126,6 +129,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
         {
             StopAllCoroutines();
             CloseControlPanel();
+            HideOutline();
         }
         #endregion
 
@@ -133,6 +137,18 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
         public void SetName (string name)
         {
             folderName.text = name;
+        }
+
+        public void ShowOutline()
+        {
+            outline.SetActive(true);
+            containerOutline.SetActive(true);
+        }
+
+        public void HideOutline()
+        {
+            outline.SetActive(false);
+            containerOutline.SetActive(false);
         }
         #endregion
     }

@@ -301,7 +301,6 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
 
         private void DeSelectAllSlidePanels()
         {
-            //Debug.Log("IJJJJJ");
             rightButton.Close();
             leftButton.Close();
         }

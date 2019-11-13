@@ -12,6 +12,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
 
         [SerializeField] private Button button;
         [SerializeField] private TextMeshProUGUI fileName;
+        [SerializeField] private GameObject outline;
 
         public ToolBar toolBar;
 
@@ -24,11 +25,23 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
         private void SetCurrentSelection_OnClick()
         {
             toolBar.CurrentSelection = button;
+            ShowOutline();
         }
 
         public void SetName(string name)
         {
             fileName.text = name;
+        }
+
+        public void ShowOutline()
+        {
+            outline.SetActive(true);
+            FileManager.DeselectFiles(button);
+        }
+
+        public void HideOutline()
+        {
+            outline.SetActive(false);
         }
 
     }
