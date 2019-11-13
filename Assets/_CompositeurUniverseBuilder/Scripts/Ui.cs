@@ -69,6 +69,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
             rightButtonContainer.universeName.text = DirectoryData.CurrentUniverseName;
 
             CreateNewFolderButton();
+            
 
             SlideButtonContainerAddListeners(leftButtonContainer);
             SlideButtonContainerAddListeners(rightButtonContainer);

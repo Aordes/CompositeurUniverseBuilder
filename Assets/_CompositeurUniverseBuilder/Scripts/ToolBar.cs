@@ -4,8 +4,10 @@
 ///-----------------------------------------------------------------
 
 using System;
+using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.UI;
+using Debug = UnityEngine.Debug;
 
 namespace Com.Docaret.CompositeurUniverseBuilder
 {
@@ -13,10 +15,9 @@ namespace Com.Docaret.CompositeurUniverseBuilder
     public class ToolBar : MonoBehaviour {
 
         #region Fields
-        [Header("Meta")]
-        [SerializeField] private Button btnAddMetaToMainFolder;
-        [SerializeField] private Button btnAddMetaToSelection;
         [SerializeField] private GameObject metaMenu;
+        [SerializeField] private GameObject folderButtons;
+        [SerializeField] private GameObject fileButtons;
 
         [Header("MetaData")]
         [SerializeField] private Toggle desiredWidth;
@@ -26,20 +27,25 @@ namespace Com.Docaret.CompositeurUniverseBuilder
         [SerializeField] private Toggle videoAutoPlay;
         [SerializeField] private Toggle videoMute;
 
+        [Header("Meta")]
+        [SerializeField] private Button btnAddMetaToMainFolder;
+        [SerializeField] private Button btnAddMetaToFile;
+
         [Header("Rename")]
         [SerializeField] private Button btnRenameMainFolder;
-        [SerializeField] private Button btnRenameSelection;
+        [SerializeField] private Button btnRenameFile;
 
         [Header("Preview")]
         [SerializeField] private Button btnPreviewToMainfolder;
-        [SerializeField] private Button btnPreviewToSelection;
+        [SerializeField] private Button btnPreviewToFile;
 
         [Header("Delete")]
         [SerializeField] private Button btnDeleteMainfolder;
-        [SerializeField] private Button btnDeleteSelection;
+        [SerializeField] private Button btnDeleteFile;
 
         [Header("Content")]
         [SerializeField] private Button btnAddContent;
+        [SerializeField] private Button btnOpenInProgram;
 
         [Header("Animator")]
         [SerializeField] private OpenCloseAnimator animator;
@@ -95,18 +101,28 @@ namespace Com.Docaret.CompositeurUniverseBuilder
             #region Buttons AddListeners
             if (btnAddMetaToMainFolder)
                 btnAddMetaToMainFolder.onClick.AddListener(OpenMetaToMenu_OnClick);
+            if (btnAddMetaToFile)
+                btnAddMetaToFile.onClick.AddListener(OpenMetaToMenu_OnClick);
 
             if (btnRenameMainFolder)
                 btnRenameMainFolder.onClick.AddListener(RenameSelection_OnClick);
+            if (btnRenameFile)
+                btnRenameFile.onClick.AddListener(RenameSelection_OnClick);
 
             if (btnPreviewToMainfolder)
                 btnPreviewToMainfolder.onClick.AddListener(PreviewToSelection_OnClick);
+            if (btnPreviewToFile)
+                btnPreviewToFile.onClick.AddListener(PreviewToSelection_OnClick);
 
             if (btnDeleteMainfolder)
                 btnDeleteMainfolder.onClick.AddListener(DeleteSelection_OnClick);
+            if (btnDeleteFile)
+                btnDeleteFile.onClick.AddListener(DeleteSelection_OnClick);
 
             if (btnAddContent)
                 btnAddContent.onClick.AddListener(AddContent_OnClick);
+            if (btnOpenInProgram)
+                btnOpenInProgram.onClick.AddListener(OpenInProgram_OnClick);
             #endregion
 
             #region Toggles & Sliders AddListeners
@@ -137,10 +153,10 @@ namespace Com.Docaret.CompositeurUniverseBuilder
             #endregion
         }
 
-        //private void Update()
-        //{
-        //    Debug.Log(_currentSelection);
-        //}
+        private void Update()
+        {
+            Debug.Log(_currentSelection);
+        }
         #endregion
 
         #region Meta Menu
@@ -155,11 +171,17 @@ namespace Com.Docaret.CompositeurUniverseBuilder
 
             if (isFile)
             {
-               FileStruct fileStruct = FileManager.GetFileStructFromFileButton(_currentSelection);
-               md = fileStruct.metaData;
+                folderButtons.SetActive(false);
+                fileButtons.SetActive(true);
+
+                FileStruct fileStruct = FileManager.GetFileStructFromFileButton(_currentSelection);
+                md = fileStruct.metaData;
             }
             else
             {
+                folderButtons.SetActive(true);
+                fileButtons.SetActive(false);
+
                 FolderStruct folderStruct = FileManager.GetFolderStructFromFolderButton(_currentSelection);
                 md = folderStruct.metaData;
             }
@@ -226,6 +248,13 @@ namespace Com.Docaret.CompositeurUniverseBuilder
             {
                 FileManager.FolderButton_RenameFolder(newName, _currentSelection);
             }
+        }
+
+        private void OpenInProgram_OnClick()
+        {
+            string file = FileManager.GetFileStructFromFileButton(_currentSelection).path;
+            Debug.Log("Starting " + file);
+            Process.Start(file);
         }
 
         private void RenameSelection_OnClick()
