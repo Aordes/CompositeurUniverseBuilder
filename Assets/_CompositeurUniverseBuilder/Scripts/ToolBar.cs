@@ -45,6 +45,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder
 
         [Header("Content")]
         [SerializeField] private Button btnAddContent;
+        [SerializeField] private Button btnCreateWebview;
         [SerializeField] private Button btnOpenInProgram;
 
         [Header("Animator")]
@@ -56,6 +57,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder
         public event Action<GameObject> OnSelectionChangeEvent;
         public event Action<bool> OnDeleteDialog;
         public event Action<bool,string> OnRenameDialog;
+        public event Action<FolderStruct> OnCreateWebview;
 
         private bool isFile;
         #endregion
@@ -74,6 +76,10 @@ namespace Com.Docaret.CompositeurUniverseBuilder
         public Button CurrentSelection
         {
             //OnSelectionChange();
+            get
+            {
+                return _currentSelection;
+            }
             set
             {
                 if (_currentSelection == value) return;
@@ -121,6 +127,8 @@ namespace Com.Docaret.CompositeurUniverseBuilder
 
             if (btnAddContent)
                 btnAddContent.onClick.AddListener(AddContent_OnClick);
+            if (btnCreateWebview)
+                btnCreateWebview.onClick.AddListener(CreateWebviewButton_OnClick);
             if (btnOpenInProgram)
                 btnOpenInProgram.onClick.AddListener(OpenInProgram_OnClick);
             #endregion
@@ -266,6 +274,11 @@ namespace Com.Docaret.CompositeurUniverseBuilder
         {
             if (!confirm) return;
             RenameSelection(newName);
+        }
+
+        private void CreateWebviewButton_OnClick()
+        {
+            OnCreateWebview?.Invoke(FileManager.GetFolderStructFromFolderButton(_currentSelection));
         }
         #endregion
 

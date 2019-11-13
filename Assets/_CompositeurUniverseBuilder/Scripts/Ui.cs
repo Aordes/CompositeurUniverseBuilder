@@ -69,11 +69,13 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
             rightButtonContainer.universeName.text = DirectoryData.CurrentUniverseName;
 
             CreateNewFolderButton();
-            
+            toolBar.OnCreateWebview += WebviewManager.Create;
 
             SlideButtonContainerAddListeners(leftButtonContainer);
             SlideButtonContainerAddListeners(rightButtonContainer);
         }
+
+        
 
         #endregion
 
@@ -299,7 +301,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
 
         private void DeSelectAllSlidePanels()
         {
-            Debug.Log("IJJJJJ");
+            //Debug.Log("IJJJJJ");
             rightButton.Close();
             leftButton.Close();
         }
