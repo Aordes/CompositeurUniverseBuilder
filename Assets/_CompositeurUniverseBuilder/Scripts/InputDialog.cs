@@ -18,18 +18,29 @@ namespace Com.Docaret.CompositeurUniverseBuilder
 
         public new event Action<bool, string> OnStatus;
         public Action OnClose;
+        private bool isValidated;
 
         public void Init(Action<bool, string> Callback, string title, string ok, string cancel, string placeHolder)
         {
             OnStatus = Callback;
 
             txtAlert.text = title;
-            
             txtPlaceHolder.text = placeHolder;
+
             txtInput.text = string.Empty;
+            isValidated = false;
 
             txtConfirm.text = ok;
             txtCancel.text = cancel;
+        }
+
+        private void Update()
+        {
+            if (txtInput.isFocused)
+                isValidated = true;
+            
+            if (isValidated && !string.IsNullOrWhiteSpace(txtInput.text) && (Input.GetKey(KeyCode.Return) || Input.GetKey(KeyCode.KeypadEnter)))
+                ButtonConfirm_OnClick();
         }
 
         protected override void ButtonConfirm_OnClick()
