@@ -53,7 +53,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
             public static string PREVIEW = "_preview";
         }
 
-        public static event Action<UniverseStruct> OnFinishLoadUniverse;
+        //public static event Action<UniverseStruct> OnFinishLoadUniverse;
 
         public static IEnumerator ImportUniverse(DirectoryInfo directory, Action<UniverseStruct> OnComplete)
         {

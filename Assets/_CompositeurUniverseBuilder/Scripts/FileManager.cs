@@ -18,8 +18,8 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
         public static List<FolderStruct> folderList = new List<FolderStruct>();
         public static DynamicGrid fileGrid;
 
-        private static string[] UNSUPPORTED_EXTENSIONS = new string[] {
-            ".exe", ".xlsx", ".xlsm", ".xlsb", ".xltx", ".xltm", ".xls", ".xlt",
+        private static readonly string[] UNSUPPORTED_TEXT_EXTENSIONS = new string[] {
+            ".xlsx", ".xlsm", ".xlsb", ".xltx", ".xltm", ".xls", ".xlt",
             ".doc", ".dot", ".wbk", ".docx", ".docm", ".dotx", ".dotm", ".docb"
         };
         private static string[] POWERPOINT_EXTENSIONS = new string[] { ".pptx", ".pptm", ".ppt", ".pot", ".ppa", ".pps" };
@@ -60,9 +60,12 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
             {
                 extension = Path.GetExtension(path[i]).ToLower();
                 Debug.Log(extension);
-                if (Array.IndexOf(UNSUPPORTED_EXTENSIONS, extension) != -1)
+                if (Array.IndexOf(UNSUPPORTED_TEXT_EXTENSIONS, extension) != -1)
+                {
+                    DialogScreen.Instance.DisplayDialog(null, "Compatibility issue", "OK", "Please convert your document to PDF");
                     continue;
-                else if (Array.IndexOf(POWERPOINT_EXTENSIONS, extension) != -1) 
+                }
+                else if (Array.IndexOf(POWERPOINT_EXTENSIONS, extension) != -1)
                 {
                     DialogScreen.Instance.DisplayDialog(null, "Compatibility notice", "OK", "Check your PowerPoint file for full compatibilty");
                 }
