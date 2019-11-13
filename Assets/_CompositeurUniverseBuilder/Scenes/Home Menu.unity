@@ -3968,8 +3968,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 884.99994, y: 0}
-  m_SizeDelta: {x: 1769.9999, y: 0}
+  m_AnchoredPosition: {x: 885, y: 0}
+  m_SizeDelta: {x: 1770, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1910344458
 MonoBehaviour:
@@ -4582,11 +4582,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: DialogScreen
-      objectReference: {fileID: 0}
-    - target: {fileID: 4942437812069570331, guid: 292ba6c7d55c4584caaf8b47db612b1f,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4942437812069570330, guid: 292ba6c7d55c4584caaf8b47db612b1f,
         type: 3}

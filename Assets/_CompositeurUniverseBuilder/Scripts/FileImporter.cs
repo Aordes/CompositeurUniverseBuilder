@@ -57,6 +57,8 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
 
         public static IEnumerator ImportUniverse(DirectoryInfo directory, Action<UniverseStruct> OnComplete)
         {
+            UniverseStruct universe = new UniverseStruct();
+
             //Folders
             DirectoryInfo[] directories = directory.GetDirectories();
             Debug.Log("Project has " + directories.Length + " folders");
@@ -65,10 +67,8 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
             //Files
             FileInfo[] files = directory.GetFiles();
             Debug.Log(files.Length + " files");
-            yield return null;
 
-            UniverseStruct universe = new UniverseStruct();
-             
+            universe.files = new List<UniverseFileStruct>();
             FileInfo fileInfo;
             for (int i = 0; i < files.Length; i++)
             {
@@ -78,7 +78,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
                 {
                     if (fileInfo.Name.StartsWith(FileTypes.BACKGROUND))
                     {
-                        yield return ImportTexture(fileInfo, (output) => { universe.background = output;});
+                        yield return ImportTexture(fileInfo, (output) => { universe.background = output; });
                         //yield return null;
                     }
                     else if (fileInfo.Name.StartsWith(FileTypes.PREVIEW))
@@ -86,6 +86,8 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
                         yield return ImportTexture(fileInfo, (output) => { universe.preview = output; });
                     }
                 }
+
+                universe.files.Add(new UniverseFileStruct() { fileInfo = fileInfo });
             }
 
             universe.folders = new List<UniverseFolderStruct>();
