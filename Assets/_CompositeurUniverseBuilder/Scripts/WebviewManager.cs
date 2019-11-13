@@ -10,9 +10,9 @@ namespace Com.Docaret.CompositeurUniverseBuilder
 {
 	public class WebviewManager : MonoBehaviour {
 
+        private static readonly string WEBVIEW_PREFIX = "url = ";
         private struct WebviewModel
         {
-            public string name;
             public string path;
         }
 
@@ -47,7 +47,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder
             FileManager.CreateFile(currentWebview.path);
             using (StreamWriter sw = File.CreateText(currentWebview.path))
             {
-                sw.WriteLine(output);
+                sw.WriteLine(WEBVIEW_PREFIX + output);
             }
         }
 }
