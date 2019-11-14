@@ -161,10 +161,10 @@ namespace Com.Docaret.CompositeurUniverseBuilder
             #endregion
         }
 
-        //private void Update()
-        //{
-        //    Debug.Log(_currentSelection);
-        //}
+        private void Update()
+        {
+            Debug.Log(_currentSelection);
+        }
         #endregion
 
         #region Meta Menu

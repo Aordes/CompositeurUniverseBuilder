@@ -80,6 +80,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
             FolderStruct folder = GetFolderStructFromFolderButton(button);
 
             folder.directory.Delete(true);
+            fileGrid.fileList.Clear();
             folderList.RemoveAt(folderList.IndexOf(folder));
             UnityEngine.Object.Destroy(folder.folderInstance);
         }
@@ -129,7 +130,10 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
             if (Directory.Exists(fileGrid.currentFolderStruct.directory.FullName + "/"+ newName) || string.IsNullOrEmpty(newName)) return;
 
             FileStruct file = GetFileStructFromFileButton(button);
-            File.Move(file.path, file.folderstruct.directory.FullName + "/"+ newName + Path.GetExtension(file.path));
+            file.path = fileGrid.currentFolderStruct.directory.FullName + "/" + Path.GetFileName(file.path);
+            Debug.Log(file.path);
+            Debug.Log(fileGrid.currentFolderStruct.directory.FullName + "/" + newName + Path.GetExtension(file.path));
+            File.Move(file.path, fileGrid.currentFolderStruct.directory.FullName + "/"+ newName + Path.GetExtension(file.path));
             file.path = file.folderstruct.directory.FullName + "/"+ newName + Path.GetExtension(file.path);
             file.fileScript.SetName(newName);
             UpdateFileStruct(file, button);
@@ -240,6 +244,8 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
                     folderList[i] = folderStruct;
                 }
             }
+
+            fileGrid.currentFolderStruct = folderStruct;
         }
         #endregion
 
