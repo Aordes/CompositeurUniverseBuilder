@@ -4,6 +4,7 @@
 ///-----------------------------------------------------------------
 
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -35,7 +36,14 @@ namespace Com.Docaret.CompositeurUniverseBuilder
             txtConfirm.text = ok;
             txtCancel.text = cancel;
 
+            StartCoroutine(SelectInput());
             doAction = DoActionCheckForEnter;
+        }
+
+        public IEnumerator SelectInput()
+        {
+            yield return null;
+            txtInput.Select();
         }
 
         private void Update()
