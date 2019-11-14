@@ -141,7 +141,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
 
                 folderStruct.folderScript.onSelected += FileManager.FolderButton_OnSelected;
 
-                folderStruct.image = folderStruct.button.gameObject.GetComponent<RawImage>();
+                folderStruct.image = folderStruct.folderScript.image;
                 if (universeStruct.folders[i].icon != null)
                 {
                     folderStruct.image.texture = universeStruct.folders[i].icon.texture;
