@@ -96,6 +96,8 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
 
         public static void FolderButton_OnSelected(Button button)
         {
+            DeselectAllFiles();
+
             for (int i = 0; i < folderList.Count; i++)
             {
                 if (folderList[i].button != button)
@@ -131,6 +133,25 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
             file.path = file.folderstruct.directory.FullName + "/"+ newName + Path.GetExtension(file.path);
             file.fileScript.SetName(newName);
             UpdateFileStruct(file, button);
+        }
+
+        public static void DeselectAllFiles()
+        {
+            for (int i = 0; i < fileGrid.fileList.Count; i++)
+            {
+                fileGrid.fileList[i].fileScript.HideOutline();
+            }
+        }
+
+        public static void DeselectFiles(Button button)
+        {
+            for (int i = 0; i < fileGrid.fileList.Count; i++)
+            {
+                if (fileGrid.fileList[i].button != button)
+                {
+                    fileGrid.fileList[i].fileScript.HideOutline();
+                }
+            }
         }
         #endregion
 
