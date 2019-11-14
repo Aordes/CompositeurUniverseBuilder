@@ -310,7 +310,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder
 
         private void DeleteSelection_OnClick()
         {
-            dialogScreen.DisplayDialog(OnDeleteDialog, "Delete", "Ok", "Are you shure you want to delete this?", "Cancel"); 
+            DialogScreen.Instance.DisplayDialog(OnDeleteDialog, "Delete", "Ok", "Are you shure you want to delete this?", "Cancel"); 
         }
 
         private void OnDeleteConfirm(bool confirm)
