@@ -4621,7 +4621,7 @@ PrefabInstance:
     - target: {fileID: 26146482334447935, guid: 19bdcd61ee24be546968dbf58970e494,
         type: 3}
       propertyPath: m_Text
-      value: Change Background
+      value: Application Background
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 19bdcd61ee24be546968dbf58970e494, type: 3}
