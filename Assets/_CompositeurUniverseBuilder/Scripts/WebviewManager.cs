@@ -42,7 +42,8 @@ namespace Com.Docaret.CompositeurUniverseBuilder
             if (!complete)
                 return;
 
-            currentWebview.path += FileTypes.CDURL;
+            if (!currentWebview.path.EndsWith(FileTypes.CDURL)) 
+                currentWebview.path += FileTypes.CDURL;
 
             FileManager.CreateFile(currentWebview.path);
             using (StreamWriter sw = File.CreateText(currentWebview.path))

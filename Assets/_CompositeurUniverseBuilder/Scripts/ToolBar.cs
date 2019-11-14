@@ -261,7 +261,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder
         private void OpenInProgram_OnClick()
         {
             string file = FileManager.GetFileStructFromFileButton(_currentSelection).path;
-            Debug.Log("Starting " + file);
+            //Debug.Log("Starting " + file);
             Process.Start(file);
         }
 

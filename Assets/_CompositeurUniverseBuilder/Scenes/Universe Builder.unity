@@ -858,16 +858,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02b05187ff74b2840aa87bb00ace59c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  avi: {fileID: 0}
-  gif: {fileID: 0}
-  jpg: {fileID: 0}
-  mp3: {fileID: 0}
-  mp4: {fileID: 0}
-  pdf: {fileID: 0}
-  png: {fileID: 0}
-  powerpoint: {fileID: 0}
-  txt: {fileID: 0}
-  zip: {fileID: 0}
 --- !u!1 &216355183
 GameObject:
   m_ObjectHideFlags: 0

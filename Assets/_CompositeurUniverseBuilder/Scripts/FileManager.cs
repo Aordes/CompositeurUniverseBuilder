@@ -137,6 +137,8 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
 
         public static void DeselectAllFiles()
         {
+            if (fileGrid == null) return;
+
             for (int i = 0; i < fileGrid.fileList.Count; i++)
             {
                 fileGrid.fileList[i].fileScript.HideOutline();

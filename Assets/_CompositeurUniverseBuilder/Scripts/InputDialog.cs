@@ -16,9 +16,11 @@ namespace Com.Docaret.CompositeurUniverseBuilder
         [SerializeField] protected Text txtPlaceHolder;
         [SerializeField] protected InputField txtInput;
 
-        public new event Action<bool, string> OnStatus;
+        public event Action<bool, string> OnStatus;
         public Action OnClose;
         private bool isValidated;
+
+        private Action doAction;
 
         public void Init(Action<bool, string> Callback, string title, string ok, string cancel, string placeHolder)
         {
@@ -32,14 +34,21 @@ namespace Com.Docaret.CompositeurUniverseBuilder
 
             txtConfirm.text = ok;
             txtCancel.text = cancel;
+
+            doAction = DoActionCheckForEnter;
         }
 
         private void Update()
         {
+            doAction?.Invoke();
+        }
+
+        private void DoActionCheckForEnter()
+        {
             if (txtInput.isFocused)
                 isValidated = true;
-            
-            if (isValidated && !string.IsNullOrWhiteSpace(txtInput.text) && (Input.GetKey(KeyCode.Return) || Input.GetKey(KeyCode.KeypadEnter)))
+
+            if (isValidated && !string.IsNullOrWhiteSpace(txtInput.text) && (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter)))
                 ButtonConfirm_OnClick();
         }
 
@@ -52,12 +61,12 @@ namespace Com.Docaret.CompositeurUniverseBuilder
                 Debug.LogWarning("Input text is empty");
                 return;
             }
-            
-            base.ButtonConfirm_OnClick();
 
-            OnStatus?.Invoke(true, input);
-            //OnStatus = null;
+            Action<bool, string> CachedCallback = OnStatus;
+            OnStatus = null;
+            doAction = null;
 
+            CachedCallback?.Invoke(true, input);
             OnClose?.Invoke();
         }
 
