@@ -4919,7 +4919,7 @@ PrefabInstance:
     - target: {fileID: 8725943272834110720, guid: 638225621f00b7f4ea281d8e0473bd36,
         type: 3}
       propertyPath: m_Text
-      value: Add Preview To Folder
+      value: Add Content To Folder
       objectReference: {fileID: 0}
     - target: {fileID: 1810242877228851297, guid: 638225621f00b7f4ea281d8e0473bd36,
         type: 3}
