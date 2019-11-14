@@ -210,16 +210,24 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
         [Obsolete]
         private void OnChangeUniversePreview()
         {
+            if (universePath == null)
+            {
+                Debug.LogError("No universe");
+                return;
+            }
+
             string[] path = StandaloneFileBrowser.OpenFilePanel("Select a Preview", "", FileManager.supportedImageExtensions, false);
 
             if (path.Length == 0) return;
 
-            string newPath = universePath + "/_preview.png";
+            string newPath = universePath + "/_preview";
 
-            if (File.Exists(newPath))
-            {
-                File.Delete(newPath);
-            }
+            if (File.Exists(newPath + FileTypes.PNG))
+                File.Delete(newPath + FileTypes.PNG);
+            if (File.Exists(newPath + FileTypes.JPG))
+                File.Delete(newPath + FileTypes.JPG);
+
+            newPath += FileTypes.PNG;
             File.Copy(path[0], newPath);
 
             WWW www = new WWW(newPath);
