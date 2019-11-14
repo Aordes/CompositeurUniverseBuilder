@@ -42,7 +42,8 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
         {
             //universeNameInputField.gameObject.SetActive(false);
             //universeNameInputField.onEndEdit.AddListener(OnEndEdit_LoadScene);
-            compositeurFolderPath = "C:/Users/" + Environment.UserName + "/Documents/Compositeur Digital UX";
+            //compositeurFolderPath = "C:/Users/" + Environment.UserName + "/Documents/Compositeur Digital UX";
+            compositeurFolderPath = "C:/Users/" + "adrie" + "/Documents/Compositeur Digital UX";
 
             if (!Directory.Exists(compositeurFolderPath))
             {
