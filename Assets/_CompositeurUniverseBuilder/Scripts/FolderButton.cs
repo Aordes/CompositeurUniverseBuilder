@@ -26,6 +26,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
         [SerializeField] private GameObject containerOutline;
 
         public GameObject fileContainer;
+        public RawImage image;
         public ToolBar toolbar;
         public delegate void OnEndEditFolderNameDelegate(string name, Button button);
         public OnEndEditFolderNameDelegate onEndEditFolderName;
