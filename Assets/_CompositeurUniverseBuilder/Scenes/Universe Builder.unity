@@ -449,7 +449,6 @@ MonoBehaviour:
   leftButton: {fileID: 1017620786}
   rightButtonContainer: {fileID: 1621800656}
   rightButton: {fileID: 1122868347}
-  uiContainer: {fileID: 248295799}
   folderPrefab: {fileID: 8597980953729236769, guid: 2b963e4496f5a7f479443d06f4fe5967,
     type: 3}
   newFolderButtonPrefab: {fileID: 1598643127266752263, guid: 37f46025307f278489f586204e0cc636,

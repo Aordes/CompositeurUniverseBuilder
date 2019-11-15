@@ -71,6 +71,8 @@ namespace Com.Docaret.CompositeurUniverseBuilder
                 return;
             }
 
+            btnConfirm.Select();
+
             Action<bool, string> CachedCallback = OnStatus;
             OnStatus = null;
             doAction = null;
