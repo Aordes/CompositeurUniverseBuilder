@@ -14,20 +14,22 @@ using UnityEngine.UI;
 namespace Com.Docaret.CompositeurUniverseBuilder.Sidebar
 {
 
-    public class SidebarBackground : MonoBehaviour {
+    public class SidebarBackground : MonoBehaviour
+    {
 
         [SerializeField] protected Button button;
         [SerializeField] protected Sprite sprite;
         [SerializeField] protected Image image;
 
         [SerializeField, HideInInspector] protected string assetPath;
-        
+
         public event Action<Sprite, string> OnSelect;
 
 #if UNITY_EDITOR
         private void OnValidate()
         {
-            if (sprite != null) {
+            if (sprite != null)
+            {
                 //string path = AssetDatabase.GetAssetPath(sprite);
                 string separator = "/";
                 string[] path = (AssetDatabase.GetAssetPath(sprite).Split(new string[] { separator }, StringSplitOptions.RemoveEmptyEntries));
@@ -47,7 +49,8 @@ namespace Com.Docaret.CompositeurUniverseBuilder.Sidebar
         }
 #endif
 
-        private void Start () {
+        private void Start()
+        {
             button.onClick.AddListener(Button_OnClick);
         }
 

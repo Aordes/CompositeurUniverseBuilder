@@ -7,9 +7,11 @@ using Com.Sabattie.Theo.ScriptTemplateSettings;
 using System;
 using UnityEditor;
 
-namespace Com.DefaultCompany.ScriptTemplateSettings {
+namespace Com.DefaultCompany.ScriptTemplateSettings
+{
 
-    public static class Menu {
+    public static class Menu
+    {
         private const string EDITOR_TEMPLATE_PATH = "Editor/82-C# Editor__Editor-NewEditor.cs.txt";
         private const string DRAWER_TEMPLATE_PATH = "Editor/82-C# Editor__Property Drawer-NewPropertyDrawer.cs.txt";
         private const string EDITOR_MENU = "Assets/Create/C# Editor/Editor";
@@ -17,12 +19,14 @@ namespace Com.DefaultCompany.ScriptTemplateSettings {
         private const int PRIORITY = 80;
 
         [MenuItem(EDITOR_MENU, priority = PRIORITY)]
-        public static void CreateEditor () {
+        public static void CreateEditor()
+        {
             SetTargetedTypeThenCreateFromTemplate(EDITOR_TEMPLATE_PATH, "{0}Editor.cs");
         }
 
         [MenuItem(DRAWER_MENU, priority = PRIORITY)]
-        public static void CreateDrawer () {
+        public static void CreateDrawer()
+        {
             SetTargetedTypeThenCreateFromTemplate(DRAWER_TEMPLATE_PATH, "{0}Drawer.cs");
         }
 

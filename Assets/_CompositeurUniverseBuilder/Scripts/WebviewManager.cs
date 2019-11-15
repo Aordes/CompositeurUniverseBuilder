@@ -8,7 +8,8 @@ using UnityEngine;
 
 namespace Com.Docaret.CompositeurUniverseBuilder
 {
-	public class WebviewManager : MonoBehaviour {
+    public class WebviewManager : MonoBehaviour
+    {
 
         private static readonly string WEBVIEW_PREFIX = "url = ";
         private struct WebviewModel
@@ -42,7 +43,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder
             if (!complete)
                 return;
 
-            if (!currentWebview.path.EndsWith(FileTypes.CDURL)) 
+            if (!currentWebview.path.EndsWith(FileTypes.CDURL))
                 currentWebview.path += FileTypes.CDURL;
 
             FileManager.CreateFile(currentWebview.path);
@@ -51,5 +52,5 @@ namespace Com.Docaret.CompositeurUniverseBuilder
                 sw.WriteLine(WEBVIEW_PREFIX + output);
             }
         }
-}
+    }
 }

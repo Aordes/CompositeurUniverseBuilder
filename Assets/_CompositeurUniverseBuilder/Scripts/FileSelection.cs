@@ -7,8 +7,10 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Com.Docaret.CompositeurUniverseBuilder {
-	public class FileSelection : MonoBehaviour {
+namespace Com.Docaret.CompositeurUniverseBuilder
+{
+    public class FileSelection : MonoBehaviour
+    {
 
         [SerializeField] private Button button;
         [SerializeField] private TextMeshProUGUI fileName;

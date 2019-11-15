@@ -8,7 +8,8 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Com.Docaret.CompositeurUniverseBuilder {
+namespace Com.Docaret.CompositeurUniverseBuilder
+{
     public struct FolderStruct
     {
         public DirectoryInfo directory;

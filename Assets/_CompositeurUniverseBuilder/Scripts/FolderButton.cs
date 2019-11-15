@@ -4,16 +4,14 @@
 ///-----------------------------------------------------------------
 
 using System;
-using System.IO;
 using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using TMPro;
 
-namespace Com.Docaret.CompositeurUniverseBuilder {
+namespace Com.Docaret.CompositeurUniverseBuilder
+{
     public class FolderButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         #region Fields
@@ -39,7 +37,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
         private bool isMouseOverUi;
 
         private readonly int leftClick = 0;
-        private readonly int rightClick = 1;
+        //private readonly int rightClick = 1;
         #endregion
 
         #region Unity Methods
@@ -135,7 +133,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
         #endregion
 
         #region Utils
-        public void SetName (string name)
+        public void SetName(string name)
         {
             folderName.text = name;
         }

@@ -5,8 +5,9 @@
 
 using UnityEngine;
 
-namespace Com.Docaret.CompositeurUniverseBuilder {
-	public class OpenCloseAnimator : MonoBehaviour
+namespace Com.Docaret.CompositeurUniverseBuilder
+{
+    public class OpenCloseAnimator : MonoBehaviour
     {
         [SerializeField] private Animator animator;
 

@@ -11,7 +11,8 @@ using UnityEngine.UI;
 namespace Com.Docaret.CompositeurUniverseBuilder
 {
 
-    public class InputDialog : Dialog {
+    public class InputDialog : Dialog
+    {
 
         [Header("Input")]
         [SerializeField] protected Text txtPlaceHolder;

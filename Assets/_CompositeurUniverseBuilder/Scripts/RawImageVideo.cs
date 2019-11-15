@@ -9,9 +9,11 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Video;
 
-namespace Com.Docaret.CompositeurUniverseBuilder {
+namespace Com.Docaret.CompositeurUniverseBuilder
+{
 
-    public class RawImageVideo : MonoBehaviour {
+    public class RawImageVideo : MonoBehaviour
+    {
         [Header("Video")]
         [SerializeField] protected RawImage targetImage;
         [SerializeField] protected VideoPlayer videoPlayer;
@@ -22,7 +24,8 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
 
         public event Action OnPlay;
 
-        private void Start () {
+        private void Start()
+        {
             if (btnPlay)
                 btnPlay.onClick.AddListener(ButtonPlay_OnClick);
 

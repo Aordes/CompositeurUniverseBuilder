@@ -6,19 +6,21 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Com.Docaret.CompositeurUniverseBuilder {
-	public class ButtonAnimator : MonoBehaviour {
+namespace Com.Docaret.CompositeurUniverseBuilder
+{
+    public class ButtonAnimator : MonoBehaviour
+    {
 
         [SerializeField] private Animator animator;
 
         public Button button;
 
         private bool isOpen;
-	
-		private void Start ()
+
+        private void Start()
         {
             button.onClick.AddListener(OnClick_OpenClose);
-		}
+        }
 
         private void OnClick_OpenClose()
         {

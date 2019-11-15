@@ -6,9 +6,11 @@
 using System;
 using UnityEngine;
 
-namespace Com.Docaret.CompositeurUniverseBuilder {
+namespace Com.Docaret.CompositeurUniverseBuilder
+{
 
-    public class DialogScreen : MonoBehaviour {
+    public class DialogScreen : MonoBehaviour
+    {
 
         public static DialogScreen Instance { get; private set; }
 
@@ -36,7 +38,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
             inputDialog.OnClose += CloseScreen;
             modalDialog.OnClose += CloseScreen;
             modalDialogComplex.OnClose += CloseScreen;
-        //    DisplayDialog(Test, "Test", "Confirm", "no", "Cancel");
+            //    DisplayDialog(Test, "Test", "Confirm", "no", "Cancel");
         }
 
         //public void Test(bool yes)
@@ -75,7 +77,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
         {
             modalDialogComplex.gameObject.SetActive(true);
 
-            if (modalDialog) 
+            if (modalDialog)
                 modalDialog.gameObject.SetActive(false);
             if (inputDialog)
                 inputDialog.gameObject.SetActive(false);
@@ -90,8 +92,8 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
             modalDialogComplex.gameObject.SetActive(true);
 
             inputDialog.gameObject.SetActive(true);
-           
-            if (modalDialog) 
+
+            if (modalDialog)
                 modalDialog.gameObject.SetActive(false);
             if (modalDialogComplex)
                 modalDialogComplex.gameObject.SetActive(false);

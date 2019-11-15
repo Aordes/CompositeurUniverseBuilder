@@ -8,12 +8,12 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using UnityEngine;
-using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Debug = UnityEngine.Debug;
 
-namespace Com.Docaret.CompositeurUniverseBuilder {
+namespace Com.Docaret.CompositeurUniverseBuilder
+{
     public class Ui : MonoBehaviour
     {
         #region Fields
@@ -47,7 +47,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
         private GameObject nameInputField;
 
         private event Action<bool> OnExitDialog;
-        private event Action<bool,string> OnRenameUniverseDialog;
+        private event Action<bool, string> OnRenameUniverseDialog;
         #endregion
 
         #region Unity Methods
@@ -75,7 +75,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
             SlideButtonContainerAddListeners(rightButtonContainer);
         }
 
-        
+
 
         #endregion
 
@@ -237,7 +237,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
             www.Dispose();
         }
 
-        public void SetUniversePreview (Texture2D preview)
+        public void SetUniversePreview(Texture2D preview)
         {
             leftButtonContainer.universePreview.texture = preview;
             rightButtonContainer.universePreview.texture = preview;
@@ -270,12 +270,12 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
             Destroy(nameInputField);
         }
 
-        private void OnExitToHomeMenu ()
+        private void OnExitToHomeMenu()
         {
             dialogScreen.DisplayDialog(OnExitDialog, "Exit", "Ok", "Are you sure you want to exit?", "Cancel");
         }
 
-        private void ExitToHomeMenu (bool confirm)
+        private void ExitToHomeMenu(bool confirm)
         {
             if (!confirm) return;
             for (int i = 0; i < FileManager.folderList.Count; i++)

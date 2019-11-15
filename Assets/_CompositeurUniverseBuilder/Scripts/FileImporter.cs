@@ -11,7 +11,8 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace Com.Docaret.CompositeurUniverseBuilder {
+namespace Com.Docaret.CompositeurUniverseBuilder
+{
 
     public struct UniverseStruct
     {
@@ -36,9 +37,10 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
         public FileInfo fileInfo;
     }
 
-    public class FileImporter {
+    public class FileImporter
+    {
 
-        
+
 
         //public static event Action<UniverseStruct> OnFinishLoadUniverse;
 

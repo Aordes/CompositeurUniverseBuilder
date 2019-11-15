@@ -8,7 +8,8 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Com.Docaret.CompositeurUniverseBuilder {
+namespace Com.Docaret.CompositeurUniverseBuilder
+{
     [RequireComponent(typeof(Animator))]
     public class ProjectItem : MonoBehaviour
     {

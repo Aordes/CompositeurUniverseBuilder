@@ -10,8 +10,10 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Com.Docaret.CompositeurUniverseBuilder {
-    public class FileManager {
+namespace Com.Docaret.CompositeurUniverseBuilder
+{
+    public class FileManager
+    {
 
         #region Fields
         public static ExtensionFilter[] supportedImageExtensions = new[] { new ExtensionFilter("Image Files", "png", "jpg", "jpeg") };
@@ -25,10 +27,11 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
         private static string[] POWERPOINT_EXTENSIONS = new string[] { ".pptx", ".pptm", ".ppt", ".pot", ".ppa", ".pps" };
 
         private static string currentMetaProperty;
-        
+
         #endregion
 
         #region Folder Methods
+        [Obsolete]
         public static void FolderButton_OnChangePreview(Button button)
         {
             string[] path = StandaloneFileBrowser.OpenFilePanel("Select a Preview", "", supportedImageExtensions, false);
@@ -46,6 +49,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
 
             WWW www = new WWW(newPath);
             folder.image.texture = www.texture;
+            www.Dispose();
         }
 
         public static void FolderButton_OnChangeDirectoryContent(Button button)
@@ -87,10 +91,10 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
 
         public static void FolderButton_RenameFolder(string newName, Button button)
         {
-            if (Directory.Exists(DirectoryData.CurrentUniversePath + "/"+ newName) || string.IsNullOrEmpty(newName)) return;
+            if (Directory.Exists(DirectoryData.CurrentUniversePath + "/" + newName) || string.IsNullOrEmpty(newName)) return;
 
             FolderStruct folder = GetFolderStructFromFolderButton(button);
-            folder.directory.MoveTo(DirectoryData.CurrentUniversePath + "/"+ newName);
+            folder.directory.MoveTo(DirectoryData.CurrentUniversePath + "/" + newName);
             folder.folderScript.SetName(newName);
             UpdateFolderStruct(folder, button);
         }
@@ -122,19 +126,19 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
             Debug.Log(file.path);
             File.Delete(file.path);
             file.folderstruct.fileList.RemoveAt(file.folderstruct.fileList.IndexOf(file));
-            UnityEngine.Object.Destroy(file.instance);            
+            UnityEngine.Object.Destroy(file.instance);
         }
 
         public static void FileButton_RenameFile(string newName, Button button)
         {
-            if (Directory.Exists(fileGrid.currentFolderStruct.directory.FullName + "/"+ newName) || string.IsNullOrEmpty(newName)) return;
+            if (Directory.Exists(fileGrid.currentFolderStruct.directory.FullName + "/" + newName) || string.IsNullOrEmpty(newName)) return;
 
             FileStruct file = GetFileStructFromFileButton(button);
             file.path = fileGrid.currentFolderStruct.directory.FullName + "/" + Path.GetFileName(file.path);
             Debug.Log(file.path);
             Debug.Log(fileGrid.currentFolderStruct.directory.FullName + "/" + newName + Path.GetExtension(file.path));
-            File.Move(file.path, fileGrid.currentFolderStruct.directory.FullName + "/"+ newName + Path.GetExtension(file.path));
-            file.path = file.folderstruct.directory.FullName + "/"+ newName + Path.GetExtension(file.path);
+            File.Move(file.path, fileGrid.currentFolderStruct.directory.FullName + "/" + newName + Path.GetExtension(file.path));
+            file.path = file.folderstruct.directory.FullName + "/" + newName + Path.GetExtension(file.path);
             file.fileScript.SetName(newName);
             UpdateFileStruct(file, button);
         }
@@ -177,7 +181,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
         public static void AddMetaToFile(Button button, string metaProperty, bool value, int intValue)
         {
             FileStruct file = GetFileStructFromFileButton(button);
-            string metaPath = Path.Combine(Path.GetDirectoryName(file.path) + "/"+ Path.GetFileNameWithoutExtension(file.path) + "_meta.txt");
+            string metaPath = Path.Combine(Path.GetDirectoryName(file.path) + "/" + Path.GetFileNameWithoutExtension(file.path) + "_meta.txt");
 
             currentMetaProperty = metaProperty;
 
@@ -262,7 +266,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
             return fileGrid.fileList[0];
         }
 
-        public static void UpdateFileStruct (FileStruct fileStruct, Button button)
+        public static void UpdateFileStruct(FileStruct fileStruct, Button button)
         {
             for (int i = 0; i < fileGrid.fileList.Count; i++)
             {
@@ -295,27 +299,27 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
             {
                 if (metaData.desiredWidth)
                 {
-                    metaLine = MetaData.DESIRED_WIDTH + ""+ metaData.desiredWidthValue + "%";
+                    metaLine = MetaData.DESIRED_WIDTH + "" + metaData.desiredWidthValue + "%";
                     sw.WriteLine(metaLine);
                 }
                 if (metaData.showOnStart)
                 {
-                    metaLine = MetaData.SHOW_ON_START + ""+ metaData.showOnStart;
+                    metaLine = MetaData.SHOW_ON_START + "" + metaData.showOnStart;
                     sw.WriteLine(metaLine);
                 }
                 if (metaData.videoLoop)
                 {
-                    metaLine = MetaData.VDEO_LOOP + ""+ metaData.videoLoop;
+                    metaLine = MetaData.VDEO_LOOP + "" + metaData.videoLoop;
                     sw.WriteLine(metaLine);
                 }
                 if (!metaData.videoAutoplay)
                 {
-                    metaLine = MetaData.VDEO_AUTOPLAY + ""+ metaData.videoAutoplay;
+                    metaLine = MetaData.VDEO_AUTOPLAY + "" + metaData.videoAutoplay;
                     sw.WriteLine(metaLine);
                 }
                 if (metaData.videoMute)
                 {
-                    metaLine = MetaData.VDEO_MUTE + ""+ metaData.videoMute;
+                    metaLine = MetaData.VDEO_MUTE + "" + metaData.videoMute;
                     sw.WriteLine(metaLine);
                 }
             }
@@ -331,27 +335,27 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
             {
                 if (metaData.desiredWidth)
                 {
-                    metaLine = MetaData.DESIRED_WIDTH + ""+ metaData.desiredWidthValue + "%";
+                    metaLine = MetaData.DESIRED_WIDTH + "" + metaData.desiredWidthValue + "%";
                     sw.WriteLine(metaLine);
                 }
                 if (metaData.showOnStart)
                 {
-                    metaLine = MetaData.SHOW_ON_START + ""+ metaData.showOnStart;
+                    metaLine = MetaData.SHOW_ON_START + "" + metaData.showOnStart;
                     sw.WriteLine(metaLine);
                 }
                 if (metaData.videoLoop)
                 {
-                    metaLine = MetaData.VDEO_LOOP + ""+ metaData.videoLoop;
+                    metaLine = MetaData.VDEO_LOOP + "" + metaData.videoLoop;
                     sw.WriteLine(metaLine);
                 }
                 if (!metaData.videoAutoplay)
                 {
-                    metaLine = MetaData.VDEO_AUTOPLAY + ""+ metaData.videoAutoplay;
+                    metaLine = MetaData.VDEO_AUTOPLAY + "" + metaData.videoAutoplay;
                     sw.WriteLine(metaLine);
                 }
                 if (metaData.videoMute)
                 {
-                    metaLine = MetaData.VDEO_MUTE + ""+ metaData.videoMute;
+                    metaLine = MetaData.VDEO_MUTE + "" + metaData.videoMute;
                     sw.WriteLine(metaLine);
                 }
             }

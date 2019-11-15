@@ -7,7 +7,8 @@ using UnityEngine;
 
 namespace Com.Docaret.CompositeurUniverseBuilder
 {
-	public class ExtentionIcons : MonoBehaviour {
+    public class ExtentionIcons : MonoBehaviour
+    {
 
         public Sprite avi;
         public Sprite gif;
@@ -38,6 +39,6 @@ namespace Com.Docaret.CompositeurUniverseBuilder
         //    else if (extention == ".zip") return zip;
         //    else return null;
         //}
-	
-	}
+
+    }
 }

@@ -3,11 +3,11 @@
 /// Date : 15/10/2019 18:09
 ///-----------------------------------------------------------------
 
-using System;
-using UnityEngine;
 
-namespace Com.Docaret.CompositeurUniverseBuilder {
-	public class MetaData {
+namespace Com.Docaret.CompositeurUniverseBuilder
+{
+    public class MetaData
+    {
 
         public int desiredWidthValue = 75;
         public bool desiredWidth;

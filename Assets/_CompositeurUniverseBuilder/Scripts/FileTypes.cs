@@ -5,8 +5,10 @@
 
 using UnityEngine;
 
-namespace Com.Docaret.CompositeurUniverseBuilder {
-	public class FileTypes : MonoBehaviour {
+namespace Com.Docaret.CompositeurUniverseBuilder
+{
+    public class FileTypes : MonoBehaviour
+    {
 
         public static string CONTENT_FOLDER = ".content";
         public static string CDURL = ".cdurl";

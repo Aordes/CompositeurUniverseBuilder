@@ -8,15 +8,18 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-namespace Com.Docaret.CompositeurUniverseBuilder.Video {
+namespace Com.Docaret.CompositeurUniverseBuilder.Video
+{
 
     [RequireComponent(typeof(Slider))]
-    public class VideoSlider : MonoBehaviour, IPointerDownHandler {
+    public class VideoSlider : MonoBehaviour, IPointerDownHandler
+    {
         public Slider Slider { get; private set; }
 
         public event Action OnClick;
 
-        private void Start () {
+        private void Start()
+        {
             Slider = GetComponent<Slider>();
         }
 

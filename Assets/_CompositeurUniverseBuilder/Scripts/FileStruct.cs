@@ -3,11 +3,11 @@
 /// Date : #01.10.2019#
 ///-----------------------------------------------------------------
 
-using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Com.Docaret.CompositeurUniverseBuilder {
+namespace Com.Docaret.CompositeurUniverseBuilder
+{
     public struct FileStruct
     {
         public GameObject instance;

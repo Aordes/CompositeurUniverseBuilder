@@ -3,13 +3,14 @@
 ///   Date   : 15/10/2019 11:41
 ///-----------------------------------------------------------------
 
-using System;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Com.Docaret.CompositeurUniverseBuilder {
+namespace Com.Docaret.CompositeurUniverseBuilder
+{
 
-    public class Dialog : MonoBehaviour {
+    public class Dialog : MonoBehaviour
+    {
 
         [Header("Title")]
         [SerializeField] protected Text txtAlert;

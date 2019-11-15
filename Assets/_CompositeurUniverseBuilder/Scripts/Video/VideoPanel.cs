@@ -6,13 +6,14 @@
 using System;
 using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityEngine.Video;
 
-namespace Com.Docaret.CompositeurUniverseBuilder.Video {
+namespace Com.Docaret.CompositeurUniverseBuilder.Video
+{
 
-    public class VideoPanel : MonoBehaviour {
+    public class VideoPanel : MonoBehaviour
+    {
 
         [Header("Video")]
         public VideoPlayer videoPlayer;
@@ -34,7 +35,8 @@ namespace Com.Docaret.CompositeurUniverseBuilder.Video {
         private ulong totalFrames;
         private Action doAction;
 
-        private void Start () {
+        private void Start()
+        {
             Init(videoPlayer);
         }
 

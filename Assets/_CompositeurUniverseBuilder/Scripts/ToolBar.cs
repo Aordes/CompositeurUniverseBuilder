@@ -12,7 +12,8 @@ using Debug = UnityEngine.Debug;
 namespace Com.Docaret.CompositeurUniverseBuilder
 {
 
-    public class ToolBar : MonoBehaviour {
+    public class ToolBar : MonoBehaviour
+    {
 
         #region Fields
         [SerializeField] private GameObject metaMenu;
@@ -56,7 +57,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder
 
         public event Action<GameObject> OnSelectionChangeEvent;
         public event Action<bool> OnDeleteDialog;
-        public event Action<bool,string> OnRenameDialog;
+        public event Action<bool, string> OnRenameDialog;
         public event Action<FolderStruct> OnCreateWebview;
 
         private bool isFile;
@@ -66,7 +67,8 @@ namespace Com.Docaret.CompositeurUniverseBuilder
         private Button _currentFolder;
         public Button CurrentFolder
         {
-            set {
+            set
+            {
                 _currentFolder = value;
                 //init buttons
             }
@@ -99,7 +101,8 @@ namespace Com.Docaret.CompositeurUniverseBuilder
         #endregion
 
         #region Unity Methods
-        private void Start() {
+        private void Start()
+        {
             OnSelectionChangeEvent += OnSelectionChange;
             OnDeleteDialog += OnDeleteConfirm;
             OnRenameDialog += OnRenameConfirm;
@@ -135,27 +138,33 @@ namespace Com.Docaret.CompositeurUniverseBuilder
 
             #region Toggles & Sliders AddListeners
             //MetaData Toggles & Sliders
-            if (desiredWidth) desiredWidth.onValueChanged.AddListener((value) => {
+            if (desiredWidth) desiredWidth.onValueChanged.AddListener((value) =>
+            {
                 DesiredWidth_OnValueChanged(value);
             });
 
-            if (desiredWidth) desiredWidthSlider.onValueChanged.AddListener((value) => {
+            if (desiredWidth) desiredWidthSlider.onValueChanged.AddListener((value) =>
+            {
                 DesiredWidthSlider_OnValueChanged(value);
             });
 
-            if (showOnStart) showOnStart.onValueChanged.AddListener((value) => {
+            if (showOnStart) showOnStart.onValueChanged.AddListener((value) =>
+            {
                 ShowOnStart_OnValueChanged(value);
             });
 
-            if (videoLoop) videoLoop.onValueChanged.AddListener((value) => {
+            if (videoLoop) videoLoop.onValueChanged.AddListener((value) =>
+            {
                 VideoLoop_OnValueChanged(value);
             });
 
-            if (videoAutoPlay) videoAutoPlay.onValueChanged.AddListener((value) => {
+            if (videoAutoPlay) videoAutoPlay.onValueChanged.AddListener((value) =>
+            {
                 VideoAutoPlay_OnValueChanged(value);
             });
 
-            if (videoMute) videoMute.onValueChanged.AddListener((value) => {
+            if (videoMute) videoMute.onValueChanged.AddListener((value) =>
+            {
                 VideoMute_OnValueChanged(value);
             });
             #endregion
@@ -310,7 +319,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder
 
         private void DeleteSelection_OnClick()
         {
-            DialogScreen.Instance.DisplayDialog(OnDeleteDialog, "Delete", "Ok", "Are you shure you want to delete this?", "Cancel"); 
+            DialogScreen.Instance.DisplayDialog(OnDeleteDialog, "Delete", "Ok", "Are you shure you want to delete this?", "Cancel");
         }
 
         private void OnDeleteConfirm(bool confirm)

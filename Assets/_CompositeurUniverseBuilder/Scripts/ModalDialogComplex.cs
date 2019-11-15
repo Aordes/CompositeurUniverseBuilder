@@ -7,16 +7,18 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Com.Docaret.CompositeurUniverseBuilder {
+namespace Com.Docaret.CompositeurUniverseBuilder
+{
 
-    public class ModalDialogComplex : ModalDialog {
+    public class ModalDialogComplex : ModalDialog
+    {
 
         [Header("Other Button")]
         [SerializeField] protected Button btnOther;
         [SerializeField] protected Text txtOther;
 
         public new Action<int> OnStatus;
-        public Action OnClose;
+        public new Action OnClose;
 
         protected override void Start()
         {

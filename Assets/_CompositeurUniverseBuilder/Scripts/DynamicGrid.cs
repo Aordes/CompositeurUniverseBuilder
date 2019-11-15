@@ -8,8 +8,9 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Com.Docaret.CompositeurUniverseBuilder {
-	public class DynamicGrid : MonoBehaviour
+namespace Com.Docaret.CompositeurUniverseBuilder
+{
+    public class DynamicGrid : MonoBehaviour
     {
         [SerializeField] private GameObject filePrefab;
         [SerializeField] private RectTransform rectTransform;
@@ -20,14 +21,14 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
 
         private GridLayoutGroup gridLayout;
 
-        private int minXCellSize = 80;
-        private int minYCellSize = 20;
+        //private int minXCellSize = 80;
+        //private int minYCellSize = 20;
 
-  //      private void Awake ()
-  //      {
-  //          gridLayout = gameObject.GetComponent<GridLayoutGroup>();
-  //          rectTransform = gameObject.GetComponent<RectTransform>();
-		//}
+        //      private void Awake ()
+        //      {
+        //          gridLayout = gameObject.GetComponent<GridLayoutGroup>();
+        //          rectTransform = gameObject.GetComponent<RectTransform>();
+        //}
 
         public void CreateFile(string path)
         {
@@ -57,6 +58,6 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
             //}
             //gridLayout.constraintCount = 4
         }
-		
-	}
+
+    }
 }

@@ -7,9 +7,11 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Com.Docaret.CompositeurUniverseBuilder {
+namespace Com.Docaret.CompositeurUniverseBuilder
+{
 
-    public class ModalDialog : Dialog {
+    public class ModalDialog : Dialog
+    {
 
         [Header("Message")]
         [SerializeField] protected Text txtMessage;

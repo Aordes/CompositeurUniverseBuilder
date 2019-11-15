@@ -8,12 +8,13 @@ using SFB;
 using System;
 using System.IO;
 using TMPro;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Com.Docaret.CompositeurUniverseBuilder {
-    public class SlidePanelButtonContainer : MonoBehaviour {
+namespace Com.Docaret.CompositeurUniverseBuilder
+{
+    public class SlidePanelButtonContainer : MonoBehaviour
+    {
 
         [Header("Buttons")]
         public Button openCompositeurButton;
@@ -56,7 +57,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
         {
             string[] path = StandaloneFileBrowser.OpenFilePanel("Select a Background", "", FileManager.supportedImageExtensions, false);
 
-            if (path.Length == 0) 
+            if (path.Length == 0)
                 return;
 
             OnBackgroundChange?.Invoke(path[0]);

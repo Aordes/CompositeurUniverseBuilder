@@ -5,10 +5,11 @@
 
 using System;
 using System.IO;
-using UnityEngine;
 
-namespace Com.Docaret.CompositeurUniverseBuilder {
-	public class DirectoryData {
+namespace Com.Docaret.CompositeurUniverseBuilder
+{
+    public class DirectoryData
+    {
 
         private static DirectoryInfo _currentDirectory;
         private static string _currentUniversePath;
@@ -28,5 +29,5 @@ namespace Com.Docaret.CompositeurUniverseBuilder {
         public static string CompositeurFolderPath { get; set; }
         public static UniverseStruct UniverseStruct { get; set; }
         #endregion
-	}
+    }
 }
