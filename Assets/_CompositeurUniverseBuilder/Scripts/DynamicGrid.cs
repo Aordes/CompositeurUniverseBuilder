@@ -19,7 +19,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder
         public FolderStruct currentFolderStruct;
         public List<FileStruct> fileList = new List<FileStruct>();
 
-        private GridLayoutGroup gridLayout;
+        //private GridLayoutGroup gridLayout;
 
         //private int minXCellSize = 80;
         //private int minYCellSize = 20;
@@ -33,10 +33,12 @@ namespace Com.Docaret.CompositeurUniverseBuilder
         public void CreateFile(string path)
         {
             GameObject instance = Instantiate(filePrefab, rectTransform);
-            FileStruct fileStruct = new FileStruct();
+            FileStruct fileStruct = new FileStruct
+            {
+                instance = instance,
+                fileScript = instance.GetComponent<FileSelection>()
+            };
 
-            fileStruct.instance = instance;
-            fileStruct.fileScript = instance.GetComponent<FileSelection>();
             fileStruct.fileScript.toolBar = toolBar;
             fileStruct.fileScript.SetName(Path.GetFileNameWithoutExtension(path));
             fileStruct.folderstruct = currentFolderStruct;

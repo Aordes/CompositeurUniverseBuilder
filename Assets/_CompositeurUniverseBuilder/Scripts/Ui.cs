@@ -23,7 +23,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder
         [SerializeField] ButtonAnimator leftButton;
         [SerializeField] SlidePanelButtonContainer rightButtonContainer;
         [SerializeField] ButtonAnimator rightButton;
-        [SerializeField] GameObject uiContainer;
+        //[SerializeField] GameObject uiContainer;
 
         [Header("Prefabs")]
         [SerializeField] GameObject folderPrefab;
@@ -40,7 +40,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder
 
         private string universePath;
         private string compositeurFolderPath;
-        private string path;
+        //private string path;
 
         private Button newFolderButton;
         private DirectoryInfo universeDirectory;
@@ -91,8 +91,10 @@ namespace Com.Docaret.CompositeurUniverseBuilder
         private void OnCLick_CreateFolder()
         {
             DynamicGrid dynamicGrid;
-            FolderStruct folderStruct = new FolderStruct();
-            folderStruct.path = universePath + "/" + "New Folder" + (FileManager.folderList.Count + 1);
+            FolderStruct folderStruct = new FolderStruct
+            {
+                path = universePath + "/" + "New Folder" + (FileManager.folderList.Count + 1)
+            };
 
             DirectoryInfo folderDirectory = Directory.CreateDirectory(folderStruct.path);
             Destroy(newFolderButton.gameObject);
@@ -104,8 +106,8 @@ namespace Com.Docaret.CompositeurUniverseBuilder
             folderStruct.folderScript = folderStruct.button.gameObject.GetComponent<FolderButton>();
             folderStruct.folderScript.toolbar = toolBar;
             folderStruct.folderScript.SetName(folderStruct.directory.Name);
-            folderStruct.folderScript.onSelected += FileManager.FolderButton_OnSelected;
-            folderStruct.folderScript.closeSlidePanels += DeSelectAllSlidePanels;
+            folderStruct.folderScript.OnSelected += FileManager.FolderButton_OnSelected;
+            folderStruct.folderScript.CloseSlidePanels += DeSelectAllSlidePanels;
 
             folderStruct.image = folderStruct.button.gameObject.GetComponent<RawImage>();
             folderStruct.metaData = new MetaData();
@@ -126,8 +128,10 @@ namespace Com.Docaret.CompositeurUniverseBuilder
             for (int i = 0; i < universeStruct.folders.Count; i++)
             {
                 DynamicGrid dynamicGrid;
-                FolderStruct folderStruct = new FolderStruct();
-                folderStruct.path = universeStruct.folders[i].fileInfo.FullName;
+                FolderStruct folderStruct = new FolderStruct
+                {
+                    path = universeStruct.folders[i].fileInfo.FullName
+                };
 
                 DirectoryInfo folderDirectory = Directory.CreateDirectory(folderStruct.path);
 
@@ -139,7 +143,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder
                 folderStruct.folderScript.toolbar = toolBar;
                 folderStruct.folderScript.SetName(folderStruct.directory.Name);
 
-                folderStruct.folderScript.onSelected += FileManager.FolderButton_OnSelected;
+                folderStruct.folderScript.OnSelected += FileManager.FolderButton_OnSelected;
 
                 folderStruct.image = folderStruct.folderScript.image;
                 if (universeStruct.folders[i].icon != null)
@@ -177,11 +181,11 @@ namespace Com.Docaret.CompositeurUniverseBuilder
             backgroundImage.texture = background;
         }
 
-        private void SetUniversePreview(Sprite preview)
-        {
-            leftButtonContainer.universePreview.texture = preview.texture;
-            rightButtonContainer.universePreview.texture = preview.texture;
-        }
+        //private void SetUniversePreview(Sprite preview)
+        //{
+        //    leftButtonContainer.universePreview.texture = preview.texture;
+        //    rightButtonContainer.universePreview.texture = preview.texture;
+        //}
 
         //Instanciate new Create Folder Button
         private void CreateNewFolderButton()
@@ -280,8 +284,8 @@ namespace Com.Docaret.CompositeurUniverseBuilder
             if (!confirm) return;
             for (int i = 0; i < FileManager.folderList.Count; i++)
             {
-                FileManager.folderList[i].folderScript.onSelected -= FileManager.FolderButton_OnSelected;
-                FileManager.folderList[i].folderScript.closeSlidePanels -= DeSelectAllSlidePanels;
+                FileManager.folderList[i].folderScript.OnSelected -= FileManager.FolderButton_OnSelected;
+                FileManager.folderList[i].folderScript.CloseSlidePanels -= DeSelectAllSlidePanels;
             }
             toolBar.CurrentSelection = null;
             toolBar.CurrentFolder = null;
@@ -318,7 +322,9 @@ namespace Com.Docaret.CompositeurUniverseBuilder
             rightButton.button.onClick.AddListener(DeSelectAllFolders);
             leftButton.button.onClick.AddListener(DeSelectAllFolders);
             buttonContainer.changeUniverseNameButton.onClick.AddListener(OnChangeUniverseName);
+#pragma warning disable CS0612 // Le type ou le membre est obsolète
             buttonContainer.changeUniversePreviewButton.onClick.AddListener(OnChangeUniversePreview);
+#pragma warning restore CS0612 // Le type ou le membre est obsolète
             buttonContainer.openCompositeurButton.onClick.AddListener(OnOpenCompositeur);
             buttonContainer.homeButton.onClick.AddListener(OnExitToHomeMenu);
 

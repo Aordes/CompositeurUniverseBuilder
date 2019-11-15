@@ -295,7 +295,9 @@ namespace Com.Docaret.CompositeurUniverseBuilder
         {
             if (!isFile)
             {
+#pragma warning disable CS0612 // Le type ou le membre est obsolète
                 FileManager.FolderButton_OnChangePreview(_currentFolder);
+#pragma warning restore CS0612 // Le type ou le membre est obsolète
             }
         }
 

@@ -16,9 +16,9 @@ namespace Com.Docaret.CompositeurUniverseBuilder
     {
         #region Fields
         [SerializeField] private TextMeshProUGUI folderName;
-        [SerializeField] private Button openButton;
-        [SerializeField] private Button changePreviewButton;
-        [SerializeField] private Button deleteButton;
+        //[SerializeField] private Button openButton;
+        //[SerializeField] private Button changePreviewButton;
+        //[SerializeField] private Button deleteButton;
         [SerializeField] private OpenCloseAnimator openCloseAnimator;
         [SerializeField] private GameObject outline;
         [SerializeField] private GameObject containerOutline;
@@ -29,8 +29,8 @@ namespace Com.Docaret.CompositeurUniverseBuilder
         public delegate void OnEndEditFolderNameDelegate(string name, Button button);
         public OnEndEditFolderNameDelegate onEndEditFolderName;
 
-        public event Action<Button> onSelected;
-        public event Action closeSlidePanels;
+        public event Action<Button> OnSelected;
+        public event Action CloseSlidePanels;
 
         private Button button;
         private bool isControlPanelOpen;
@@ -65,9 +65,9 @@ namespace Com.Docaret.CompositeurUniverseBuilder
             }
         }
 
-        private void OnSelected()
+        private void OnSelect()
         {
-            onSelected?.Invoke(button);
+            OnSelected?.Invoke(button);
             toolbar.CurrentSelection = button;
             toolbar.CurrentFolder = button;
             ShowOutline();
@@ -107,11 +107,11 @@ namespace Com.Docaret.CompositeurUniverseBuilder
         public void OpenControlPanel()
         {
             StopCoroutine(MouseOver());
-            closeSlidePanels?.Invoke();
+            CloseSlidePanels?.Invoke();
             openCloseAnimator.Open();
             isControlPanelOpen = true;
             FileManager.fileGrid = fileContainer.GetComponent<DynamicGrid>();
-            OnSelected();
+            OnSelect();
         }
 
         public void CloseControlPanel()

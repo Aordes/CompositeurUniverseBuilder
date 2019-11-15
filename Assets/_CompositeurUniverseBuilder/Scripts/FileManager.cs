@@ -24,7 +24,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder
             ".xlsx", ".xlsm", ".xlsb", ".xltx", ".xltm", ".xls", ".xlt",
             ".doc", ".dot", ".wbk", ".docx", ".docm", ".dotx", ".dotm", ".docb"
         };
-        private static string[] POWERPOINT_EXTENSIONS = new string[] { ".pptx", ".pptm", ".ppt", ".pot", ".ppa", ".pps" };
+        private static readonly string[] POWERPOINT_EXTENSIONS = new string[] { ".pptx", ".pptm", ".ppt", ".pot", ".ppa", ".pps" };
 
         private static string currentMetaProperty;
 
@@ -329,7 +329,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder
         private static void AddToExistingMetaFile(string metaPath, MetaData metaData)
         {
             Debug.Log(metaData.videoMute);
-            string metaLine = "";
+            string metaLine;
 
             using (StreamWriter sw = new StreamWriter(metaPath, false))
             {
