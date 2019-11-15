@@ -131,14 +131,24 @@ namespace Com.Docaret.CompositeurUniverseBuilder
 
         public static void FileButton_RenameFile(string newName, Button button)
         {
-            if (Directory.Exists(fileGrid.currentFolderStruct.directory.FullName + "/" + newName) || string.IsNullOrEmpty(newName)) return;
+            if (string.IsNullOrWhiteSpace(newName))
+                return;
 
             FileStruct file = GetFileStructFromFileButton(button);
-            file.path = fileGrid.currentFolderStruct.directory.FullName + "/" + Path.GetFileName(file.path);
-            Debug.Log(file.path);
-            Debug.Log(fileGrid.currentFolderStruct.directory.FullName + "/" + newName + Path.GetExtension(file.path));
-            File.Move(file.path, fileGrid.currentFolderStruct.directory.FullName + "/" + newName + Path.GetExtension(file.path));
-            file.path = file.folderstruct.directory.FullName + "/" + newName + Path.GetExtension(file.path);
+            string newFullPath = Path.Combine(fileGrid.currentFolderStruct.directory.FullName, newName + Path.GetExtension(file.path));
+
+            if (File.Exists(newFullPath))
+            {
+                DialogScreen.Instance.DisplayDialog(null, "File already exists", "OK", "A file with the name " + newName + " already exists");
+                return;
+            }
+
+            file.path = Path.Combine(fileGrid.currentFolderStruct.directory.FullName, Path.GetFileName(file.path));
+            //Debug.Log(file.path);
+            //Debug.Log(newFullPath);
+
+            File.Move(file.path, newFullPath);
+            file.path = newFullPath;//file.folderstruct.directory.FullName + "/" + newName + Path.GetExtension(file.path);
             file.fileScript.SetName(newName);
             UpdateFileStruct(file, button);
         }
