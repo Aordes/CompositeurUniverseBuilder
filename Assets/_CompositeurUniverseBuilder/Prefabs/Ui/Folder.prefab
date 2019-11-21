@@ -794,7 +794,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1651950734583184674}
   - component: {fileID: 5791029128100486934}
-  - component: {fileID: 2414019585017337018}
+  - component: {fileID: 3123371896951223691}
   m_Layer: 5
   m_Name: Image
   m_TagString: Untagged
@@ -829,7 +829,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4541831459627046938}
   m_CullTransparentMesh: 0
---- !u!114 &2414019585017337018
+--- !u!114 &3123371896951223691
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -838,27 +838,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 4541831459627046938}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.46226418, g: 0.46226418, b: 0.46226418, a: 1}
+  m_Color: {r: 0.4627451, g: 0.4627451, b: 0.4627451, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 0}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
+  m_Texture: {fileID: 0}
+  m_UVRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
 --- !u!1 &5415581792327136537
 GameObject:
   m_ObjectHideFlags: 0
@@ -1028,7 +1025,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.8490566, g: 0.8490566, b: 0.8490566, a: 0.43529412}
+  m_Color: {r: 0.754717, g: 0.754717, b: 0.754717, a: 0.7607843}
   m_RaycastTarget: 0
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -1420,9 +1417,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   folderName: {fileID: 893186980254333520}
-  openButton: {fileID: 0}
-  changePreviewButton: {fileID: 0}
-  deleteButton: {fileID: 0}
   openCloseAnimator: {fileID: 3794307629600361078}
   outline: {fileID: 8828666922941849733}
   containerOutline: {fileID: 5803265210134418791}

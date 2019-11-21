@@ -109,7 +109,7 @@ namespace Com.Docaret.CompositeurUniverseBuilder
             folderStruct.folderScript.OnSelected += FileManager.FolderButton_OnSelected;
             folderStruct.folderScript.CloseSlidePanels += DeSelectAllSlidePanels;
 
-            folderStruct.image = folderStruct.button.gameObject.GetComponent<RawImage>();
+            folderStruct.image = folderStruct.folderScript.image;
             folderStruct.metaData = new MetaData();
 
             dynamicGrid = folderStruct.folderScript.fileContainer.GetComponent<DynamicGrid>();
